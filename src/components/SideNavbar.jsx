@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DashboardIcon from "../assets/DashboardIcon";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ClienteIcon from "../assets/ClienteIcon";
 import ProductosIcon from "../assets/ProductosIcon";
 import ControlExistenciasIcon from "../assets/ControlExistenciasIcon";
@@ -73,10 +73,17 @@ const SideNavbar = () => {
               </NavLink>
             </li>
             <li>
-              <DropDown
-                nombre={"Gestión de Productos"}
-                Icon={<ProductosIcon clases={"mr-3 size-7"} />}
-              />
+              <NavLink to={"/stock"}>
+                {({ isActive }) => {
+                  return (
+                    <DropDown
+                      nombre={"Gestión de Productos"}
+                      Icon={<ProductosIcon clases={"mr-3 size-7"} />}
+                      val={isActive}
+                    />
+                  );
+                }}
+              </NavLink>
             </li>
             <li>
               <NavLink to={"/controlexistencias"}>
