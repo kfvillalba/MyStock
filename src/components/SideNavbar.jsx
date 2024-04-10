@@ -24,7 +24,10 @@ const SideNavbar = () => {
         <header className="Profile flex flex-wrap items-center p-5  shadow-sm shadow-black ">
           <img
             className="rounded-full shadow-sm shadow-white"
-            src={localStorage.getItem("photoURL")}
+            src={
+              localStorage.getItem("photoURL") ||
+              "https://cdn-icons-png.flaticon.com/512/282/282133.png"
+            }
             alt="avatar"
             style={{ width: "64px", height: "64px" }}
           />

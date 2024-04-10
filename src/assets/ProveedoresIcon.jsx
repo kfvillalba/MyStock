@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProveedoresIcon = ({ clases }) => {
+const ProvedoresIcon = ({ clases }) => {
   return (
     <svg
       className={`inline-block ${clases}`}
@@ -13,4 +13,4 @@ const ProveedoresIcon = ({ clases }) => {
   );
 };
 
-export default ProveedoresIcon;
+export default ProvedoresIcon;
