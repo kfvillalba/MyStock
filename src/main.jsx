@@ -28,16 +28,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/productos",
+    path: "/stock/productos",
     element: <PageProduct />,
     errorElement: <PageNotFound />,
   },
   {
     path: "/categorias",
+    path: "/stock/categorias",
     element: <PageCategorias />,
     errorElement: <PageNotFound />,
   },
   {
     path: "/proveedores",
+    path: "/stock/proveedores",
     element: <PageProveedores />,
     errorElement: <PageNotFound />,
   },
