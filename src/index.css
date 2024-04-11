@@ -31,6 +31,9 @@
   .input__form {
     @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2;
   }
+  .select {
+    @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-96 pl-3 mt-2;
+  }
   .label__form {
     @apply text-sm font-medium leading-none text-gray-800;
   }

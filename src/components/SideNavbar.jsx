@@ -7,9 +7,40 @@ import ControlExistenciasIcon from "../assets/ControlExistenciasIcon";
 import ReportesIcon from "../assets/ReportesIcon";
 import LogOutIcon from "../assets/LogOutIcon";
 import DropDown from "./DropDown";
+import CategoriasIcon from "../assets/CategoriasIcon";
+import ProveedoresIcon from "../assets/ProveedoresIcon";
 
 const SideNavbar = () => {
   const Navigate = useNavigate();
+  const childrenGestion = [
+    {
+      ruta: "/gestion/categorias",
+      icon: <CategoriasIcon clases={"mr-3 size-7"} />,
+      nombre: "Categorias",
+    },
+    {
+      ruta: "/gestion/productos",
+      icon: <ProductosIcon clases={"mr-3 size-7"} />,
+      nombre: "Productos",
+    },
+    {
+      ruta: "/gestion/proveedores",
+      icon: <ProveedoresIcon clases={"mr-3 size-7"} />,
+      nombre: "Proveedores",
+    },
+  ];
+  const childrenStock = [
+    {
+      ruta: "/stock/entradas",
+      icon: <CategoriasIcon clases={"mr-3 size-7"} />,
+      nombre: "Entradas",
+    },
+    {
+      ruta: "/stock/salidas",
+      icon: <ProductosIcon clases={"mr-3 size-7"} />,
+      nombre: "Salidas/Facturacion",
+    },
+  ];
   const Logout = () => {
     localStorage.clear();
     console.log(localStorage);
@@ -36,18 +67,15 @@ const SideNavbar = () => {
         <h1 className="py-3 shadow-sm shadow-black">Navegación Principal</h1>
       </section>
       <section className="h-full [&>footer>ul>li]:mx-3 [&>header>ul>li]:mx-3 flex flex-col relative">
-        <header className="overflow-y-auto h-1 flex flex-col flex-grow shadow-sm shadow-black">
+        <header className="overflow-y-auto h-1 flex flex-col flex-grow shadow-sm shadow-black mt-2">
           <ul>
             <li>
               <NavLink to={"/dashboard"}>
                 {({ isActive }) => {
-                  return isActive ? (
-                    <button className="btn__menu__active">
-                      <DashboardIcon clases={"mr-3 size-7"} />
-                      Dashboard
-                    </button>
-                  ) : (
-                    <button className="btn__menu">
+                  return (
+                    <button
+                      className={isActive ? "btn__menu__active" : "btn__menu"}
+                    >
                       <DashboardIcon clases={"mr-3 size-7"} />
                       Dashboard
                     </button>
@@ -58,16 +86,27 @@ const SideNavbar = () => {
             <li>
               <NavLink to={"/clientes"}>
                 {({ isActive }) => {
-                  return isActive ? (
-                    <button className="btn__menu__active">
+                  return (
+                    <button
+                      className={isActive ? "btn__menu__active" : "btn__menu"}
+                    >
                       <ClienteIcon clases={"mr-3 size-7"} />
                       Clientes
                     </button>
-                  ) : (
-                    <button className="btn__menu">
-                      <ClienteIcon clases={"mr-3 size-7"} />
-                      Clientes
-                    </button>
+                  );
+                }}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to={"/gestion"}>
+                {({ isActive }) => {
+                  return (
+                    <DropDown
+                      nombre={"Gestión de Productos"}
+                      Icon={<ProductosIcon clases={"mr-3 size-7"} />}
+                      val={isActive}
+                      childrens={childrenGestion}
+                    />
                   );
                 }}
               </NavLink>
@@ -77,41 +116,23 @@ const SideNavbar = () => {
                 {({ isActive }) => {
                   return (
                     <DropDown
-                      nombre={"Gestión de Productos"}
-                      Icon={<ProductosIcon clases={"mr-3 size-7"} />}
+                      nombre={"Crontrol Existencias"}
+                      Icon={<ControlExistenciasIcon clases={"mr-3 size-7"} />}
                       val={isActive}
+                      childrens={childrenStock}
                     />
                   );
                 }}
               </NavLink>
             </li>
-            <li>
-              <NavLink to={"/controlexistencias"}>
-                {({ isActive }) => {
-                  return isActive ? (
-                    <button className="btn__menu__active">
-                      <ControlExistenciasIcon clases={"mr-3 size-7"} />
-                      Crontrol Existencias
-                    </button>
-                  ) : (
-                    <button className="btn__menu">
-                      <ControlExistenciasIcon clases={"mr-3 size-7"} />
-                      Crontrol Existencias
-                    </button>
-                  );
-                }}
-              </NavLink>
-            </li>
+
             <li>
               <NavLink to={"/reportes"}>
                 {({ isActive }) => {
-                  return isActive ? (
-                    <button className="btn__menu__active">
-                      <ReportesIcon clases={"mr-3 size-7"} />
-                      Reportes
-                    </button>
-                  ) : (
-                    <button className="btn__menu">
+                  return (
+                    <button
+                      className={isActive ? "btn__menu__active" : "btn__menu"}
+                    >
                       <ReportesIcon clases={"mr-3 size-7"} />
                       Reportes
                     </button>

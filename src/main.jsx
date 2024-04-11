@@ -9,6 +9,8 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import PageProveedores from "./pages/PageProveedores.jsx";
 import PageCategorias from "./pages/PageCategorias.jsx";
 import PageClientes from "./pages/PageClientes.jsx";
+import PageEntradas from "./pages/PageEntradas.jsx";
+import PageSalidas from "./pages/PageSalidas.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,28 +24,38 @@ const router = createBrowserRouter([
     errorElement: <PageNotFound />,
   },
   {
+    path: "/clientes",
+    element: <PageClientes />,
+    errorElement: <PageNotFound />,
+  },
+  {
     path: "/dashboard",
     element: <DashboardPage />,
     errorElement: <PageNotFound />,
   },
   {
-    path: "/stock/productos",
+    path: "/gestion/productos",
     element: <PageProduct />,
     errorElement: <PageNotFound />,
   },
   {
-    path: "/stock/categorias",
+    path: "/gestion/categorias",
     element: <PageCategorias />,
     errorElement: <PageNotFound />,
   },
   {
-    path: "/stock/proveedores",
+    path: "/gestion/proveedores",
     element: <PageProveedores />,
     errorElement: <PageNotFound />,
   },
   {
-    path: "/clientes",
-    element: <PageClientes />,
+    path: "/stock/entradas",
+    element: <PageEntradas />,
+    errorElement: <PageNotFound />,
+  },
+  {
+    path: "/stock/salidas",
+    element: <PageSalidas />,
     errorElement: <PageNotFound />,
   },
 ]);
