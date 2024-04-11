@@ -73,4 +73,8 @@
     background: transparent; /* Cambiado de "bg" */
     max-width: 100%;
   }
+
+  .cardStyle {
+    @apply mr-0 ml-0 bg-purple-dark text-white;
+  }
 }

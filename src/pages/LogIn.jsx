@@ -44,7 +44,7 @@ const LogIn = () => {
     localStorage.setItem("photoURL", photoURL);
   };
 
-  const logIngEmailPassword = () => {
+  const logInEmailPassword = () => {
     signInWithEmailAndPassword(auth, email, password).then((data) => {
       setProvider(data.user.email);
       obtenerUsuario(data.user.displayName, data.user.email);
@@ -88,7 +88,7 @@ const LogIn = () => {
   return provider ? (
     Navigate("/dashboard")
   ) : (
-    <div className="h-screen bg-gradient-to-tl from-purple-dark to-indigo-900 w-full py-16 px-4">
+    <div className="h-full bg-gradient-to-tl from-purple-dark to-indigo-900 w-full py-16 px-4">
       <div className="flex flex-col items-center justify-center">
         {showRegisterForm ? (
           <RegisterForm handleShowAuthForm={handleShowAuthForm} />
@@ -247,7 +247,7 @@ const LogIn = () => {
               <div className="mt-8">
                 {/* <Link to={"/dashboard"}> */}
                 <button
-                  onClick={logIngEmailPassword}
+                  onClick={logInEmailPassword}
                   role="button"
                   className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 bg-gray-800 py-3 text-base font-medium rounded-lg w-full text-white"
                   type="submit"
