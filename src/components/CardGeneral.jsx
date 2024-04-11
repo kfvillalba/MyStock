@@ -4,11 +4,7 @@ import ClienteIcon from "../assets/ClienteIcon";
 
 export function CardGeneral({ nombre, logo, cantidad }) {
   return (
-    <Card
-      className="mx-auto mt-0 max-w-xs cardStyle w-[240px] h-[80px] mt-0 p-2 ml-0"
-      decoration="top"
-      decorationColor="indigo"
-    >
+    <Card className="cardStyle" decoration="top" decorationColor="indigo">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
