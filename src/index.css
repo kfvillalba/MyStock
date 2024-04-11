@@ -75,6 +75,6 @@
   }
 
   .cardStyle {
-    @apply bg-purple-dark text-white   max-w-xs  w-[240px] h-[80px] mt-0 p-2;
+    @apply bg-purple-dark text-white max-w-xs  w-[200px] h-[100px] mt-0 p-2;
   }
 }
