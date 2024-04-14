@@ -7,7 +7,19 @@ import ModalRegisterExistencias from "../components/ModalRegisterExistencias";
 import ModalEditExistencias from "../components/ModalEditExistencias";
 
 const Page = () => {
-  const [existencia, setExistencia] = useState();
+  const [existencia, setExistencia] = useState([
+    {
+      nombreCategoria: "sad",
+      nombreProducto: "sad",
+      nombreProveedor: "sad",
+      comprobante: "sad",
+      existenciaInicial: "sad",
+      existenciaActual: "sad",
+      precioCompra: "sad",
+      precioVenta: "sad",
+      fechaEntrada: "sad",
+    },
+  ]);
   const [categorias, setCategorias] = useState();
   const [productos, setProductos] = useState();
   const [proveedores, setProveedores] = useState();
@@ -87,21 +99,20 @@ const Page = () => {
         </section>
 
         <div className="h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm">
-          <table className="w-full ">
+          <table className="w-full table-auto ">
             <thead className="[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white">
               <tr>
                 <th className="text-start pl-3">Categoria</th>
                 <th className="text-start pl-3">Producto</th>
                 <th className="text-start pl-3">Proveedor</th>
-                <th className="text-center w-28">Comprobante</th>
-                <th className="text-center w-28">Existencia Inicial</th>
-                <th className="text-center w-28">Existencia Actual</th>
-                <th className="text-center w-28">Precio de Compra</th>
-                <th className="text-center w-28">Precio de Venta</th>
-                <th className="text-center w-28">Fecha de Entrada</th>
-                <th className="text-center w-28">Agregar</th>
-                <th className="text-center w-28">Editar</th>
-                <th className="text-center w-28">Eliminar</th>
+                <th className="text-center">Comprobante</th>
+                <th className="text-center">Existencia Inicial</th>
+                <th className="text-center">Existencia Actual</th>
+                <th className="text-center">Precio de Compra</th>
+                <th className="text-center">Precio de Venta</th>
+                <th className="text-center">Fecha de Entrada</th>
+                <th className="text-center">Editar</th>
+                <th className="text-center">Eliminar</th>
               </tr>
             </thead>
             <tbody>
@@ -118,26 +129,12 @@ const Page = () => {
                     <td className="pl-3">{existencia.precioVenta}</td>
                     <td className="pl-3">{existencia.fechaEntrada}</td>
                     <td className="text-center text-blue-800">
-                      <button
-                        onClick={(event) =>
-                          editarCliente(
-                            event,
-                            existencia.id,
-                            existencia.nombre,
-                            existencia.celular,
-                            existencia.correo
-                          )
-                        }
-                      >
+                      <button onClick={(event) => setformEdit(true)}>
                         <EditIcon clases={"size-7 cursor-pointer"} />
                       </button>
                     </td>
                     <td className="text-center text-red-800">
-                      <button
-                        onClick={(event) =>
-                          eliminarClientes(event, existencia.id)
-                        }
-                      >
+                      <button onClick={(event) => console.log("event")}>
                         <DeleteIcon clases={"size-7 cursor-pointer"} />
                       </button>
                     </td>
