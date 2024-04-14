@@ -61,7 +61,7 @@ const Page = () => {
             </select>
           </div>
           <div>
-            <select type="text" className="select ">
+            <select type="text" className="select">
               <option value="-1">Todos los Productos</option>
               {productos?.map((producto) => {
                 return (

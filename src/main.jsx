@@ -34,17 +34,17 @@ const router = createBrowserRouter([
     errorElement: <PageNotFound />,
   },
   {
-    path: "/stock/productos",
+    path: "/gestion/productos",
     element: <PageProduct />,
     errorElement: <PageNotFound />,
   },
   {
-    path: "/stock/categorias",
+    path: "/gestion/categorias",
     element: <PageCategorias />,
     errorElement: <PageNotFound />,
   },
   {
-    path: "/stock/proveedores",
+    path: "/gestion/proveedores",
     element: <PageProveedores />,
     errorElement: <PageNotFound />,
   },
