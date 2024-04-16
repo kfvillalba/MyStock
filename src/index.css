@@ -29,10 +29,13 @@
     @apply rounded-lg w-fit text-white bg-red-900  hover:text-white hover:bg-red-700 p-2    text-center;
   }
   .input__form {
-    @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2;
+    @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 my-2;
   }
   .select {
-    @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-96 pl-3 mt-2;
+    @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-96 pl-3 my-2;
+  }
+  .select__table {
+    @apply bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 my-2;
   }
   .label__form {
     @apply text-sm font-medium leading-none text-gray-800;
@@ -42,36 +45,6 @@
   }
   .btn__menu__active {
     @apply rounded-lg w-full [&>svg]:text-white bg-purple-light  [&>svg]:hover:text-white hover:bg-purple-light py-2 my-1 hover:text-white pl-4 text-start;
-  }
-
-  .tr {
-    display: flex;
-    width: fit-content;
-  }
-
-  .th,
-  .td {
-    box-shadow: inset 0 0 0 1px #424242;
-  }
-
-  .th {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #a9a9a9; /* Cambiado de "gray.400" */
-    padding: 0.5rem;
-    font-weight: bold;
-    font-size: 0.75rem; /* Cambiado de "xs" */
-    text-transform: uppercase;
-    text-align: center;
-  }
-
-  .td > input {
-    margin: 0.25rem; /* Cambiado de "m" */
-    padding: 0.2rem;
-    background: transparent; /* Cambiado de "bg" */
-    max-width: 100%;
   }
 
   .cardStyle {

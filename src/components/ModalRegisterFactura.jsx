@@ -9,7 +9,6 @@ const ModalRegisterFactura = ({
   registrar,
   productos,
   categorias,
-  proveedores,
   clientes,
 }) => {
   const {
@@ -22,11 +21,35 @@ const ModalRegisterFactura = ({
   const onSubmit = (data) => {
     console.log(data);
   };
-  const onSubmitDetalle = (data) => {
-    console.log(data);
-  };
+  const total = [
+    (
+      Math.floor(
+        parseFloat(
+          watch("cantidad") * watch("precio") -
+            (watch("cantidad") * watch("precio") * watch("descuento")) / 100
+        ) * 100
+      ) / 100
+    ).toFixed(2),
+  ];
+  const totales = {};
   const [detalleFactura, setDetalleFactura] = useState([]);
+  function getTotales() {
+    totales.totalProductos = 0;
+    totales.totalSinDescuento = 0;
+    totales.totalDescuento = 0;
+    totales.totalPagar = 0;
+    detalleFactura.map((detalle) => {
+      totales.totalProductos += parseFloat(detalle.cantidad);
+      totales.totalSinDescuento += parseFloat(
+        detalle.cantidad * detalle.precio
+      );
+      totales.totalDescuento += parseFloat(detalle.valorDescuento);
+      totales.totalPagar += parseFloat(detalle.total);
+    });
+  }
+  getTotales();
   const agregarDetalle = (e) => {
+    console.log(watch("total"));
     e.preventDefault();
     const detalle = {
       categoria: [watch("categoria")],
@@ -34,8 +57,17 @@ const ModalRegisterFactura = ({
       cantidad: [watch("cantidad")],
       precio: [watch("precio")],
       descuento: [watch("descuento")],
-      total: [watch("total")],
+      valorDescuento: [
+        (
+          Math.floor(
+            ((watch("cantidad") * watch("precio") * watch("descuento")) / 100) *
+              100
+          ) / 100
+        ).toFixed(2),
+      ],
+      total: total,
     };
+    console.log(detalle);
     setDetalleFactura([...detalleFactura, detalle]);
     reset();
   };
@@ -74,13 +106,13 @@ const ModalRegisterFactura = ({
               <table className="w-full table-auto ">
                 <thead className="[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white">
                   <tr>
-                    <th className="text-center">#</th>
-                    <th className="text-start pl-3">Categoria</th>
-                    <th className="text-start pl-3">Producto</th>
-                    <th className="text-start pl-3">Cantidad</th>
-                    <th className="text-center">Precio</th>
-                    <th className="text-center">Descuento %</th>
-                    <th className="text-center">Total</th>
+                    <th>#</th>
+                    <th>Categoria</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Descuento %</th>
+                    <th>Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -111,7 +143,7 @@ const ModalRegisterFactura = ({
                       <div className="flex flex-col">
                         <select
                           type="text"
-                          className="select"
+                          className="select__table"
                           {...register("categoria")}
                         >
                           <option value="-1">Seleccione un categoria</option>
@@ -135,7 +167,7 @@ const ModalRegisterFactura = ({
                       <div className="flex flex-col">
                         <select
                           type="text"
-                          className="select"
+                          className="select__table"
                           {...register("producto")}
                         >
                           <option value="-1">Seleccione un producto</option>
@@ -204,6 +236,10 @@ const ModalRegisterFactura = ({
                               value: 0,
                               message: "Ingrese numeros validos",
                             },
+                            max: {
+                              value: 100,
+                              message: "Ingrese numeros validos",
+                            },
                             valueAsNumber: true,
                           })}
                         />
@@ -215,6 +251,8 @@ const ModalRegisterFactura = ({
                     <td>
                       <div>
                         <input
+                          placeholder={total}
+                          disabled
                           type="number"
                           className="input__form"
                           {...register("total", {
@@ -233,6 +271,30 @@ const ModalRegisterFactura = ({
                     </td>
                   </tr>
                 </tbody>
+                <tfoot className="py-2">
+                  <tr className="bg-purple-light text-white [&>td]:py-2 ">
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td>Productos: {totales.totalProductos}</td>
+                    <td>
+                      Total sin descuento:{" "}
+                      {(
+                        Math.floor(totales.totalSinDescuento * 100) / 100
+                      ).toFixed(2)}
+                    </td>
+                    <td>
+                      Total Descuento:{" "}
+                      {(Math.floor(totales.totalDescuento * 100) / 100).toFixed(
+                        2
+                      )}
+                    </td>
+                    <td>
+                      Total a Pagar:{" "}
+                      {(Math.floor(totales.totalPagar * 100) / 100).toFixed(2)}
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
             <button

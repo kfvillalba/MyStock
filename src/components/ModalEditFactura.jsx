@@ -28,7 +28,7 @@ const ModalEditFactura = ({
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="p-5 shadow-md rounded-sm shadow-black h-full">
-          <h3>Editar Existencias</h3>
+          <h3>Editar Factura</h3>
           <section className="flex flex-col gap-4 my-5">
             <div className="flex flex-col">
               <select

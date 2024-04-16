@@ -3,18 +3,32 @@ import PanelDivisor from "../components/PanelDivisor";
 import DeleteIcon from "../assets/DeleteIcon";
 import EditIcon from "../assets/EditIcon";
 import Swal from "sweetalert2";
-import ModalRegisterExistencias from "../components/ModalRegisterExistencias";
-import ModalEditExistencias from "../components/ModalEditExistencias";
 import ModalRegisterFactura from "../components/ModalRegisterFactura";
 import ModalEditFactura from "../components/ModalEditFactura";
 
 const Page = () => {
   const [facturas, setFacturas] = useState([
     {
-      numFactura: "sad",
-      fecha: "sad",
-      nombre: "sad",
-      totalPagado: "sad",
+      idFactura: "11",
+      fecha: "2024/232/232",
+      idCliente: "1003",
+      nombreCliente: "kevin Villlaba",
+      cantidadProductos: 213.213,
+      totalPagarConDescuento: 213.213,
+      totalPagarSinDescuento: 213.1234,
+      totalDescuento: 212.12312,
+      detalle: [
+        {
+          idCategoria: "",
+          nombreCategoria: "",
+          nombreProducto: "",
+          idProducto: "213123",
+          precio: 213.21,
+          cantidad: 213.12,
+          descuento: 21.312,
+          total: 2131.23,
+        },
+      ],
     },
   ]);
   const [clientes, setClientes] = useState();
@@ -91,10 +105,10 @@ const Page = () => {
               {facturas?.map((factura, index) => {
                 return (
                   <tr className="even:bg-slate-100" key={index}>
-                    <td className="pl-3">{factura.numFactura}</td>
+                    <td className="pl-3">{factura.idFactura}</td>
                     <td>{factura.fecha}</td>
-                    <td>{factura.nombre}</td>
-                    <td>{factura.totalPagado}</td>
+                    <td>{factura.nombreCliente}</td>
+                    <td>{factura.totalPagarConDescuento}</td>
                     <td className="text-center text-blue-800">
                       <button onClick={(event) => setformEdit(true)}>
                         <EditIcon clases={"size-7 cursor-pointer"} />
