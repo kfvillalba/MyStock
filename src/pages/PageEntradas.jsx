@@ -1,155 +1,251 @@
-import React, { useState, useEffect } from "react";
-import PanelDivisor from "../components/PanelDivisor";
-import DeleteIcon from "../assets/DeleteIcon";
-import EditIcon from "../assets/EditIcon";
-import Swal from "sweetalert2";
-import ModalRegisterExistencias from "../components/ModalRegisterExistencias";
-import ModalEditExistencias from "../components/ModalEditExistencias";
+import React, { useState, useEffect } from 'react'
+import PanelDivisor from '../components/PanelDivisor'
+import DeleteIcon from '../assets/DeleteIcon'
+import EditIcon from '../assets/EditIcon'
+import Swal from 'sweetalert2'
+import ModalRegisterExistencias from '../components/ModalRegisterExistencias'
+import ModalEditExistencias from '../components/ModalEditExistencias'
 
 const Page = () => {
-  const [existencia, setExistencia] = useState([
-    {
-      nombreCategoria: "sad",
-      nombreProducto: "sad",
-      nombreProveedor: "sad",
-      comprobante: "sad",
-      existenciaInicial: "sad",
-      existenciaActual: "sad",
-      precioCompra: "sad",
-      precioVenta: "sad",
-      fechaEntrada: "sad",
-    },
-  ]);
-  const [categorias, setCategorias] = useState();
-  const [productos, setProductos] = useState();
-  const [proveedores, setProveedores] = useState();
+  const [existencia, setExistencia] = useState([])
+  const [categorias, setCategorias] = useState([])
+  const [productos, setProductos] = useState([])
+  const [proveedores, setProveedores] = useState([])
 
-  const [formRegister, setformRegister] = useState(false);
-  const [formEdit, setformEdit] = useState(false);
+  const [formRegister, setFormRegister] = useState(false)
+  const [formEdit, setFormEdit] = useState(false)
+
+  const [dataExistencia, setDataExistencia] = useState({
+    id: '',
+    idCategoria: '',
+    idProducto: '',
+    idProveedor: '',
+    precioCompra: '',
+    precioVenta: '',
+    existenciaInicial: '',
+    nota: '',
+  })
+
+  useEffect(() => {
+    const fetchExistencias = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7127/api/Entradas/Consultar'
+        )
+        if (response.ok) {
+          const data = await response.json()
+          setExistencia(data)
+        } else {
+          throw new Error('Error al obtener las existencias')
+        }
+      } catch (error) {
+        console.error(error)
+        Swal.fire('Error', 'Hubo un error al obtener las existencias', 'error')
+      }
+    }
+
+    fetchExistencias()
+  }, [])
+
+  const eliminarExistencia = async (idExistencia) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás deshacer este cambio',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, bórralo',
+      cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(
+            `https://localhost:7127/api/Entradas/Eliminar?id=${idExistencia}`,
+            {
+              method: 'DELETE',
+            }
+          )
+          if (response.ok) {
+            setExistencia(existencia.filter((ex) => ex.id !== idExistencia))
+            Swal.fire('Éxito', 'Existencia eliminada correctamente', 'success')
+          } else {
+            throw new Error('Error al eliminar la existencia')
+          }
+        } catch (error) {
+          console.error(error)
+          Swal.fire('Error', 'Hubo un error al eliminar la existencia', 'error')
+        }
+      }
+    })
+  }
+
+  const editarExistencia = (
+    event,
+    id,
+    idCategoria,
+    idProducto,
+    idProveedor,
+    precioCompra,
+    precioVenta,
+    existenciaInicial,
+    nota
+  ) => {
+    event.preventDefault()
+    setDataExistencia({
+      id,
+      idCategoria,
+      idProducto,
+      idProveedor,
+      precioCompra,
+      precioVenta,
+      existenciaInicial,
+      nota,
+    })
+    setFormEdit(true)
+  }
 
   return (
     <>
       <ModalRegisterExistencias
         open={formRegister}
         onClose={() => {
-          setformRegister(false);
+          setFormRegister(false)
         }}
         registrar={(dataForm) => {
-          console.log(dataForm);
-          setExistencia([...existencia, dataForm]);
+          console.log(dataForm)
+          setExistencia([...existencia, dataForm])
         }}
       />
-      {
+      {formEdit && (
         <ModalEditExistencias
           open={formEdit}
+          dataExistencia={dataExistencia}
           onClose={() => {
-            setformEdit(false);
+            console.log(dataExistencia)
+            setFormEdit(false)
           }}
-          editar={(dataForm) => {}}
+          editar={(dataForm) => {
+            console.log(dataForm)
+          }}
         />
-      }
-      <div className="p-5  shadow-md rounded-sm shadow-black h-full">
+      )}
+      <div className='p-5 shadow-md rounded-sm shadow-black h-full'>
         <h3>Lista existencia</h3>
         <section>
           <button
-            onClick={() => setformRegister(true)}
-            className="bnt__primary"
+            onClick={() => setFormRegister(true)}
+            className='bnt__primary'
           >
             Agregar Existencia
           </button>
         </section>
 
-        <section className="flex row-span-3 flex-wrap justify-between gap-4 my-5">
+        <section className='flex row-span-3 flex-wrap justify-between gap-4 my-5'>
           <div>
-            <select type="text" className="select">
-              <option value="-1">Todas las Categorias</option>
+            <select type='text' className='select'>
+              <option value='-1'>Todas las Categorias</option>
               {categorias?.map((categoria) => {
                 return (
                   <option key={categoria.id} value={`${categoria.id}`}>
                     {categoria.nombre}
                   </option>
-                );
+                )
               })}
             </select>
           </div>
           <div>
-            <select type="text" className="select">
-              <option value="-1">Todos los Productos</option>
+            <select type='text' className='select'>
+              <option value='-1'>Todos los Productos</option>
               {productos?.map((producto) => {
                 return (
                   <option key={producto.id} value={`${producto.id}`}>
                     {producto.nombre}
                   </option>
-                );
+                )
               })}
             </select>
           </div>
           <div>
-            <select type="text" className="select">
-              <option value="-1">Todos los Proveedores</option>
+            <select type='text' className='select'>
+              <option value='-1'>Todos los Proveedores</option>
               {proveedores?.map((proveedor) => {
                 return (
                   <option key={proveedor.id} value={`${proveedor.id}`}>
                     {proveedor.nombre}
                   </option>
-                );
+                )
               })}
             </select>
           </div>
         </section>
 
-        <div className="h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm">
-          <table className="w-full table-auto ">
-            <thead className="[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white">
+        <div className='h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm'>
+          <table className='w-full table-auto'>
+            <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
               <tr>
-                <th className="text-start pl-3">Categoria</th>
-                <th className="text-start pl-3">Producto</th>
-                <th className="text-start pl-3">Proveedor</th>
-                <th className="text-center">Comprobante</th>
-                <th className="text-center">Existencia Inicial</th>
-                <th className="text-center">Existencia Actual</th>
-                <th className="text-center">Precio de Compra</th>
-                <th className="text-center">Precio de Venta</th>
-                <th className="text-center">Fecha de Entrada</th>
-                <th className="text-center">Editar</th>
-                <th className="text-center">Eliminar</th>
+                <th className='text-start pl-3'>Categoria</th>
+                <th className='text-start pl-3'>Producto</th>
+                <th className='text-start pl-3'>Proveedor</th>
+                <th className='text-center'>Existencia Inicial</th>
+                <th className='text-center'>Existencia Actual</th>
+                <th className='text-center'>Precio de Compra</th>
+                <th className='text-center'>Precio de Venta</th>
+                <th className='text-center'>Fecha de Entrada</th>
+                <th className='text-center'>Nota</th>
+                <th className='text-center'>Editar</th>
+                <th className='text-center'>Eliminar</th>
               </tr>
             </thead>
             <tbody>
               {existencia?.map((existencia, index) => {
                 return (
-                  <tr className="even:bg-slate-100" key={index}>
-                    <td className="pl-3">{existencia.nombreCategoria}</td>
-                    <td className="pl-3">{existencia.nombreProducto}</td>
-                    <td className="pl-3">{existencia.nombreProveedor}</td>
-                    <td className="pl-3">{existencia.comprobante}</td>
-                    <td className="pl-3">{existencia.existenciaInicial}</td>
-                    <td className="pl-3">{existencia.existenciaActual}</td>
-                    <td className="pl-3">{existencia.precioCompra}</td>
-                    <td className="pl-3">{existencia.precioVenta}</td>
-                    <td className="pl-3">{existencia.fechaEntrada}</td>
-                    <td className="text-center text-blue-800">
-                      <button onClick={(event) => setformEdit(true)}>
-                        <EditIcon clases={"size-7 cursor-pointer"} />
+                  <tr className='even:bg-slate-100' key={index}>
+                    <td className='pl-3'>{existencia.nombreCategoria}</td>
+                    <td className='pl-3'>{existencia.nombreProducto}</td>
+                    <td className='pl-3'>{existencia.nombreProveedor}</td>
+                    <td className='pl-3'>{existencia.existenciaInicial}</td>
+                    <td className='pl-3'>{existencia.existenciaActual}</td>
+                    <td className='pl-3'>{existencia.precioCompra}</td>
+                    <td className='pl-3'>{existencia.precioVenta}</td>
+                    <td className='pl-3'>{existencia.fechaEntrada}</td>
+                    <td className='pl-3'>{existencia.nota}</td>
+                    <td className='text-center text-blue-800'>
+                      <button
+                        onClick={(event) =>
+                          editarExistencia(
+                            event,
+                            existencia.id,
+                            existencia.nombreCategoria,
+                            existencia.nombreProducto,
+                            existencia.nombreProveedor,
+                            existencia.precioCompra,
+                            existencia.precioVenta,
+                            existencia.existenciaInicial,
+                            existencia.nota
+                          )
+                        }
+                      >
+                        <EditIcon clases={'size-7 cursor-pointer'} />
                       </button>
                     </td>
-                    <td className="text-center text-red-800">
-                      <button onClick={(event) => console.log("event")}>
-                        <DeleteIcon clases={"size-7 cursor-pointer"} />
+                    <td className='text-center text-red-800'>
+                      <button onClick={() => eliminarExistencia(existencia.id)}>
+                        <DeleteIcon clases={'size-7 cursor-pointer'} />
                       </button>
                     </td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </table>
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 const Pageexistencia = () => {
-  return <PanelDivisor Page={<Page />} />;
-};
+  return <PanelDivisor Page={<Page />} />
+}
 
-export default Pageexistencia;
+export default Pageexistencia
