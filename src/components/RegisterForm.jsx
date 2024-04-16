@@ -16,66 +16,38 @@ const RegisterForm = ({ handleShowAuthForm }) => {
 
   const [registroExitoso, setRegistroExitoso] = useState(false)
 
-  const onSubmit = handleSubmit(async ({ userName, email, password }) => {
+  const onSubmit = handleSubmit(async ({ email, password }) => {
     try {
-      // Verificar si el correo ya está registrado
-      const verificarCorreo = await fetch(
-        `https://localhost:7045/api/Usuarios/Autenticacion?email=${email}&password=${password}`
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
       )
-      if (verificarCorreo.ok) {
-        const data = await verificarCorreo.json()
-        if (data.existe) {
-          throw new Error('El correo ya está registrado')
-        }
-      } else {
-        throw new Error('Error al verificar el correo')
-      }
-
-      // Si el correo no está registrado, proceder con el registro
-      const response = await fetch(
-        `https://localhost:7045/api/Usuarios/Agregar`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userName,
-            email,
-            password,
-          }),
-        }
-      )
-
-      if (response.ok) {
-        console.log('Usuario registrado exitosamente')
-        setRegistroExitoso(true)
-        Swal.fire({
-          position: 'top-center',
-          icon: 'success',
-          title: 'Tu registro ha sido exitoso',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then((result) => {
-          setTimeout(() => {
-            reset()
-            handleShowAuthForm()
-          }, 1000)
-        })
-      } else {
-        throw new Error('Error al registrar usuario')
-      }
+      console.log('Usuario creado exitosamente:', userCredential.user)
+      setRegistroExitoso(true)
+      //handleShowAuthForm();
+      Swal.fire({
+        position: 'top-center',
+        icon: 'success',
+        title: 'Tu registro ha sido exitoso',
+        showConfirmButton: false,
+        timer: 1500,
+      }).then((result) => {
+        setTimeout(() => {
+          reset()
+          handleShowAuthForm()
+        }, 1000)
+      })
     } catch (error) {
-      console.error('Error al registrar usuario:', error)
       setError('general', {
         type: 'manual',
-        message: error.message,
+        message: 'Error al registrar usuario',
       })
       Swal.fire({
         position: 'top-center',
         icon: 'error',
-        title: 'Error al registrar usuario',
-        text: error.message,
+        title: 'El correo ya esta en uso',
+        text: 'Por favor, inténtalo de nuevo.',
         showConfirmButton: true,
       })
       reset()
@@ -95,7 +67,7 @@ const RegisterForm = ({ handleShowAuthForm }) => {
           <form onSubmit={onSubmit}>
             <div className='mt-6'>
               <label
-                htmlFor='userName'
+                htmlFor='username'
                 className='text-sm font-medium leading-none text-gray-800'
               >
                 Nombre de usuario
@@ -105,7 +77,7 @@ const RegisterForm = ({ handleShowAuthForm }) => {
                 type='text'
                 placeholder='Nombre de usuario'
                 className='bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2'
-                {...register('userName', {
+                {...register('username', {
                   required: {
                     value: true,
                     message: 'El nombre es obligatorio',

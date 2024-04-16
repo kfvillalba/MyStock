@@ -17,10 +17,17 @@ import BeneficioTotalIcon from '../assets/BeneficioTotalIcon'
 
 const Page = () => {
   const [totalClientes, setTotalClientes] = useState(0)
-  const [totalProductos, setTotalProductos] = useState(0)
   const [totalProveedores, setTotalProveedores] = useState(0)
+  const [totalCategorias, setTotalCategorias] = useState(0)
+  const [totalProductos, setTotalProductos] = useState(0)
+  const [totalFacturas, setTotalFacturas] = useState(0)
   const [existenciaTotal, setExistenciaTotal] = useState(0)
+  const [existenciaVendida, setExistenciaVendida] = useState(0)
   const [existenciaActual, setExistenciaActual] = useState(0)
+  const [totalImporteVendido, setTotalImporteVendido] = useState(0)
+  const [totalImportePagado, setTotalImportePagado] = useState(0)
+  const [totalBeneficioBruto, setTotalbeneficioBruto] = useState(0)
+  const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0)
 
   useEffect(() => {
     fetch('https://localhost:7127/api/Dashboard/TarjetaClientes')
@@ -29,19 +36,47 @@ const Page = () => {
 
     fetch('https://localhost:7127/api/Dashboard/TarjetaProveedors')
       .then((response) => response.text())
-      .then((data) => setTotalProductos(parseInt(data)))
+      .then((data) => setTotalProveedores(parseInt(data)))
+
+    fetch('https://localhost:7127/api/Dashboard/TarjetaCategorias')
+      .then((response) => response.text())
+      .then((data) => setTotalCategorias(parseInt(data)))
 
     fetch('https://localhost:7127/api/Dashboard/TarjetaProductos')
       .then((response) => response.text())
-      .then((data) => setTotalProveedores(parseInt(data)))
+      .then((data) => setTotalProductos(parseInt(data)))
+
+    fetch('https://localhost:7127/api/Dashboard/TarjetaFacturas')
+      .then((response) => response.text())
+      .then((data) => setTotalFacturas(parseInt(data)))
 
     fetch('https://localhost:7127/api/Dashboard/TarjetaExistenciasTotales')
       .then((response) => response.text())
       .then((data) => setExistenciaTotal(parseInt(data)))
 
+    fetch('https://localhost:7127/api/Dashboard/TarjetaExistenciasVendidas')
+      .then((response) => response.text())
+      .then((data) => setExistenciaVendida(parseInt(data)))
+
     fetch('https://localhost:7127/api/Dashboard/TarjetaExistenciasActuales')
       .then((response) => response.text())
       .then((data) => setExistenciaActual(parseInt(data)))
+
+    fetch('https://localhost:7127/api/Dashboard/TarjetaImporteVendido')
+      .then((response) => response.text())
+      .then((data) => setTotalImporteVendido(parseInt(data)))
+
+    fetch('https://localhost:7127/api/Dashboard/TarjetaImportePagado')
+      .then((response) => response.text())
+      .then((data) => setTotalImportePagado(parseInt(data)))
+
+    fetch('https://localhost:7127/api/Dashboard/TarjetaBeneficioBruto')
+      .then((response) => response.text())
+      .then((data) => setTotalbeneficioBruto(parseInt(data)))
+
+    fetch('https://localhost:7127/api/Dashboard/TarjetaBeneficioNeto')
+      .then((response) => response.text())
+      .then((data) => setTotalBeneficioNeto(parseInt(data)))
   }, [])
   return (
     <div>
@@ -52,60 +87,61 @@ const Page = () => {
           logo={<ClienteIcon clases={'size-12'} />}
         />
         <CardGeneral
+          nombre={'Proveedores'}
+          cantidad={totalProveedores}
+          logo={<ProvedoresIcon clases={'size-12'} />}
+        />
+        <CardGeneral
+          nombre={'Categorias'}
+          cantidad={totalCategorias}
+          logo={<ImporteRestanteIcon clases={'size-12'} />}
+        />
+        <CardGeneral
           nombre={'Productos'}
           cantidad={totalProductos}
           logo={<ProductosIcon clases={'size-12'} />}
         />
         <CardGeneral
-          nombre={'Proveedores'}
-          cantidad={totalProveedores}
-          logo={<ProvedoresIcon clases={'size-12'} />}
-        />
-        {/* <CardGeneral
           nombre={'Facturas'}
-          cantidad={2000}
+          cantidad={totalFacturas}
           logo={<FacturaIcon clases={'size-12'} />}
-        /> */}
+        />
         <CardGeneral
           nombre={'Existencia total'}
           cantidad={existenciaTotal}
           logo={<ExistenciaTotalIcon clases={'size-12'} />}
         />
-        {/* <CardGeneral
+        <CardGeneral
           nombre={'Existencia vendida'}
-          cantidad={2000}
+          cantidad={existenciaVendida}
           logo={<ExistenciaVendidaIcon clases={'size-12'} />}
-        /> */}
+        />
         <CardGeneral
           nombre={'Existencia actual'}
           cantidad={existenciaActual}
           logo={<ExistenciaActualIcon clases={'size-12'} />}
         />
-        {/* <CardGeneral
+        <CardGeneral
           nombre={'Importe vendido'}
-          cantidad={'$2000'}
+          cantidad={totalImporteVendido}
           logo={<ImporteVendidoIcon clases={'size-12'} />}
         />
         <CardGeneral
           nombre={'Importe pagado'}
-          cantidad={'$2000'}
+          cantidad={totalImportePagado}
           logo={<ImportePagadoIcon clases={'size-12'} />}
         />
-        <CardGeneral
-          nombre={'Importe restante'}
-          cantidad={'$2000'}
-          logo={<ImporteRestanteIcon clases={'size-12'} />}
-        />
+
         <CardGeneral
           nombre={'Beneficio bruto'}
-          cantidad={'$2000'}
+          cantidad={totalBeneficioBruto}
           logo={<BeneficioBrutoIcon clases={'size-12'} />}
         />
         <CardGeneral
           nombre={'Beneficio neto'}
-          cantidad={'$2000'}
+          cantidad={totalBeneficioNeto}
           logo={<BeneficioTotalIcon clases={'size-12'} />}
-        /> */}
+        />
         {/* <CategoryList /> */}
       </section>
     </div>
