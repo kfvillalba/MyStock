@@ -10,7 +10,7 @@ const Page = () => {
   const [proveedores, setProveedores] = useState()
 
   useEffect(() => {
-    fetch('https://localhost:7127/api/Proveerdors/Consultar')
+    fetch('https://localhost:7073/inventario-service/Proveedors/Consultar')
       .then((responde) => responde.json())
       .then((proveedores) => setProveedores(proveedores))
   }, [proveedores])
@@ -39,7 +39,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://localhost:7127/api/Proveerdors/Eliminar?id=${id}`,
+            `https://localhost:7073/inventario-service/Proveerdors/Eliminar?id=${id}`,
             {
               method: 'DELETE',
             }
@@ -99,11 +99,12 @@ const Page = () => {
         />
       }
       <div className='p-5  shadow-md rounded-sm shadow-black h-full'>
-        <h3>Lista proveedores</h3>
+        <h3 className='mb-2'>Lista proveedores</h3>
         <section>
           <button
             onClick={() => setformRegister(true)}
             className='bnt__primary'
+            class='bnt__primary transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ...'
           >
             Agregar proveedores
           </button>

@@ -12,7 +12,7 @@ const ModalRegisterCategoria = ({ open, onClose, registrar }) => {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        'https://localhost:7127/api/Categorias/Agregar',
+        'https://localhost:7073/inventario-service/Categorias/Agregar',
         {
           method: 'POST',
           headers: {

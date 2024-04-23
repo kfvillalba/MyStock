@@ -12,7 +12,7 @@ const ModalEditClientes = ({ open, onClose, editar, dataCliente }) => {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        `https://localhost:7127/api/Clientes/Actualizar?id=${dataCliente.id}`,
+        `https://localhost:7073/inventario-service/Clientes/Actualizar?id=${dataCliente.id}`,
         {
           method: 'PUT',
           headers: {

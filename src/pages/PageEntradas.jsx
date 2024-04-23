@@ -30,7 +30,7 @@ const Page = () => {
     const fetchExistencias = async () => {
       try {
         const response = await fetch(
-          'https://localhost:7127/api/Entradas/Consultar'
+          'https://localhost:7073/inventario-service/Entradas/Consultar'
         )
         if (response.ok) {
           const data = await response.json()
@@ -131,11 +131,12 @@ const Page = () => {
         />
       )}
       <div className='p-5 shadow-md rounded-sm shadow-black h-full'>
-        <h3>Lista existencia</h3>
+        <h3 className='mb-2'>Lista existencia</h3>
         <section>
           <button
             onClick={() => setFormRegister(true)}
             className='bnt__primary'
+            class='bnt__primary transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ...'
           >
             Agregar Existencia
           </button>

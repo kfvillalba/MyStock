@@ -8,17 +8,19 @@ import Swal from 'sweetalert2'
 import ModalEditProducto from '../components/ModalEditProducto'
 
 const Page = () => {
-  const [productos, setProductos] = useState()
+  const [productos, setProductos] = useState([])
   const [categorias, setCategorias] = useState()
+  const [buscarProducto, setBuscarProducto] = useState('')
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
 
   useEffect(() => {
-    fetch('https://localhost:7127/api/Productos/Consultar')
+    fetch('https://localhost:7073/inventario-service/Productos/Consultar')
       .then((responde) => responde.json())
       .then((productos) => setProductos(productos))
   }, [productos])
 
   useEffect(() => {
-    fetch('https://localhost:7127/api/Categorias/Consultar')
+    fetch('https://localhost:7073/inventario-service/Categorias/Consultar')
       .then((responde) => responde.json())
       .then((categorias) => setCategorias(categorias))
   }, [categorias])
@@ -47,7 +49,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://localhost:7127/api/Productos/Eliminar?id=${id}`,
+            `https://localhost:7073/inventario-service/Productos/Eliminar?id=${id}`,
             {
               method: 'DELETE',
             }
@@ -80,6 +82,10 @@ const Page = () => {
     setformEdit(true)
   }
 
+  const handleBuscarProducto = (event) => {
+    setBuscarProducto(event.target.value)
+  }
+
   return (
     <>
       <ModalRegisterProducto
@@ -107,21 +113,51 @@ const Page = () => {
         categorias={categorias}
       />
       <div className='p-5  shadow-md rounded-sm shadow-black h-full'>
-        <h3>Lista Productos</h3>
+        <h3 className='mb-2'>Lista Productos</h3>
         <section>
           <button
             onClick={() => setformRegister(true)}
             className='bnt__primary'
+            class='bnt__primary transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ...'
           >
             Agregar Productos
           </button>
         </section>
 
-        <section className='flex flex-col my-5'>
-          <label className='label__form' htmlFor='textBuscarProducto'>
-            Buscar Producto
-          </label>
-          <input className='input__form' id='textBuscarProducto' type='text' />
+        <section className='flex gap-10 my-5'>
+          <div className='flex flex-col'>
+            <label className='label__form' htmlFor='textBuscarProducto'>
+              Buscar Producto
+            </label>
+            <input
+              className='input__form'
+              id='textBuscarProducto'
+              type='text'
+              value={buscarProducto}
+              onChange={handleBuscarProducto}
+            />
+          </div>
+          <div>
+            <div className='flex flex-col'>
+              <label className='label__form' htmlFor='selectCategoria'>
+                Filtar Categoría
+              </label>
+              <select
+                className='select'
+                id='selectCategoria'
+                value={categoriaSeleccionada}
+                onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+              >
+                <option value=''>Todas las Categorías</option>
+                {categorias &&
+                  categorias.map((categoria) => (
+                    <option key={categoria.id} value={categoria.id}>
+                      {categoria.nombre}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
         </section>
 
         <div className='h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm'>
@@ -136,8 +172,19 @@ const Page = () => {
               </tr>
             </thead>
             <tbody>
-              {productos?.map((producto, index) => {
-                return (
+              {productos
+                .filter((producto) =>
+                  producto.nombre
+                    .toLowerCase()
+                    .includes(buscarProducto.toLowerCase())
+                )
+                .filter((producto) =>
+                  categoriaSeleccionada
+                    ? parseInt(producto.idCategoria) ===
+                      parseInt(categoriaSeleccionada)
+                    : true
+                )
+                .map((producto, index) => (
                   <tr className='even:bg-slate-100' key={index}>
                     <td className='pl-3'>{producto.nombreCategoria}</td>
                     <td className='pl-3'>{producto.nombre}</td>
@@ -167,8 +214,7 @@ const Page = () => {
                       </button>
                     </td>
                   </tr>
-                )
-              })}
+                ))}
             </tbody>
           </table>
         </div>
@@ -176,6 +222,7 @@ const Page = () => {
     </>
   )
 }
+
 const PageProduct = () => {
   return <PanelDivisor Page={<Page />} />
 }

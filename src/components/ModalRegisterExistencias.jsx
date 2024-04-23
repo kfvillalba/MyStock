@@ -11,7 +11,7 @@ const ModalRegisterExistencias = ({ open, onClose }) => {
     const fetchCategorias = async () => {
       try {
         const response = await fetch(
-          'https://localhost:7127/api/Categorias/Consultar'
+          'https://localhost:7073/inventario-service/Categorias/Consultar'
         )
         if (response.ok) {
           const data = await response.json()
@@ -27,7 +27,7 @@ const ModalRegisterExistencias = ({ open, onClose }) => {
     const fetchProveedores = async () => {
       try {
         const response = await fetch(
-          'https://localhost:7127/api/Proveerdors/Consultar'
+          'https://localhost:7073/inventario-service/Proveedors/Consultar'
         )
         if (response.ok) {
           const data = await response.json()
@@ -55,7 +55,7 @@ const ModalRegisterExistencias = ({ open, onClose }) => {
     console.log(data)
     try {
       const response = await fetch(
-        'https://localhost:7127/api/Entradas/Agregar',
+        'https://localhost:7073/inventario-service/Entradas/Agregar',
         {
           method: 'POST',
           headers: {
@@ -96,7 +96,7 @@ const ModalRegisterExistencias = ({ open, onClose }) => {
     if (idCategoria !== '-1') {
       try {
         const response = await fetch(
-          `https://localhost:7127/api/Productos/Filtrar/IdCategoria?idCategoria=${idCategoria}`
+          `https://localhost:7073/inventario-service/Productos/Filtrar/IdCategoria?idCategoria=${idCategoria}`
         )
         if (response.ok) {
           const data = await response.json()

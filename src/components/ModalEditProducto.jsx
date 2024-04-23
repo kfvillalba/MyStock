@@ -18,7 +18,7 @@ const ModalEditProducto = ({
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        `https://localhost:7127/api/Productos/Actualizar?id=${dataProducto.id}`,
+        `https://localhost:7073/inventario-service/Productos/Actualizar?id=${dataProducto.id}`,
         {
           method: 'PUT',
           headers: {

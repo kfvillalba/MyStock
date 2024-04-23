@@ -13,7 +13,7 @@ const ModalRegisterProducto = ({ open, onClose, registrar, categorias }) => {
     console.log(JSON.stringify(data))
     try {
       const response = await fetch(
-        'https://localhost:7127/api/Productos/Agregar',
+        'https://localhost:7073/inventario-service/Productos/Agregar',
         {
           method: 'POST',
           headers: {

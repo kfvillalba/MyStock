@@ -13,7 +13,7 @@ const ModalEditCategoria = ({ open, onClose, editar, dataCategoria }) => {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        `https://localhost:7127/api/Categorias/Actualizar?id=${dataCategoria.id}`,
+        `https://localhost:7073/inventario-service/Categorias/Actualizar?id=${dataCategoria.id}`,
         {
           method: 'PUT',
           headers: {

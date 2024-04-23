@@ -10,7 +10,7 @@ const Page = () => {
   const [salidas, setSalidas] = useState([])
 
   useEffect(() => {
-    fetch('https://localhost:7127/api/Salidas/ConsultarTodo')
+    fetch('https://localhost:7073/inventario-service/Salidas/ConsultarTodo')
       .then((response) => response.json())
       .then((data) => setSalidas(data))
       .catch((error) => console.error('Error fetching data:', error))
@@ -41,11 +41,12 @@ const Page = () => {
         />
       }
       <div className='p-5  shadow-md rounded-sm shadow-black h-full'>
-        <h3>Lista Facturas</h3>
+        <h3 className='mb-2'>Lista Facturas</h3>
         <section>
           <button
             onClick={() => setformRegister(true)}
             className='bnt__primary'
+            class='bnt__primary transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ...'
           >
             Nueva Factura
           </button>

@@ -30,51 +30,71 @@ const Page = () => {
   const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0)
 
   useEffect(() => {
-    fetch('https://localhost:7127/api/Dashboard/TarjetaClientes')
+    fetch('https://localhost:7073/inventario-service/Dashboard/TarjetaClientes')
       .then((response) => response.text())
       .then((data) => setTotalClientes(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaProveedors')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaProveedors'
+    )
       .then((response) => response.text())
       .then((data) => setTotalProveedores(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaCategorias')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaCategorias'
+    )
       .then((response) => response.text())
       .then((data) => setTotalCategorias(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaProductos')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaProductos'
+    )
       .then((response) => response.text())
       .then((data) => setTotalProductos(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaFacturas')
+    fetch('https://localhost:7073/inventario-service/Dashboard/TarjetaFacturas')
       .then((response) => response.text())
       .then((data) => setTotalFacturas(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaExistenciasTotales')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasTotales'
+    )
       .then((response) => response.text())
       .then((data) => setExistenciaTotal(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaExistenciasVendidas')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasVendidas'
+    )
       .then((response) => response.text())
       .then((data) => setExistenciaVendida(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaExistenciasActuales')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales'
+    )
       .then((response) => response.text())
       .then((data) => setExistenciaActual(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaImporteVendido')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaImporteVendido'
+    )
       .then((response) => response.text())
       .then((data) => setTotalImporteVendido(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaImportePagado')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado'
+    )
       .then((response) => response.text())
       .then((data) => setTotalImportePagado(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaBeneficioBruto')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioBruto'
+    )
       .then((response) => response.text())
       .then((data) => setTotalbeneficioBruto(parseInt(data)))
 
-    fetch('https://localhost:7127/api/Dashboard/TarjetaBeneficioNeto')
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto'
+    )
       .then((response) => response.text())
       .then((data) => setTotalBeneficioNeto(parseInt(data)))
   }, [])

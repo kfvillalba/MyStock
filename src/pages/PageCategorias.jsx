@@ -7,12 +7,17 @@ import Swal from 'sweetalert2'
 import ModalEditCategoria from '../components/ModalEditCategoria'
 
 const Page = () => {
-  const [data, setData] = useState()
+  const [data, setData] = useState([])
+  const [buscarCategoria, setBuscarCategoria] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch('https://localhost:7127/api/Categorias/Consultar')
+    fetch('https://localhost:7073/inventario-service/Categorias/Consultar')
       .then((responde) => responde.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        setData(data)
+        setIsLoading(false)
+      })
   }, [data])
 
   const [formRegister, setformRegister] = useState(false)
@@ -34,7 +39,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `https://localhost:7127/api/Categorias/Eliminar?id=${id}`,
+            `https://localhost:7073/inventario-service/Categorias/Eliminar?id=${id}`,
             {
               method: 'DELETE',
             }
@@ -67,6 +72,10 @@ const Page = () => {
     setformEdit(true)
   }
 
+  const handleBuscarCategoria = (event) => {
+    setBuscarCategoria(event.target.value)
+  }
+
   return (
     <>
       <ModalRegisterCategoria
@@ -90,11 +99,12 @@ const Page = () => {
         }}
       />
       <div className='p-5  shadow-md rounded-sm shadow-black h-full'>
-        <h3>Lista Categorias</h3>
+        <h3 className='mb-2'>Lista Categorias</h3>
         <section>
           <button
             onClick={() => setformRegister(true)}
             className='bnt__primary'
+            class='bnt__primary transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ...'
           >
             Agregar Categoria
           </button>
@@ -104,7 +114,13 @@ const Page = () => {
           <label className='label__form' htmlFor='textBuscarCategoria'>
             Buscar Categoria
           </label>
-          <input className='input__form' id='textBuscarCategoria' type='text' />
+          <input
+            className='input__form'
+            id='textBuscarCategoria'
+            type='text'
+            value={buscarCategoria}
+            onChange={handleBuscarCategoria}
+          />
         </section>
 
         <div className='h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm'>
@@ -117,31 +133,52 @@ const Page = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.map((categoria, index) => {
-                return (
-                  <tr className='even:bg-slate-100' key={index}>
-                    <td className='pl-3'>{categoria.nombre}</td>
-                    <td className='text-center text-blue-800'>
-                      <button
-                        onClick={(event) =>
-                          editarCategoria(event, categoria.id, categoria.nombre)
-                        }
-                      >
-                        <EditIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                    <td className='text-center text-red-800'>
-                      <button
-                        onClick={(event) =>
-                          eliminarCategoria(event, categoria.id)
-                        }
-                      >
-                        <DeleteIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
+              {isLoading ? (
+                <tr>
+                  <td colSpan='5' className='text-center py-4'>
+                    <div className='flex items-center justify-center'>
+                      <div className='animate-spin'>
+                        <div className='w-8 h-8 border-2 border-blue-900 rounded-full'></div>
+                      </div>
+                      <span className='ml-2'>Cargando...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                data
+                  .filter((data) =>
+                    data.nombre
+                      .toLowerCase()
+                      .includes(buscarCategoria.toLowerCase())
+                  )
+                  .map((categoria, index) => (
+                    <tr className='even:bg-slate-100' key={index}>
+                      <td className='pl-3'>{categoria.nombre}</td>
+                      <td className='text-center text-blue-800'>
+                        <button
+                          onClick={(event) =>
+                            editarCategoria(
+                              event,
+                              categoria.id,
+                              categoria.nombre
+                            )
+                          }
+                        >
+                          <EditIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                      <td className='text-center text-red-800'>
+                        <button
+                          onClick={(event) =>
+                            eliminarCategoria(event, categoria.id)
+                          }
+                        >
+                          <DeleteIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+              )}
             </tbody>
           </table>
         </div>

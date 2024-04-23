@@ -12,7 +12,7 @@ const ModalEditExistencias = ({ open, onClose, editar, dataExistencia }) => {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        `https://localhost:7127/api/Entradas/Actualizar?id=${dataExistencia.id}`,
+        `https://localhost:7073/inventario-service/Entradas/Actualizar?id=${dataExistencia.id}`,
         {
           method: 'PUT',
           headers: {
