@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { auth } from '../FireBaseConfig'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import Swal from 'sweetalert2'
+import depositoImage from '../assets/registro.png'
 
 const RegisterForm = ({ handleShowAuthForm }) => {
   const {
@@ -15,6 +16,20 @@ const RegisterForm = ({ handleShowAuthForm }) => {
   } = useForm()
 
   const [registroExitoso, setRegistroExitoso] = useState(false)
+
+  const checkUserExists = async (email, password) => {
+    const url = `http://localhost:5155/authetication-service/Usuarios/Autenticacion?email=${encodeURIComponent(
+      email
+    )}&password=${encodeURIComponent(password)}`
+
+    try {
+      const response = await fetch(url)
+      return response.ok
+    } catch (error) {
+      console.error('Error al verificar usuario:', error)
+      return false
+    }
+  }
 
   const onSubmit = handleSubmit(async ({ email, password }) => {
     try {
@@ -55,177 +70,205 @@ const RegisterForm = ({ handleShowAuthForm }) => {
   })
 
   return (
-    <div className='h-full w-full py-16 px-4'>
-      <div className='flex flex-col items-center justify-center'>
-        <div className='bg-white shadow rounded lg:w-1/3 md:w-1/2 w-full p-10 mt-1'>
-          <p
-            tabIndex='0'
-            className='focus:outline-none text-2xl font-extrabold leading-6 text-gray-800'
-          >
-            Regístrate
-          </p>
-          <form onSubmit={onSubmit}>
-            <div className='mt-6'>
-              <label
-                htmlFor='username'
-                className='text-sm font-medium leading-none text-gray-800'
-              >
-                Nombre de usuario
-              </label>
-              <input
-                //id="username"
-                type='text'
-                placeholder='Nombre de usuario'
-                className='bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2'
-                {...register('username', {
-                  required: {
-                    value: true,
-                    message: 'El nombre es obligatorio',
-                  },
-                  minLength: {
-                    value: 3,
-                    message: 'El nombre debe tener minimo 3 caracteres',
-                  },
-                  maxLength: {
-                    value: 20,
-                    message: 'El username debe tener maximo 20 carcteres',
-                  },
-                })}
-              />
-              {errors.username && (
-                <span
-                  style={{ color: 'red', fontSize: '0.8rem', display: 'block' }}
-                >
-                  {errors.username.message}
-                </span>
-              )}
-            </div>
-            <div className='mt-6'>
-              <label
-                htmlFor='email'
-                className='text-sm font-medium leading-none text-gray-800'
-              >
-                Correo electrónico
-              </label>
-              <input
-                id='email'
-                type='email'
-                placeholder='Correo electrónico'
-                className='bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2'
-                {...register('email', {
-                  required: 'El correo es obligatorio',
-                  pattern: {
-                    value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
-                    message: 'El correo no es válido',
-                  },
-                })}
-              />
-              {errors.email && (
-                <span
-                  style={{ color: 'red', fontSize: '0.8rem', display: 'block' }}
-                >
-                  {errors.email.message}
-                </span>
-              )}
-            </div>
-            <div className='mt-6'>
-              <label
-                htmlFor='password'
-                className='text-sm font-medium leading-none text-gray-800'
-              >
-                Contraseña
-              </label>
-              <div className='relative flex items-center justify-center'>
-                <input
-                  id='password'
-                  type='password'
-                  placeholder='Contraseña'
-                  className='bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2'
-                  {...register('password', {
-                    required: 'La contraseña es obligatoria',
-                    minLength: {
-                      value: 6,
-                      message: 'La contraseña debe tener al menos 6 caracteres',
-                    },
-                  })}
-                />
-              </div>
-              {errors.password && (
-                <span
-                  style={{ color: 'red', fontSize: '0.8rem', display: 'block' }}
-                >
-                  {errors.password.message}
-                </span>
-              )}
-            </div>
-            <div className='mt-6'>
-              <label
-                htmlFor='confirmpassword'
-                className='text-sm font-medium leading-none text-gray-800'
-              >
-                Confirmar contraseña
-              </label>
-              <div className='relative flex items-center justify-center'>
-                <input
-                  //id="password"
-                  type='password'
-                  placeholder='Confirmar contraseña'
-                  className='bg-gray-200 border rounded text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2'
-                  {...register('confirmpassword', {
-                    required: {
-                      value: true,
-                      message: 'El confirmar contraseña es obligatorio',
-                    },
-                    validate: (value) =>
-                      value === watch('password') ||
-                      'Las contraseñas no coinciden',
-                  })}
-                />
-                <div className='absolute right-0 mt-2 mr-3 cursor-pointer'>
-                  <svg
-                    width='16'
-                    height='16'
-                    viewBox='0 0 16 16'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
+    <div className='min-h-screen bg-purple-dark text-gray-900 flex justify-center'>
+      <div className='max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1'>
+        <div className='lg:w-1/2 xl:w-5/12 p-6 sm:p-12'>
+          <div>
+            <img src='../src/assets/en-stock.png' className='w-10 mx-auto' />
+          </div>
+          <div className='mt-2 flex flex-col items-center'>
+            <h1 className='text-2xl xl:text-3xl font-extrabold'>Sign up</h1>
+            <div className='w-full flex-1 mt-4'>
+              <form onSubmit={onSubmit}>
+                <div className='mx-auto max-w-xs'>
+                  <label htmlFor='username' className='text-sm font-extrabold'>
+                    Nombre de usuario
+                  </label>
+                  <input
+                    id='username'
+                    type='text'
+                    placeholder='Nombre de usuario'
+                    className='mt-1 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
+                    {...register('username', {
+                      required: {
+                        value: true,
+                        message: 'El nombre es obligatorio',
+                      },
+                      minLength: {
+                        value: 3,
+                        message: 'El nombre debe tener minimo 3 caracteres',
+                      },
+                      maxLength: {
+                        value: 20,
+                        message: 'El username debe tener maximo 20 carcteres',
+                      },
+                    })}
+                  />
+                  {errors.username && (
+                    <span
+                      style={{
+                        color: 'red',
+                        fontSize: '0.8rem',
+                        display: 'block',
+                      }}
+                    >
+                      {errors.username.message}
+                    </span>
+                  )}
+                  <div className='mt-4'>
+                    <label htmlFor='correo' className='text-sm font-extrabold'>
+                      Correo
+                    </label>
+                    <input
+                      className='mt-1 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
+                      type='email'
+                      id='email'
+                      placeholder='Email'
+                      {...register('email', {
+                        required: {
+                          value: true,
+                          message: 'El correo es obligatorio',
+                        },
+                        pattern: {
+                          value:
+                            /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+                          message: 'El correo no es valido',
+                        },
+                      })}
+                    />
+
+                    {errors.email && (
+                      <span
+                        style={{
+                          color: 'red',
+                          fontSize: '0.8rem',
+                          display: 'block',
+                        }}
+                      >
+                        {errors.email.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className='mt-4'>
+                    <label
+                      htmlFor='password'
+                      className='text-sm font-extrabold'
+                    >
+                      Contraseña
+                    </label>
+                    <input
+                      id='password'
+                      type='password'
+                      placeholder='Contraseña'
+                      className='mt-1 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
+                      {...register('password', {
+                        required: 'La contraseña es obligatoria',
+                        minLength: {
+                          value: 6,
+                          message:
+                            'La contraseña debe tener al menos 6 caracteres',
+                        },
+                      })}
+                    />
+                    {errors.password && (
+                      <span
+                        style={{
+                          color: 'red',
+                          fontSize: '0.8rem',
+                          display: 'block',
+                        }}
+                      >
+                        {errors.password.message}
+                      </span>
+                    )}
+                    {errors.password && (
+                      <span
+                        style={{
+                          color: 'red',
+                          fontSize: '0.8rem',
+                          display: 'block',
+                        }}
+                      >
+                        {errors.password.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className='mt-4'>
+                    <label
+                      htmlFor='contraseña2'
+                      className='text-sm font-extrabold'
+                    >
+                      Confirmar contraseña
+                    </label>
+
+                    <input
+                      //id="password"
+                      type='password'
+                      placeholder='Confirmar contraseña'
+                      className='mt-1 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
+                      {...register('confirmpassword', {
+                        required: {
+                          value: true,
+                          message: 'El confirmar contraseña es obligatorio',
+                        },
+                        validate: (value) =>
+                          value === watch('password') ||
+                          'Las contraseñas no coinciden',
+                      })}
+                    />
+                    {errors.confirmpassword && (
+                      <span
+                        style={{
+                          color: 'red',
+                          fontSize: '0.8rem',
+                          display: 'block',
+                        }}
+                      >
+                        {errors.confirmpassword.message}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    className='mt-6 tracking-wide font-semibold bg-gray-800 text-white w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none'
+                    type='submit'
                   >
-                    {/* Icono de visibilidad de contraseña */}
-                  </svg>
+                    <svg
+                      className='w-6 h-6 -ml-2'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    >
+                      <path d='M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2' />
+                      <circle cx='8.5' cy='7' r='4' />
+                      <path d='M20 8v6M23 11h-6' />
+                    </svg>
+                    <span className='ml-'> Registrarse</span>
+                  </button>
+                  <p
+                    tabIndex='0'
+                    className='text-center focus:outline-none text-sm mt-4 font-medium leading-none text-gray-500'
+                  >
+                    ¿Ya tienes cuenta?{' '}
+                    <button
+                      className='hover:text-gray-500 focus:text-gray-500 focus:outline-none focus:underline hover:underline text-sm font-medium leading-none text-gray-800 cursor-pointer'
+                      onClick={handleShowAuthForm}
+                    >
+                      Inicia sesión aquí
+                    </button>
+                  </p>
                 </div>
-              </div>
-              {errors.confirmpassword && (
-                <span
-                  style={{
-                    color: 'red',
-                    fontSize: '0.8rem',
-                    display: 'block',
-                  }}
-                >
-                  {errors.confirmpassword.message}
-                </span>
-              )}
+              </form>
             </div>
-            <div className='mt-8'>
-              <button
-                className='focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 bg-gray-800 py-3 text-base font-medium rounded-lg w-full text-white'
-                type='submit'
-              >
-                Registrarse
-              </button>
-            </div>
-            <div
-              className='mt-4 text-sm text-gray-500 justify'
-              style={{ textAlign: 'center' }}
-            >
-              ¿Ya tienes una cuenta?{' '}
-              <button
-                onClick={handleShowAuthForm}
-                className='hover:text-gray-500 focus:text-gray-500 focus:outline-none focus:underline hover:underline font-medium leading-none cursor-pointer text-black'
-              >
-                Iniciar sesión
-              </button>
-            </div>
-          </form>
+          </div>
+        </div>
+
+        <div className='flex-1 bg-green-100 text-center hidden lg:flex bor sm:rounded-lg'>
+          <div
+            className='m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat'
+            style={{ backgroundImage: `url(${depositoImage})` }}
+          ></div>
         </div>
       </div>
     </div>
