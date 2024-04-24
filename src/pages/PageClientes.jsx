@@ -148,22 +148,6 @@ const Page = () => {
             </thead>
             <tbody>
               {isLoading ? (
-                // <tr>
-                //   <td colSpan='5' className='text-center py-4'>
-                //     <div className='flex items-center justify-center'>
-                //       <svg
-                //         className='animate-spin h-8 w-8 mr-3 text-blue-900'
-                //         viewBox='0 0 24 24'
-                //       >
-                //         <path
-                //           fill='currentColor'
-                //           d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9.5h4c.28 0 .5.22.5.5s-.22.5-.5.5h-4c-.28 0-.5-.22-.5-.5s.22-.5.5-.5z'
-                //         />
-                //       </svg>
-                //       <span className='ml-2'>Cargando...</span>
-                //     </div>
-                //   </td>
-                // </tr>
                 <tr>
                   <td colSpan='5' className='text-center py-4'>
                     <div className='flex items-center justify-center'>

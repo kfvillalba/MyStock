@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { auth } from '../FireBaseConfig'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import Swal from 'sweetalert2'
-import depositoImage from '../assets/registro.png'
+import depositoImage from '../assets/registrarse.gif'
 
 const RegisterForm = ({ handleShowAuthForm }) => {
   const {
@@ -77,7 +77,7 @@ const RegisterForm = ({ handleShowAuthForm }) => {
             <img src='../src/assets/en-stock.png' className='w-10 mx-auto' />
           </div>
           <div className='mt-2 flex flex-col items-center'>
-            <h1 className='text-2xl xl:text-3xl font-extrabold'>Sign up</h1>
+            <h1 className='text-2xl xl:text-3xl font-extrabold'>Registrarse</h1>
             <div className='w-full flex-1 mt-4'>
               <form onSubmit={onSubmit}>
                 <div className='mx-auto max-w-xs'>

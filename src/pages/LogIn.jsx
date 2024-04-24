@@ -11,7 +11,7 @@ import {
 } from '../FireBaseConfig'
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
 import Swal from 'sweetalert2'
-import depositoImage from '../assets/deposito.png'
+import depositoImage from '../assets/Login.gif'
 
 const LogIn = () => {
   const [provider, setProvider] = useState('')
@@ -146,7 +146,9 @@ const LogIn = () => {
                 />
               </div>
               <div className='mt-2 flex flex-col items-center'>
-                <h1 className='text-2xl xl:text-3xl font-extrabold'>Sign up</h1>
+                <h1 className='text-2xl xl:text-3xl font-extrabold'>
+                  Iniciar Sesión
+                </h1>
                 <div className='w-full flex-1 mt-8'>
                   <div className='flex flex-col items-center'>
                     <button

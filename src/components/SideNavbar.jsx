@@ -47,18 +47,15 @@ const SideNavbar = () => {
     Navigate('/login')
   }
   return (
-    <nav className='bg-purple-dark object-cover h-full text-gray-300 relative flex flex-col'>
+    <nav className='bg-[#2e4057] object-cover h-full text-white font-bold relative flex flex-col'>
       <section className='flex-wrap'>
-        <h1 className='p-2 text-center shadow-md shadow-black text-purple-light text-5xl '>
+        <h1 className='p-2 text-center  text-purple-light text-5xl '>
           MyStock
         </h1>
-        <header className='Profile flex flex-wrap items-center p-5  shadow-sm shadow-black '>
+        <header className='Profile flex flex-wrap items-center p-5   '>
           <img
-            className='rounded-full shadow-sm shadow-white'
-            src={
-              localStorage.getItem('photoURL') ||
-              'https://cdn-icons-png.flaticon.com/512/282/282133.png'
-            }
+            className='rounded-full'
+            src={localStorage.getItem('photoURL') || '../src/assets/perfil.png'}
             alt='avatar'
             style={{ width: '64px', height: '64px' }}
           />
@@ -67,10 +64,10 @@ const SideNavbar = () => {
             <p className='text-sm'>{localStorage.getItem('email')}</p>
           </div>
         </header>
-        <h1 className='py-3 shadow-sm shadow-black'>Navegación Principal</h1>
+        <h1 className='py-3 '>Navegación Principal</h1>
       </section>
       <section className='h-full [&>footer>ul>li]:mx-3 [&>header>ul>li]:mx-3 flex flex-col relative'>
-        <header className='overflow-y-auto h-1 flex flex-col flex-grow shadow-sm shadow-black mt-2'>
+        <header className='overflow-y-auto h-1 flex flex-col flex-grow  mt-2'>
           <ul>
             <li>
               <NavLink to={'/dashboard'}>
