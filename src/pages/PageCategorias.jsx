@@ -98,7 +98,7 @@ const Page = () => {
           //con esta dataForm modifican
         }}
       />
-      <div className="p-5 h-full flex flex-col">
+      <div className="p-5 h-full flex flex-col shadow-md rounded-sm shadow-black ">
         <section className="flex flex-col ">
           <label className="label__form" htmlFor="textBuscarCategoria">
             Buscar Categoria
@@ -112,7 +112,7 @@ const Page = () => {
           />
         </section>
 
-        <div className="h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm">
+        <div className="container__table">
           <table className="w-full ">
             <thead className="[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white">
               <tr>
