@@ -5,16 +5,20 @@ import EditIcon from '../assets/EditIcon'
 import Swal from 'sweetalert2'
 import ModalRegisterFactura from '../components/ModalRegisterFactura'
 import ModalEditFactura from '../components/ModalEditFactura'
+import { fetchSalidas } from '../components/API_INV'
 
 const Page = () => {
   const [salidas, setSalidas] = useState([])
 
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Salidas/ConsultarTodo')
-      .then((response) => response.json())
+    fetchSalidas()
       .then((data) => setSalidas(data))
-      .catch((error) => console.error('Error fetching data:', error))
+      .catch((error) => {
+        console.error(error)
+        Swal.fire('Error', 'Hubo un error al obtener las salidas', 'error')
+      })
   }, [])
+
   const [clientes, setClientes] = useState()
   const [formRegister, setformRegister] = useState(false)
   const [formEdit, setformEdit] = useState(false)
@@ -28,7 +32,7 @@ const Page = () => {
         }}
         registrar={(dataForm) => {
           console.log(dataForm)
-          setExistencia([...existencia, dataForm])
+          fetchSalidas().then((salidas) => setSalidas(salidas))
         }}
       />
       {

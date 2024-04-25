@@ -15,6 +15,12 @@ import ImporteRestanteIcon from '../assets/ImporteRestante'
 import BeneficioBrutoIcon from '../assets/BeneficioBrutoIcon'
 import BeneficioTotalIcon from '../assets/BeneficioTotalIcon'
 
+const fetchData = (url, setter) => {
+  fetch(url)
+    .then((response) => response.text())
+    .then((data) => setter(parseInt(data)))
+}
+
 const Page = () => {
   const [totalClientes, setTotalClientes] = useState(0)
   const [totalProveedores, setTotalProveedores] = useState(0)
@@ -29,75 +35,63 @@ const Page = () => {
   const [totalBeneficioBruto, setTotalbeneficioBruto] = useState(0)
   const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0)
 
+  const fetchItems = [
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaClientes',
+      setter: setTotalClientes,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProveedors',
+      setter: setTotalProveedores,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaCategorias',
+      setter: setTotalCategorias,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProductos',
+      setter: setTotalProductos,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaFacturas',
+      setter: setTotalFacturas,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasTotales',
+      setter: setExistenciaTotal,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasVendidas',
+      setter: setExistenciaVendida,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales',
+      setter: setExistenciaActual,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImporteVendido',
+      setter: setTotalImporteVendido,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado',
+      setter: setTotalImportePagado,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioBruto',
+      setter: setTotalbeneficioBruto,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto',
+      setter: setTotalBeneficioNeto,
+    },
+
+    // Agrega aquí los demás objetos con las URL y los setters correspondientes
+  ]
+
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Dashboard/TarjetaClientes')
-      .then((response) => response.text())
-      .then((data) => setTotalClientes(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaProveedors'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalProveedores(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaCategorias'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalCategorias(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaProductos'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalProductos(parseInt(data)))
-
-    fetch('https://localhost:7073/inventario-service/Dashboard/TarjetaFacturas')
-      .then((response) => response.text())
-      .then((data) => setTotalFacturas(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasTotales'
-    )
-      .then((response) => response.text())
-      .then((data) => setExistenciaTotal(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasVendidas'
-    )
-      .then((response) => response.text())
-      .then((data) => setExistenciaVendida(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales'
-    )
-      .then((response) => response.text())
-      .then((data) => setExistenciaActual(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaImporteVendido'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalImporteVendido(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalImportePagado(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioBruto'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalbeneficioBruto(parseInt(data)))
-
-    fetch(
-      'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto'
-    )
-      .then((response) => response.text())
-      .then((data) => setTotalBeneficioNeto(parseInt(data)))
+    fetchItems.forEach(({ url, setter }) => fetchData(url, setter))
   }, [])
+
   return (
     <div>
       <section className='flex flex-wrap gap-5 p-4 mr-4'>
@@ -162,7 +156,7 @@ const Page = () => {
           cantidad={totalBeneficioNeto}
           logo={<BeneficioTotalIcon clases={'size-12'} />}
         />
-        {/* <CategoryList /> */}
+        <CategoryList />
       </section>
     </div>
   )

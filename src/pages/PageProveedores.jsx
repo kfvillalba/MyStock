@@ -5,15 +5,16 @@ import EditIcon from '../assets/EditIcon'
 import ModalRegisterProveedores from '../components/ModalRegisterProveedores'
 import ModalEditProveedores from '../components/ModalEditProveedores'
 import Swal from 'sweetalert2'
+import { fetchProviders } from '../components/API_INV'
 
 const Page = () => {
   const [proveedores, setProveedores] = useState()
 
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Proveedors/Consultar')
-      .then((responde) => responde.json())
+    fetchProviders()
       .then((proveedores) => setProveedores(proveedores))
-  }, [proveedores])
+      .catch((error) => console.error(error))
+  }, [])
 
   const [formRegister, setformRegister] = useState(false)
   const [formEdit, setformEdit] = useState(false)
@@ -25,7 +26,7 @@ const Page = () => {
     correo: '',
   })
 
-  const eliminarProveedores = (event, id) => {
+  const eliminarProveedores = async (event, id) => {
     event.preventDefault()
     Swal.fire({
       title: '¿Estas seguro?',
@@ -38,22 +39,12 @@ const Page = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(
-            `https://localhost:7073/inventario-service/Proveerdors/Eliminar?id=${id}`,
-            {
-              method: 'DELETE',
-            }
-          )
-
-          if (response.ok) {
-            Swal.fire({
-              title: 'Borrado!',
-              text: 'Se ha borrado con éxito',
-              icon: 'success',
-            })
-          } else {
-            throw new Error('Error al intentar borrar la categoría')
-          }
+          await deleteProvider(id)
+          Swal.fire({
+            title: 'Borrado!',
+            text: 'Se ha borrado con éxito',
+            icon: 'success',
+          })
         } catch (error) {
           console.error(error)
           Swal.fire({

@@ -5,9 +5,10 @@ import EditIcon from '../assets/EditIcon'
 import ModalRegisterClientes from '../components/ModalRegisterClientes'
 import ModalEditClientes from '../components/ModalEditClientes'
 import Swal from 'sweetalert2'
+import { fetchClients, deleteClient } from '../components/API_INV'
 
 const Page = () => {
-  const [clientes, setclientes] = useState([])
+  const [clientes, setClientes] = useState([])
   const [buscarCliente, setBuscarCliente] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
@@ -22,17 +23,20 @@ const Page = () => {
   })
 
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Clientes/Consultar')
-      .then((responde) => responde.json())
+    fetchClients()
       .then((clientes) => {
-        setclientes(clientes)
+        setClientes(clientes)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error('Error fetching clients:', error)
         setIsLoading(false)
       })
   }, [])
 
-  const eliminarClientes = (event, id) => {
+  const eliminarCliente = async (event, id) => {
     event.preventDefault()
-    setIsLoading(true)
+
     Swal.fire({
       title: '¿Estas seguro?',
       text: 'No podra deshacer este cambio!',
@@ -44,22 +48,13 @@ const Page = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(
-            `https://localhost:7073/inventario-service/Clientes/Eliminar?id=${id}`,
-            {
-              method: 'DELETE',
-            }
-          )
-
-          if (response.ok) {
-            Swal.fire({
-              title: 'Borrado!',
-              text: 'Se ha borrado con éxito',
-              icon: 'success',
-            })
-          } else {
-            throw new Error('Error al intentar borrar la categoría')
-          }
+          await deleteClient(id)
+          fetchClients().then((clientes) => setClientes(clientes))
+          Swal.fire({
+            title: 'Borrado!',
+            text: 'Se ha borrado con éxito',
+            icon: 'success',
+          })
         } catch (error) {
           console.error(error)
           Swal.fire({
@@ -94,8 +89,7 @@ const Page = () => {
           setformRegister(false)
         }}
         registrar={(dataForm) => {
-          console.log(dataForm)
-          setclientes([...clientes, dataForm])
+          fetchClients().then((clientes) => setClientes(clientes))
         }}
       />
       {
@@ -212,7 +206,7 @@ const Page = () => {
                       <td className='text-center text-red-800'>
                         <button
                           onClick={(event) =>
-                            eliminarClientes(event, clientes.id)
+                            eliminarCliente(event, cliente.id)
                           }
                         >
                           <DeleteIcon clases={'size-7 cursor-pointer'} />

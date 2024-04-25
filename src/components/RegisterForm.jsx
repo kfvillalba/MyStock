@@ -17,10 +17,10 @@ const RegisterForm = ({ handleShowAuthForm }) => {
 
   const [registroExitoso, setRegistroExitoso] = useState(false)
 
-  const checkUserExists = async (email, password) => {
-    const url = `http://localhost:5155/authetication-service/Usuarios/Autenticacion?email=${encodeURIComponent(
+  const checkUserExists = async (email) => {
+    const url = `https://localhost:7073/autenticacion-service/Usuarios/AutenticacionDeExistencia?email=${encodeURIComponent(
       email
-    )}&password=${encodeURIComponent(password)}`
+    )}`
 
     try {
       const response = await fetch(url)
@@ -31,29 +31,57 @@ const RegisterForm = ({ handleShowAuthForm }) => {
     }
   }
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+  const onSubmit = handleSubmit(async ({ userName, email, password }) => {
+    const userExists = await checkUserExists(email, password)
+
+    if (!userExists) {
+      console.log(userName, email, password)
+      // El usuario no está registrado, procedemos con el registro
+      console.log('Usuario no registrado, procediendo con el registro')
+      const registerResponse = await fetch(
+        'https://localhost:7073/autenticacion-service/Usuarios/Agregar',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userName, email, password }),
+        }
       )
-      console.log('Usuario creado exitosamente:', userCredential.user)
-      setRegistroExitoso(true)
-      //handleShowAuthForm();
-      Swal.fire({
-        position: 'top-center',
-        icon: 'success',
-        title: 'Tu registro ha sido exitoso',
-        showConfirmButton: false,
-        timer: 1500,
-      }).then((result) => {
-        setTimeout(() => {
-          reset()
-          handleShowAuthForm()
-        }, 1000)
-      })
-    } catch (error) {
+      if (registerResponse.ok) {
+        // Registro exitoso
+        console.log('Usuario registrado exitosamente')
+        setRegistroExitoso(true)
+        Swal.fire({
+          position: 'top-center',
+          icon: 'success',
+          title: 'Tu registro ha sido exitoso',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then((result) => {
+          setTimeout(() => {
+            reset()
+            handleShowAuthForm()
+          }, 1000)
+        })
+      } else {
+        // Error al registrar usuario en la API
+        console.error('Error al registrar usuario en la API')
+        setError('general', {
+          type: 'manual',
+          message: 'Error al registrar usuario',
+        })
+        Swal.fire({
+          position: 'top-center',
+          icon: 'error',
+          title: 'Error al registrar usuario',
+          text: 'Por favor, inténtalo de nuevo.',
+          showConfirmButton: true,
+        })
+      }
+    } else {
+      // El usuario ya está registrado
+      console.log('El usuario ya está registrado')
       setError('general', {
         type: 'manual',
         message: 'Error al registrar usuario',
@@ -61,7 +89,7 @@ const RegisterForm = ({ handleShowAuthForm }) => {
       Swal.fire({
         position: 'top-center',
         icon: 'error',
-        title: 'El correo ya esta en uso',
+        title: 'El correo ya está en uso',
         text: 'Por favor, inténtalo de nuevo.',
         showConfirmButton: true,
       })
@@ -81,15 +109,15 @@ const RegisterForm = ({ handleShowAuthForm }) => {
             <div className='w-full flex-1 mt-4'>
               <form onSubmit={onSubmit}>
                 <div className='mx-auto max-w-xs'>
-                  <label htmlFor='username' className='text-sm font-extrabold'>
+                  <label htmlFor='userName' className='text-sm font-extrabold'>
                     Nombre de usuario
                   </label>
                   <input
-                    id='username'
+                    id='userName'
                     type='text'
                     placeholder='Nombre de usuario'
                     className='mt-1 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
-                    {...register('username', {
+                    {...register('userName', {
                       required: {
                         value: true,
                         message: 'El nombre es obligatorio',
@@ -116,14 +144,14 @@ const RegisterForm = ({ handleShowAuthForm }) => {
                     </span>
                   )}
                   <div className='mt-4'>
-                    <label htmlFor='correo' className='text-sm font-extrabold'>
+                    <label htmlFor='email' className='text-sm font-extrabold'>
                       Correo
                     </label>
                     <input
                       className='mt-1 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
                       type='email'
                       id='email'
-                      placeholder='Email'
+                      placeholder='email'
                       {...register('email', {
                         required: {
                           value: true,
@@ -181,21 +209,10 @@ const RegisterForm = ({ handleShowAuthForm }) => {
                         {errors.password.message}
                       </span>
                     )}
-                    {errors.password && (
-                      <span
-                        style={{
-                          color: 'red',
-                          fontSize: '0.8rem',
-                          display: 'block',
-                        }}
-                      >
-                        {errors.password.message}
-                      </span>
-                    )}
                   </div>
                   <div className='mt-4'>
                     <label
-                      htmlFor='contraseña2'
+                      htmlFor='confirmpassword'
                       className='text-sm font-extrabold'
                     >
                       Confirmar contraseña

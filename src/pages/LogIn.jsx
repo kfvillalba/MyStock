@@ -12,6 +12,7 @@ import {
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
 import Swal from 'sweetalert2'
 import depositoImage from '../assets/Login.gif'
+import { loginWithEmailPassword, sendEmail } from '../components/API_USU'
 
 const LogIn = () => {
   const [provider, setProvider] = useState('')
@@ -44,45 +45,17 @@ const LogIn = () => {
   }
 
   const logIngEmailPassword = (email, password) => {
-    fetch(
-      `https://localhost:7045/api/Usuarios/Autenticacion?email=${email}&password=${password}`
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error('Usuario o contraseña incorrectos')
-        }
-      })
+    loginWithEmailPassword(email, password)
       .then((data) => {
         setProvider(data.email)
         obtenerUsuario(data.userName, data.email)
 
-        // Envío del correo electrónico
-        fetch('https://localhost:7062/EnviarEmail', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: email, // Utilizamos el email del usuario que se está iniciando sesión
-            subject: 'Iniciaste sesión en la aplicación MyStock',
-            body: 'Si no fuiste tu, cambia de inmediato tu clave.',
-            attachments: ['dfgdfg'],
-          }),
-        })
-          .then((response) => {
-            if (response.ok) {
-              console.log('Correo electrónico enviado con éxito')
-            } else {
-              throw new Error('Error al enviar el correo electrónico')
-            }
-          })
-          .catch((error) => {
+        sendEmail(email)
+          .then(() => console.log('Correo electrónico enviado con éxito'))
+          .catch((error) =>
             console.error('Error al enviar el correo electrónico:', error)
-          })
+          )
 
-        // Mostrar alerta de éxito
         Swal.fire({
           icon: 'success',
           title: 'Inicio de sesión exitoso',
@@ -91,7 +64,6 @@ const LogIn = () => {
       })
       .catch((error) => {
         console.error('Error al autenticar usuario:', error)
-        // Mostrar alerta de error
         Swal.fire({
           icon: 'error',
           title: 'Error',
