@@ -4,8 +4,12 @@ import DeleteIcon from '../assets/DeleteIcon'
 import EditIcon from '../assets/EditIcon'
 import ModalRegisterProducto from '../components/ModalRegisterProducto'
 import Swal from 'sweetalert2'
-
 import ModalEditProducto from '../components/ModalEditProducto'
+import {
+  fetchProducts,
+  fetchCategories,
+  deleteProduct,
+} from '../components/API_INV'
 
 const Page = () => {
   const [productos, setProductos] = useState([])
@@ -14,16 +18,16 @@ const Page = () => {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
 
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Productos/Consultar')
-      .then((responde) => responde.json())
+    fetchProducts()
       .then((productos) => setProductos(productos))
-  }, [productos])
+      .catch((error) => console.error('Error fetching products:', error))
+  }, [])
 
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Categorias/Consultar')
-      .then((responde) => responde.json())
+    fetchCategories()
       .then((categorias) => setCategorias(categorias))
-  }, [categorias])
+      .catch((error) => console.error('Error fetching categories:', error))
+  }, [])
 
   const [formRegister, setformRegister] = useState(false)
   const [formEdit, setformEdit] = useState(false)
@@ -35,7 +39,7 @@ const Page = () => {
     idCategoria: '',
   })
 
-  const eliminarProducto = (event, id) => {
+  const eliminarProducto = async (event, id) => {
     event.preventDefault()
     Swal.fire({
       title: '¿Estas seguro?',
@@ -48,22 +52,12 @@ const Page = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(
-            `https://localhost:7073/inventario-service/Productos/Eliminar?id=${id}`,
-            {
-              method: 'DELETE',
-            }
-          )
-
-          if (response.ok) {
-            Swal.fire({
-              title: 'Borrado!',
-              text: 'Se ha borrado con éxito',
-              icon: 'success',
-            })
-          } else {
-            throw new Error('Error al intentar borrar la categoría')
-          }
+          await deleteProduct(id)
+          Swal.fire({
+            title: 'Borrado!',
+            text: 'Se ha borrado con éxito',
+            icon: 'success',
+          })
         } catch (error) {
           console.error(error)
           Swal.fire({

@@ -5,6 +5,7 @@ import EditIcon from '../assets/EditIcon'
 import Swal from 'sweetalert2'
 import ModalRegisterExistencias from '../components/ModalRegisterExistencias'
 import ModalEditExistencias from '../components/ModalEditExistencias'
+import { fetchExistencias, deleteExistencia } from '../components/API_INV'
 
 const Page = () => {
   const [existencia, setExistencia] = useState([])
@@ -27,24 +28,12 @@ const Page = () => {
   })
 
   useEffect(() => {
-    const fetchExistencias = async () => {
-      try {
-        const response = await fetch(
-          'https://localhost:7073/inventario-service/Entradas/Consultar'
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setExistencia(data)
-        } else {
-          throw new Error('Error al obtener las existencias')
-        }
-      } catch (error) {
+    fetchExistencias()
+      .then((existencias) => setExistencia(existencias))
+      .catch((error) => {
         console.error(error)
         Swal.fire('Error', 'Hubo un error al obtener las existencias', 'error')
-      }
-    }
-
-    fetchExistencias()
+      })
   }, [])
 
   const eliminarExistencia = async (idExistencia) => {
@@ -60,18 +49,9 @@ const Page = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(
-            `https://localhost:7127/api/Entradas/Eliminar?id=${idExistencia}`,
-            {
-              method: 'DELETE',
-            }
-          )
-          if (response.ok) {
-            setExistencia(existencia.filter((ex) => ex.id !== idExistencia))
-            Swal.fire('Éxito', 'Existencia eliminada correctamente', 'success')
-          } else {
-            throw new Error('Error al eliminar la existencia')
-          }
+          await deleteExistencia(idExistencia)
+          setExistencia(existencia.filter((ex) => ex.id !== idExistencia))
+          Swal.fire('Éxito', 'Existencia eliminada correctamente', 'success')
         } catch (error) {
           console.error(error)
           Swal.fire('Error', 'Hubo un error al eliminar la existencia', 'error')

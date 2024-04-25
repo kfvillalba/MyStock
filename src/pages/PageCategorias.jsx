@@ -5,6 +5,7 @@ import EditIcon from '../assets/EditIcon'
 import ModalRegisterCategoria from '../components/ModalRegisterCategoria'
 import Swal from 'sweetalert2'
 import ModalEditCategoria from '../components/ModalEditCategoria'
+import { fetchCategories, deleteCategory } from '../components/API_INV'
 
 const Page = () => {
   const [data, setData] = useState([])
@@ -12,20 +13,23 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch('https://localhost:7073/inventario-service/Categorias/Consultar')
-      .then((responde) => responde.json())
+    fetchCategories()
       .then((data) => {
         setData(data)
         setIsLoading(false)
       })
-  }, [data])
+      .catch((error) => {
+        console.error('Error fetching categories:', error)
+        setIsLoading(false)
+      })
+  }, [])
 
   const [formRegister, setformRegister] = useState(false)
   const [formEdit, setformEdit] = useState(false)
 
   const [dataCategoria, setDataCategoria] = useState({ id: '', nombre: '' })
 
-  const eliminarCategoria = (event, id) => {
+  const eliminarCategoria = async (event, id) => {
     event.preventDefault()
     Swal.fire({
       title: '¿Estas seguro?',
@@ -38,22 +42,12 @@ const Page = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(
-            `https://localhost:7073/inventario-service/Categorias/Eliminar?id=${id}`,
-            {
-              method: 'DELETE',
-            }
-          )
-
-          if (response.ok) {
-            Swal.fire({
-              title: 'Borrado!',
-              text: 'Se ha borrado con éxito',
-              icon: 'success',
-            })
-          } else {
-            throw new Error('Error al intentar borrar la categoría')
-          }
+          await deleteCategory(id)
+          Swal.fire({
+            title: 'Borrado!',
+            text: 'Se ha borrado con éxito',
+            icon: 'success',
+          })
         } catch (error) {
           console.error(error)
           Swal.fire({
