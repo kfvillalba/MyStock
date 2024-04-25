@@ -43,6 +43,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           await deleteCategory(id)
+          fetchCategories().then((data) => setData(data))
           Swal.fire({
             title: 'Borrado!',
             text: 'Se ha borrado con éxito',
@@ -78,7 +79,7 @@ const Page = () => {
           setformRegister(false)
         }}
         registrar={(dataForm) => {
-          setData([...data, dataForm])
+          fetchCategories().then((data) => setData(data))
         }}
       />
       <ModalEditCategoria

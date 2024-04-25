@@ -49,6 +49,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           await deleteClient(id)
+          fetchClients().then((clientes) => setClientes(clientes))
           Swal.fire({
             title: 'Borrado!',
             text: 'Se ha borrado con éxito',
@@ -88,8 +89,7 @@ const Page = () => {
           setformRegister(false)
         }}
         registrar={(dataForm) => {
-          console.log(dataForm)
-          setclientes([...clientes, dataForm])
+          fetchClients().then((clientes) => setClientes(clientes))
         }}
       />
       {

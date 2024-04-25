@@ -29,7 +29,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchExistencias()
-      .then((existencias) => setExistencia(existencias))
+      .then((existencia) => setExistencia(existencia))
       .catch((error) => {
         console.error(error)
         Swal.fire('Error', 'Hubo un error al obtener las existencias', 'error')
@@ -50,6 +50,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           await deleteExistencia(idExistencia)
+          fetchExistencias().then((existencia) => setExistencia(existencia))
           setExistencia(existencia.filter((ex) => ex.id !== idExistencia))
           Swal.fire('Éxito', 'Existencia eliminada correctamente', 'success')
         } catch (error) {
@@ -94,7 +95,7 @@ const Page = () => {
         }}
         registrar={(dataForm) => {
           console.log(dataForm)
-          setExistencia([...existencia, dataForm])
+          fetchExistencias().then((existencia) => setExistencia(existencia))
         }}
       />
       {formEdit && (

@@ -32,7 +32,7 @@ const Page = () => {
         }}
         registrar={(dataForm) => {
           console.log(dataForm)
-          setExistencia([...existencia, dataForm])
+          fetchSalidas().then((salidas) => setSalidas(salidas))
         }}
       />
       {

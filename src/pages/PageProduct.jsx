@@ -53,6 +53,7 @@ const Page = () => {
       if (result.isConfirmed) {
         try {
           await deleteProduct(id)
+          fetchProducts().then((productos) => setProductos(productos))
           Swal.fire({
             title: 'Borrado!',
             text: 'Se ha borrado con éxito',
@@ -89,8 +90,7 @@ const Page = () => {
         }}
         registrar={(dataForm) => {
           console.log(dataForm)
-          setProductos([...productos, dataForm])
-          //aca logica
+          fetchProducts().then((productos) => setProductos(productos))
         }}
         categorias={categorias}
       />
