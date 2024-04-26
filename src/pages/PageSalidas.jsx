@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import ModalRegisterFactura from "../components/ModalRegisterFactura";
 import ModalEditFactura from "../components/ModalEditFactura";
 import { fetchSalidas } from "../components/API_INV";
+import ModalVerFactura from "../components/ModalVerFactura";
 
 const Page = () => {
   const [salidas, setSalidas] = useState([]);
@@ -21,8 +22,9 @@ const Page = () => {
 
   const [clientes, setClientes] = useState();
   const [formRegister, setformRegister] = useState(false);
+  const [formView, setFormView] = useState(false);
   const [formEdit, setformEdit] = useState(false);
-
+  const factura = {};
   return (
     <>
       <ModalRegisterFactura
@@ -35,15 +37,22 @@ const Page = () => {
           fetchSalidas().then((salidas) => setSalidas(salidas));
         }}
       />
-      {
-        <ModalEditFactura
-          open={formEdit}
-          onClose={() => {
-            setformEdit(false);
-          }}
-          editar={(dataForm) => {}}
-        />
-      }
+      <ModalVerFactura
+        open={formView}
+        onClose={() => {
+          setFormView(false);
+        }}
+        factura={factura}
+      />
+
+      <ModalEditFactura
+        open={formEdit}
+        onClose={() => {
+          setformEdit(false);
+        }}
+        editar={(dataForm) => {}}
+      />
+
       <div className="p-5 flex flex-col  shadow-md rounded-sm shadow-black h-full">
         <section className="flex row-span-3 flex-wrap justify-between gap-4">
           <div>
@@ -75,7 +84,7 @@ const Page = () => {
                 <th className="text-start pl-3">Fecha</th>
                 <th className="text-start pl-3">Cliente</th>
                 <th className="text-center">Total Pagado</th>
-                <th className="text-center">Editar</th>
+                <th className="text-center">Mostrar</th>
                 <th className="text-center">Eliminar</th>
               </tr>
             </thead>
@@ -88,7 +97,7 @@ const Page = () => {
                     <td>{salida.clienteNombre}</td>
                     <td>{salida.totalPagarConDescuento}</td>
                     <td className="text-center text-blue-800">
-                      <button onClick={(event) => setformEdit(true)}>
+                      <button onClick={(event) => setFormView(true)}>
                         <EditIcon clases={"size-7 cursor-pointer"} />
                       </button>
                     </td>

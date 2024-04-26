@@ -83,7 +83,12 @@ const SideNavbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/gestion"}>
+              <NavLink
+                to={"/gestion"}
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 {({ isActive }) => {
                   return (
                     <DropDown
@@ -97,7 +102,12 @@ const SideNavbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/stock"}>
+              <NavLink
+                to={"/stock"}
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 {({ isActive }) => {
                   return (
                     <DropDown
