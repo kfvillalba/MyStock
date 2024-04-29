@@ -15,7 +15,6 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
   const onSubmit = async (data) => {
     try {
       const idCliente = parseInt(data.cliente)
-      // const fechaFactura = new Date().toISOString()
       const cantidadProductos = detalleFactura.length
       const totalPagarSinDescuento = totales.totalSinDescuento
       const totalDescuento = totales.totalDescuento
@@ -26,6 +25,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
         return {
           idCategoria: parseInt(detalle.idCategoria),
           idProducto: parseInt(detalle.idProducto),
+          idEntrada: parseInt(detalle.id),
           precio: parseFloat(detalle.precio),
           cantidad: parseFloat(detalle.cantidad),
           descuento: parseFloat(detalle.descuento),
@@ -107,6 +107,9 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     const productoSeleccionado = productosOptions.find(
       (producto) => producto.idProducto === parseInt(watch('producto'))
     )
+    const stockSeleccionado = stockOptions.find(
+      (stock) => stock.id === parseInt(watch('stock'))
+    )
     const detalle = {
       categoria: categoriaSeleccionada
         ? categoriaSeleccionada.nombreCategoria
@@ -114,8 +117,9 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       producto: productoSeleccionado ? productoSeleccionado.nombreProducto : '',
       idCategoria: categoriaSeleccionada
         ? categoriaSeleccionada.idCategoria
-        : 0, // Reemplazar con el valor adecuado si no se encuentra
-      idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0, // Reemplazar con el valor adecuado si no se encuentra
+        : 0,
+      idEntrada: stockSeleccionado ? stockSeleccionado.id : '',
+      idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
       cantidad: parseFloat(watch('cantidad')),
       precio: parseFloat(watch('precio')),
       descuento: parseFloat(watch('descuento')),
@@ -131,6 +135,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
   const [categoriasOptions, setCategoriasOptions] = useState([])
   const [productosOptions, setProductosOptions] = useState([])
   const [clientesOptions, setClientesOptions] = useState([])
+  const [stockOptions, setStockOptions] = useState([])
 
   useEffect(() => {
     const fetchClientes = async () => {
@@ -182,7 +187,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
 
   const handleCategoriaChange = async (event) => {
     const idCategoria = event.target.value
-    setProductosOptions([]) // Limpiar la lista de productos antes de hacer la consulta
+    setProductosOptions([])
 
     if (idCategoria !== '-1') {
       try {
@@ -205,6 +210,34 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
           setProductosOptions(productosUnicos)
         } else {
           throw new Error('Error al cargar los productos')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const handleProductoChange = async (event) => {
+    const idProducto = event.target.value
+
+    if (idProducto !== '-1') {
+      try {
+        const response = await fetch(
+          `https://localhost:7073/inventario-service/Entradas/Filtrar/IdProductos?idProductos=${idProducto}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          const stockSet = new Set()
+          const stock = data.reduce((acc, { existenciaActual }) => {
+            if (!stockSet.has(existenciaActual)) {
+              stockSet.add(existenciaActual)
+              acc.push({ existenciaActual })
+            }
+            return acc
+          }, [])
+          setStockOptions(stock)
+        } else {
+          throw new Error('Error al cargar el stock')
         }
       } catch (error) {
         console.error(error)
@@ -308,6 +341,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                           type='text'
                           className='select__table'
                           {...register('producto')}
+                          onChange={handleProductoChange}
                         >
                           <option value='-1'>Seleccione un producto</option>
                           {productosOptions?.map((producto) => {
@@ -334,13 +368,10 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                           {...register('stock')}
                         >
                           <option value='-1'>Seleccione el stock</option>
-                          {productosOptions?.map((producto) => {
+                          {stockOptions?.map((stock) => {
                             return (
-                              <option
-                                key={producto.idProductos}
-                                value={`${producto.idProductos}`}
-                              >
-                                {producto.nombreProducto}
+                              <option key={stock.id} value={`${stock.id}`}>
+                                {stock.existenciaActual}
                               </option>
                             )
                           })}
@@ -466,7 +497,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
               onClick={(e) => agregarDetalle(e)}
               className='bnt__primary mt-3'
             >
-              Agregar Otro
+              Agregar
             </button>
           </section>
           <div className='flex gap-4 justify-center'>

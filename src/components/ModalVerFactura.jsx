@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import Swal from 'sweetalert2'
-import DeleteIcon from '../assets/DeleteIcon'
+import React from 'react'
 
 const ModalVerFactura = ({ open, onClose, salida }) => {
   if (!open) return null
