@@ -1,5 +1,12 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, GithubAuthProvider, FacebookAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  FacebookAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwlXvqVCkb1F-254kO6uqqRQ1q4KuPUh8",
@@ -8,7 +15,7 @@ const firebaseConfig = {
   storageBucket: "bd-pnotas.appspot.com",
   messagingSenderId: "715758211826",
   appId: "1:715758211826:web:c16dd864c6dfba6dd7b66b",
-  measurementId: "G-7JLCN3K639"
+  measurementId: "G-7JLCN3K639",
 };
 
 const app = initializeApp(firebaseConfig);
