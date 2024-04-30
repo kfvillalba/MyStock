@@ -21,11 +21,11 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       const totalPagarConDescuento = totales.totalPagar
 
       const productoSalidas = detalleFactura.map((detalle) => {
-        console.log(detalle)
+        console.log('detalleFact', detalleFactura)
         return {
           idCategoria: parseInt(detalle.idCategoria),
           idProducto: parseInt(detalle.idProducto),
-          idEntrada: parseInt(detalle.id),
+          idEntrada: parseInt(detalle.idEntrada),
           precio: parseFloat(detalle.precio),
           cantidad: parseFloat(detalle.cantidad),
           descuento: parseFloat(detalle.descuento),
@@ -57,6 +57,27 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       )
 
       if (response.ok) {
+        const idsEntradas = detalleFactura.map((detalle) => detalle.idEntrada)
+        const cantidades = detalleFactura.map((detalle) => detalle.stock)
+
+        for (let i = 0; i < idsEntradas.length; i++) {
+          const idEntrada = idsEntradas[i]
+          const quitarExistencia = cantidades[i]
+          const restarExistenciasResponse = await fetch(
+            `https://localhost:7073/inventario-service/Entradas/RestarExistencia?id=${idEntrada}&quitarExistencia=${quitarExistencia}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({}),
+            }
+          )
+          if (!restarExistenciasResponse.ok) {
+            throw new Error('Error al restar existencias')
+          }
+        }
+
         Swal.fire('¡Factura registrada!', '', 'success')
         reset()
         onClose()
@@ -107,9 +128,11 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     const productoSeleccionado = productosOptions.find(
       (producto) => producto.idProducto === parseInt(watch('producto'))
     )
+
     const stockSeleccionado = stockOptions.find(
-      (stock) => stock.id === parseInt(watch('stock'))
+      (stock) => stock.id === parseInt(watch('idEntrada'))
     )
+
     const detalle = {
       categoria: categoriaSeleccionada
         ? categoriaSeleccionada.nombreCategoria
@@ -118,7 +141,8 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       idCategoria: categoriaSeleccionada
         ? categoriaSeleccionada.idCategoria
         : 0,
-      idEntrada: stockSeleccionado ? stockSeleccionado.id : '',
+      idEntrada: parseInt(watch('idEntrada')),
+      stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
       idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
       cantidad: parseFloat(watch('cantidad')),
       precio: parseFloat(watch('precio')),
@@ -228,10 +252,10 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
         if (response.ok) {
           const data = await response.json()
           const stockSet = new Set()
-          const stock = data.reduce((acc, { existenciaActual }) => {
-            if (!stockSet.has(existenciaActual)) {
-              stockSet.add(existenciaActual)
-              acc.push({ existenciaActual })
+          const stock = data.reduce((acc, { id, existenciaActual }) => {
+            if (!stockSet.has(id)) {
+              stockSet.add(id)
+              acc.push({ id, existenciaActual })
             }
             return acc
           }, [])
@@ -356,7 +380,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                           })}
                         </select>
                         <span className='message'>
-                          {errors?.categoria?.message}
+                          {errors?.producto?.message}
                         </span>
                       </div>
                     </td>
@@ -365,7 +389,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                         <select
                           type='text'
                           className='select__table'
-                          {...register('stock')}
+                          {...register('idEntrada')}
                         >
                           <option value='-1'>Seleccione el stock</option>
                           {stockOptions?.map((stock) => {
@@ -377,7 +401,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                           })}
                         </select>
                         <span className='message'>
-                          {errors?.categoria?.message}
+                          {errors?.idEntrada?.message}
                         </span>
                       </div>
                     </td>
