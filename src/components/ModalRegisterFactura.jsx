@@ -14,6 +14,12 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
 
   const onSubmit = async (data) => {
     try {
+      if (detalleFactura.length === 0) {
+        Swal.fire('Error', 'Debe agregar un producto', 'error')
+
+        return
+      }
+
       const idCliente = parseInt(data.cliente)
       const cantidadProductos = detalleFactura.length
       const totalPagarSinDescuento = totales.totalSinDescuento
@@ -21,7 +27,6 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       const totalPagarConDescuento = totales.totalPagar
 
       const productoSalidas = detalleFactura.map((detalle) => {
-        console.log('detalleFact', detalleFactura)
         return {
           idCategoria: parseInt(detalle.idCategoria),
           idProducto: parseInt(detalle.idProducto),
@@ -35,7 +40,6 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       })
 
       const factura = {
-        // fechaFactura,
         idCliente,
         cantidadProductos,
         totalPagarConDescuento,
@@ -58,7 +62,8 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
 
       if (response.ok) {
         const idsEntradas = detalleFactura.map((detalle) => detalle.idEntrada)
-        const cantidades = detalleFactura.map((detalle) => detalle.stock)
+        const cantidades = detalleFactura.map((detalle) => detalle.cantidad)
+        console.log(detalleFactura)
 
         for (let i = 0; i < idsEntradas.length; i++) {
           const idEntrada = idsEntradas[i]
@@ -86,11 +91,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       }
     } catch (error) {
       console.error(error)
-      Swal.fire(
-        'Error',
-        'Ha ocurrido un error al registrar la factura',
-        'error'
-      )
+      Swal.fire('Error', error.message, 'error')
     }
   }
 
@@ -133,6 +134,48 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       (stock) => stock.id === parseInt(watch('idEntrada'))
     )
 
+    if (!categoriaSeleccionada) {
+      Swal.fire('Error', 'Debe seleccionar una categoría', 'error')
+      return
+    }
+    if (!productoSeleccionado) {
+      Swal.fire('Error', 'Debe seleccionar un producto', 'error')
+      return
+    }
+    if (!stockSeleccionado) {
+      Swal.fire('Error', 'Debe seleccionar el stock', 'error')
+      return
+    }
+
+    const cantidad = parseFloat(watch('cantidad'))
+    const precio = parseFloat(watch('precio'))
+    const descuento = parseFloat(watch('descuento'))
+
+    if (cantidad <= 0) {
+      Swal.fire(
+        'Error',
+        'La cantidad ingresada no puede ser menor o igual a 0 ',
+        'error'
+      )
+      return
+    }
+    if (isNaN(cantidad)) {
+      Swal.fire('Error', 'La cantidad no puede estar vacia', 'error')
+      return
+    }
+    if (cantidad > stockSeleccionado) {
+      Swal.fire('Error', 'La cantidad no puede ser mayor al stock', 'error')
+      return
+    }
+    if (precio <= 0 || isNaN(precio)) {
+      Swal.fire('Error', 'El precio ingresado no es válido', 'error')
+      return
+    }
+    if (descuento < 0 || isNaN(descuento) || descuento % 1 !== 0) {
+      Swal.fire('Error', 'El descuento ingresado no es válido', 'error')
+      return
+    }
+
     const detalle = {
       categoria: categoriaSeleccionada
         ? categoriaSeleccionada.nombreCategoria
@@ -144,16 +187,23 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       idEntrada: parseInt(watch('idEntrada')),
       stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
       idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
-      cantidad: parseFloat(watch('cantidad')),
-      precio: parseFloat(watch('precio')),
-      descuento: parseFloat(watch('descuento')),
-      valorDescuento: parseFloat(
-        (watch('cantidad') * watch('precio') * watch('descuento')) / 100
-      ).toFixed(2),
+      cantidad,
+      precio,
+      descuento,
+      valorDescuento: parseFloat((cantidad * precio * descuento) / 100).toFixed(
+        2
+      ),
       total: total[0],
     }
-    setDetalleFactura([...detalleFactura, detalle])
+    setDetalleFactura([
+      ...detalleFactura,
+      { ...detalle, id: Math.random().toString(36).substring(7) },
+    ])
     reset()
+  }
+
+  const eliminarDetalle = (index) => {
+    setDetalleFactura(detalleFactura.filter((detalle, idx) => idx !== index))
   }
 
   const [categoriasOptions, setCategoriasOptions] = useState([])
@@ -212,6 +262,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
   const handleCategoriaChange = async (event) => {
     const idCategoria = event.target.value
     setProductosOptions([])
+    setStockOptions([])
 
     if (idCategoria !== '-1') {
       try {
@@ -243,6 +294,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
 
   const handleProductoChange = async (event) => {
     const idProducto = event.target.value
+    setStockOptions([])
 
     if (idProducto !== '-1') {
       try {
@@ -316,9 +368,9 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                 <tbody>
                   {detalleFactura?.map((detalle, index) => {
                     return (
-                      <tr className='even:bg-slate-100' key={index}>
+                      <tr className='text-center even:bg-slate-100' key={index}>
                         <td className='text-center text-red-800'>
-                          <button onClick={(event) => console.log('event')}>
+                          <button onClick={() => eliminarDetalle(index)}>
                             <DeleteIcon clases={'size-7 cursor-pointer'} />
                           </button>
                         </td>

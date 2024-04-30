@@ -174,12 +174,18 @@ const Page = () => {
                     <td className='pl-3'>{existencia.nombreCategoria}</td>
                     <td className='pl-3'>{existencia.nombreProducto}</td>
                     <td className='pl-3'>{existencia.nombreProveedor}</td>
-                    <td className='pl-3'>{existencia.existenciaInicial}</td>
-                    <td className='pl-3'>{existencia.existenciaActual}</td>
-                    <td className='pl-3'>{existencia.precioCompra}</td>
-                    <td className='pl-3'>{existencia.precioVenta}</td>
-                    <td className='pl-3'>{existencia.fechaEntrada}</td>
-                    <td className='pl-3'>{existencia.nota}</td>
+                    <td className='text-center'>
+                      {existencia.existenciaInicial}
+                    </td>
+                    <td className='text-center'>
+                      {existencia.existenciaActual}
+                    </td>
+                    <td className='text-center'>{existencia.precioCompra}</td>
+                    <td className='text-center'>{existencia.precioVenta}</td>
+                    <td className='text-center pl-1'>
+                      {existencia.fechaEntrada}
+                    </td>
+                    <td className='text-start pl-5'>{existencia.nota}</td>
                     <td className='text-center text-blue-800'>
                       <button
                         onClick={(event) =>
