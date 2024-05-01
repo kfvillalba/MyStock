@@ -113,6 +113,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     totales.totalDescuento = 0
     totales.totalPagar = 0
     detalleFactura.map((detalle) => {
+      console.log(detalleFactura)
       totales.totalProductos += parseFloat(detalle.cantidad)
       totales.totalSinDescuento += parseFloat(detalle.cantidad * detalle.precio)
       totales.totalDescuento += parseFloat(detalle.valorDescuento)
@@ -133,6 +134,8 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     const stockSeleccionado = stockOptions.find(
       (stock) => stock.id === parseInt(watch('idEntrada'))
     )
+
+    const stock = stockOptions.map((stock) => stock.existenciaActual)
 
     if (!categoriaSeleccionada) {
       Swal.fire('Error', 'Debe seleccionar una categoría', 'error')
@@ -163,7 +166,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       Swal.fire('Error', 'La cantidad no puede estar vacia', 'error')
       return
     }
-    if (cantidad > stockSeleccionado) {
+    if (cantidad > stock) {
       Swal.fire('Error', 'La cantidad no puede ser mayor al stock', 'error')
       return
     }
@@ -187,12 +190,12 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       idEntrada: parseInt(watch('idEntrada')),
       stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
       idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
-      cantidad,
-      precio,
-      descuento,
-      valorDescuento: parseFloat((cantidad * precio * descuento) / 100).toFixed(
-        2
-      ),
+      cantidad: parseFloat(watch('cantidad')),
+      precio: parseFloat(watch('precio')),
+      descuento: parseFloat(watch('descuento')),
+      valorDescuento: parseFloat(
+        (watch('cantidad') * watch('precio') * watch('descuento')) / 100
+      ).toFixed(2),
       total: total[0],
     }
     setDetalleFactura([

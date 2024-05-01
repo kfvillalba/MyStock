@@ -12,6 +12,7 @@ const Page = () => {
   const [categorias, setCategorias] = useState([])
   const [productos, setProductos] = useState([])
   const [proveedores, setProveedores] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const [formRegister, setFormRegister] = useState(false)
   const [formEdit, setFormEdit] = useState(false)
@@ -29,10 +30,14 @@ const Page = () => {
 
   useEffect(() => {
     fetchExistencias()
-      .then((existencia) => setExistencia(existencia))
+      .then((existencia) => {
+        setExistencia(existencia)
+        setIsLoading(false)
+      })
       .catch((error) => {
         console.error(error)
         Swal.fire('Error', 'Hubo un error al obtener las existencias', 'error')
+        setIsLoading(false)
       })
   }, [])
 
@@ -92,10 +97,10 @@ const Page = () => {
         open={formRegister}
         onClose={() => {
           setFormRegister(false)
+          fetchExistencias().then((existencia) => setExistencia(existencia))
         }}
         registrar={(dataForm) => {
           console.log(dataForm)
-          fetchExistencias().then((existencia) => setExistencia(existencia))
         }}
       />
       {formEdit && (
@@ -168,9 +173,52 @@ const Page = () => {
               </tr>
             </thead>
             <tbody>
-              {existencia?.map((existencia, index) => {
-                return (
-                  <tr className='even:bg-slate-100' key={index}>
+              {' '}
+              {isLoading ? (
+                <tr>
+                  <td colSpan='9' className='text-center py-4'>
+                    <div className='flex items-center justify-center'>
+                      <svg
+                        className='animate-spin h-8 w-8 mr-3 text-blue-900'
+                        viewBox='0 0 24 24'
+                      >
+                        <circle
+                          cx='12'
+                          cy='12'
+                          r='10'
+                          fill='none'
+                          strokeWidth='2'
+                          stroke='currentColor'
+                          strokeLinecap='round'
+                          strokeDasharray='31.415, 31.415'
+                          transform='rotate(96 12 12)'
+                        >
+                          <animateTransform
+                            attributeName='transform'
+                            type='rotate'
+                            from='0 12 12'
+                            to='360 12 12'
+                            dur='1s'
+                            repeatCount='indefinite'
+                          />
+                        </circle>
+                      </svg>
+                      <span className='text-lg font-bold text-gray-900'>
+                        Cargando...
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                existencia?.map((existencia, index) => (
+                  <tr
+                    className={`even:bg-slate-100 ${
+                      existencia.existenciaActual === 0
+                        ? 'row-strike-through'
+                        : ''
+                    }`}
+                    key={index}
+                  >
                     <td className='pl-3'>{existencia.nombreCategoria}</td>
                     <td className='pl-3'>{existencia.nombreProducto}</td>
                     <td className='pl-3'>{existencia.nombreProveedor}</td>
@@ -211,8 +259,8 @@ const Page = () => {
                       </button>
                     </td>
                   </tr>
-                )
-              })}
+                ))
+              )}
             </tbody>
           </table>
         </div>{' '}

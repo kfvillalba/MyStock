@@ -62,4 +62,8 @@
   .barStyle {
     @apply w-[580px] h-[250px] text-black rounded-xl;
   }
+  .text-through {
+    text-decoration: line-through;
+    background-image: linear-gradient(transparent 50%, red 50%);
+  }
 }
