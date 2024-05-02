@@ -5,14 +5,22 @@ import EditIcon from '../assets/EditIcon'
 import Swal from 'sweetalert2'
 import ModalRegisterExistencias from '../components/ModalRegisterExistencias'
 import ModalEditExistencias from '../components/ModalEditExistencias'
-import { fetchExistencias, deleteExistencia } from '../components/API_INV'
+import {
+  fetchExistencias,
+  deleteExistencia,
+  fetchProducts,
+  fetchCategories,
+  fetchProviders,
+} from '../components/API_INV'
 
 const Page = () => {
   const [existencia, setExistencia] = useState([])
   const [categorias, setCategorias] = useState([])
-  const [productos, setProductos] = useState([])
   const [proveedores, setProveedores] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
+  const [buscarProducto, setBuscarProducto] = useState('')
+  const [proveedorSeleccionado, setproveedorSeleccionado] = useState('')
 
   const [formRegister, setFormRegister] = useState(false)
   const [formEdit, setFormEdit] = useState(false)
@@ -32,6 +40,32 @@ const Page = () => {
     fetchExistencias()
       .then((existencia) => {
         setExistencia(existencia)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error(error)
+        Swal.fire('Error', 'Hubo un error al obtener las existencias', 'error')
+        setIsLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetchCategories()
+      .then((existencia) => {
+        setCategorias(existencia)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error(error)
+        Swal.fire('Error', 'Hubo un error al obtener las existencias', 'error')
+        setIsLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetchProviders()
+      .then((existencia) => {
+        setProveedores(existencia)
         setIsLoading(false)
       })
       .catch((error) => {
@@ -91,6 +125,10 @@ const Page = () => {
     setFormEdit(true)
   }
 
+  const handleBuscarProducto = (event) => {
+    setBuscarProducto(event.target.value)
+  }
+
   return (
     <>
       <ModalRegisterExistencias
@@ -119,39 +157,47 @@ const Page = () => {
       <div className='p-5 flex flex-col shadow-md rounded-sm shadow-black h-full'>
         <section className='flex row-span-3 flex-wrap justify-between gap-4 '>
           <div>
-            <select type='text' className='select'>
-              <option value='-1'>Todas las Categorias</option>
-              {categorias?.map((categoria) => {
-                return (
-                  <option key={categoria.id} value={`${categoria.id}`}>
+            <select
+              className='select'
+              id='selectCategoria'
+              value={categoriaSeleccionada}
+              onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+            >
+              <option value=''>Todas las Categorías</option>
+              {categorias &&
+                categorias.map((categoria) => (
+                  <option key={categoria.id} value={categoria.id}>
                     {categoria.nombre}
                   </option>
-                )
-              })}
+                ))}
             </select>
           </div>
           <div>
-            <select type='text' className='select'>
-              <option value='-1'>Todos los Productos</option>
-              {productos?.map((producto) => {
-                return (
-                  <option key={producto.id} value={`${producto.id}`}>
-                    {producto.nombre}
-                  </option>
-                )
-              })}
-            </select>
+            <input
+              className='input__form'
+              id='textBuscarProducto'
+              type='text'
+              placeholder='Buscar Producto'
+              value={buscarProducto}
+              onChange={handleBuscarProducto}
+            />
           </div>
           <div>
-            <select type='text' className='select'>
+            <select
+              type='text'
+              className='select'
+              value={proveedorSeleccionado}
+              onChange={(e) => setproveedorSeleccionado(e.target.value)}
+            >
               <option value='-1'>Todos los Proveedores</option>
-              {proveedores?.map((proveedor) => {
-                return (
-                  <option key={proveedor.id} value={`${proveedor.id}`}>
-                    {proveedor.nombre}
-                  </option>
-                )
-              })}
+              {proveedores &&
+                proveedores.map((proveedor) => {
+                  return (
+                    <option key={proveedor.id} value={`${proveedor.id}`}>
+                      {proveedor.nombre}
+                    </option>
+                  )
+                })}
             </select>
           </div>
         </section>
@@ -210,56 +256,76 @@ const Page = () => {
                   </td>
                 </tr>
               ) : (
-                existencia?.map((existencia, index) => (
-                  <tr
-                    className={`even:bg-slate-100 ${
-                      existencia.existenciaActual === 0
-                        ? 'row-strike-through'
-                        : ''
-                    }`}
-                    key={index}
-                  >
-                    <td className='pl-3'>{existencia.nombreCategoria}</td>
-                    <td className='pl-3'>{existencia.nombreProducto}</td>
-                    <td className='pl-3'>{existencia.nombreProveedor}</td>
-                    <td className='text-center'>
-                      {existencia.existenciaInicial}
-                    </td>
-                    <td className='text-center'>
-                      {existencia.existenciaActual}
-                    </td>
-                    <td className='text-center'>{existencia.precioCompra}</td>
-                    <td className='text-center'>{existencia.precioVenta}</td>
-                    <td className='text-center pl-1'>
-                      {existencia.fechaEntrada}
-                    </td>
-                    <td className='text-start pl-5'>{existencia.nota}</td>
-                    <td className='text-center text-blue-800'>
-                      <button
-                        onClick={(event) =>
-                          editarExistencia(
-                            event,
-                            existencia.id,
-                            existencia.nombreCategoria,
-                            existencia.nombreProducto,
-                            existencia.nombreProveedor,
-                            existencia.precioCompra,
-                            existencia.precioVenta,
-                            existencia.existenciaInicial,
-                            existencia.nota
-                          )
-                        }
-                      >
-                        <EditIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                    <td className='text-center text-red-800'>
-                      <button onClick={() => eliminarExistencia(existencia.id)}>
-                        <DeleteIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                existencia
+                  .filter((categoria) =>
+                    categoriaSeleccionada
+                      ? parseInt(categoria.idCategoria) ===
+                        parseInt(categoriaSeleccionada)
+                      : true
+                  )
+                  .filter((producto) =>
+                    producto.nombreProducto
+                      .toLowerCase()
+                      .includes(buscarProducto.toLowerCase())
+                  )
+                  .filter((proveedor) =>
+                    proveedorSeleccionado
+                      ? parseInt(proveedor.idProveedor) ===
+                        parseInt(proveedorSeleccionado)
+                      : true
+                  )
+                  .map((existencia, index) => (
+                    <tr
+                      className={`even:bg-slate-100 ${
+                        existencia.existenciaActual === 0
+                          ? 'row-strike-through'
+                          : ''
+                      }`}
+                      key={index}
+                    >
+                      <td className='pl-3'>{existencia.nombreCategoria}</td>
+                      <td className='pl-3'>{existencia.nombreProducto}</td>
+                      <td className='pl-3'>{existencia.nombreProveedor}</td>
+                      <td className='text-center'>
+                        {existencia.existenciaInicial}
+                      </td>
+                      <td className='text-center'>
+                        {existencia.existenciaActual}
+                      </td>
+                      <td className='text-center'>{existencia.precioCompra}</td>
+                      <td className='text-center'>{existencia.precioVenta}</td>
+                      <td className='text-center pl-1'>
+                        {existencia.fechaEntrada}
+                      </td>
+                      <td className='text-start pl-5'>{existencia.nota}</td>
+                      <td className='text-center text-blue-800'>
+                        <button
+                          onClick={(event) =>
+                            editarExistencia(
+                              event,
+                              existencia.id,
+                              existencia.nombreCategoria,
+                              existencia.nombreProducto,
+                              existencia.nombreProveedor,
+                              existencia.precioCompra,
+                              existencia.precioVenta,
+                              existencia.existenciaInicial,
+                              existencia.nota
+                            )
+                          }
+                        >
+                          <EditIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                      <td className='text-center text-red-800'>
+                        <button
+                          onClick={() => eliminarExistencia(existencia.id)}
+                        >
+                          <DeleteIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>

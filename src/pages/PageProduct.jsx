@@ -16,11 +16,19 @@ const Page = () => {
   const [categorias, setCategorias] = useState()
   const [buscarProducto, setBuscarProducto] = useState('')
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetchProducts()
-      .then((productos) => setProductos(productos))
-      .catch((error) => console.error('Error fetching products:', error))
+      .then((productos) => {
+        setProductos(productos)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        Swal.fire('Eror', 'Hubo un error al obtener los clientes', 'error')
+        setIsLoading(false)
+      })
   }, [])
 
   useEffect(() => {
@@ -155,49 +163,86 @@ const Page = () => {
               </tr>
             </thead>
             <tbody>
-              {productos
-                .filter((producto) =>
-                  producto.nombre
-                    .toLowerCase()
-                    .includes(buscarProducto.toLowerCase())
-                )
-                .filter((producto) =>
-                  categoriaSeleccionada
-                    ? parseInt(producto.idCategoria) ===
-                      parseInt(categoriaSeleccionada)
-                    : true
-                )
-                .map((producto, index) => (
-                  <tr className='even:bg-slate-100' key={index}>
-                    <td className='pl-3'>{producto.nombreCategoria}</td>
-                    <td className='pl-3'>{producto.nombre}</td>
-                    <td className='pl-3'>{producto.descripcion}</td>
-                    <td className='text-center text-blue-800'>
-                      <button
-                        onClick={(event) =>
-                          editarProducto(
-                            event,
-                            producto.id,
-                            producto.nombre,
-                            producto.descripcion,
-                            producto.idCategoria
-                          )
-                        }
+              {isLoading ? (
+                <tr>
+                  <td colSpan='5' className='text-center py-4'>
+                    <div className='flex items-center justify-center'>
+                      <svg
+                        className='animate-spin h-8 w-8 mr-3 text-blue-900'
+                        viewBox='0 0 24 24'
                       >
-                        <EditIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                    <td className='text-center text-red-800'>
-                      <button
-                        onClick={(event) =>
-                          eliminarProducto(event, producto.id)
-                        }
-                      >
-                        <DeleteIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        <circle
+                          cx='12'
+                          cy='12'
+                          r='10'
+                          fill='none'
+                          strokeWidth='2'
+                          stroke='currentColor'
+                          strokeLinecap='round'
+                          strokeDasharray='31.415, 31.415'
+                          transform='rotate(96 12 12)'
+                        >
+                          <animateTransform
+                            attributeName='transform'
+                            type='rotate'
+                            from='0 12 12'
+                            to='360 12 12'
+                            dur='1s'
+                            repeatCount='indefinite'
+                          />
+                        </circle>
+                      </svg>
+                      <span className='text-lg font-bold text-gray-900'>
+                        Cargando...
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                productos
+                  .filter((producto) =>
+                    producto.nombre
+                      .toLowerCase()
+                      .includes(buscarProducto.toLowerCase())
+                  )
+                  .filter((producto) =>
+                    categoriaSeleccionada
+                      ? parseInt(producto.idCategoria) ===
+                        parseInt(categoriaSeleccionada)
+                      : true
+                  )
+                  .map((producto, index) => (
+                    <tr className='even:bg-slate-100' key={index}>
+                      <td className='pl-3'>{producto.nombreCategoria}</td>
+                      <td className='pl-3'>{producto.nombre}</td>
+                      <td className='pl-3'>{producto.descripcion}</td>
+                      <td className='text-center text-blue-800'>
+                        <button
+                          onClick={(event) =>
+                            editarProducto(
+                              event,
+                              producto.id,
+                              producto.nombre,
+                              producto.descripcion,
+                              producto.idCategoria
+                            )
+                          }
+                        >
+                          <EditIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                      <td className='text-center text-red-800'>
+                        <button
+                          onClick={(event) =>
+                            eliminarProducto(event, producto.id)
+                          }
+                        >
+                          <DeleteIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+              )}
             </tbody>
           </table>
         </div>
