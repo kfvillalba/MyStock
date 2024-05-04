@@ -308,7 +308,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
           const data = await response.json()
           const stockSet = new Set()
           const stock = data.reduce((acc, { id, existenciaActual }) => {
-            if (!stockSet.has(id)) {
+            if (!stockSet.has(id) && existenciaActual > 0) {
               stockSet.add(id)
               acc.push({ id, existenciaActual })
             }

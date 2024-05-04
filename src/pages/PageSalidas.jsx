@@ -10,12 +10,13 @@ import ModalVerFactura from '../components/ModalVerFactura'
 
 const Page = () => {
   const [salidas, setSalidas] = useState([])
-  const [clientes, setClientes] = useState()
   const [formRegister, setformRegister] = useState(false)
   const [formView, setFormView] = useState(false)
   const [formEdit, setformEdit] = useState(false)
   const [selectedSalida, setSelectedSalida] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [buscarCliente, setBuscarCliente] = useState('')
+  const [numeroFactura, setNumeroFactura] = useState('')
 
   useEffect(() => {
     fetchSalidas()
@@ -33,6 +34,10 @@ const Page = () => {
   const handleView = (salida) => {
     setSelectedSalida(salida)
     setFormView(true)
+  }
+
+  const handleBuscarCliente = (event) => {
+    setBuscarCliente(event.target.value)
   }
 
   return (
@@ -70,19 +75,18 @@ const Page = () => {
               placeholder='Numero de factura'
               type='number'
               className='input__form'
+              onChange={(event) => setNumeroFactura(event.target.value)}
             />
           </div>
           <div>
-            <select type='text' className='select'>
-              <option value='-1'>Todos los Clientes</option>
-              {clientes?.map((cliente) => {
-                return (
-                  <option key={cliente.id} value={`${cliente.id}`}>
-                    {cliente.nombre}
-                  </option>
-                )
-              })}
-            </select>
+            <input
+              className='input__form'
+              id='textBuscarclientes'
+              type='text'
+              placeholder='Buscar cliente'
+              value={buscarCliente}
+              onChange={handleBuscarCliente}
+            />
           </div>
         </section>
 
@@ -135,32 +139,40 @@ const Page = () => {
                   </td>
                 </tr>
               ) : (
-                salidas?.map((salida, index) => (
-                  <tr className='text-center even:bg-slate-100' key={index}>
-                    <td>{salida.id}</td>
-                    <td>
-                      {new Date(salida.fechaFactura).toLocaleString('es-ES', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                      })}
-                    </td>
-                    <td>{salida.clienteNombre}</td>
-                    <td>{salida.totalPagarConDescuento}</td>
-                    <td className='text-blue-800'>
-                      <button onClick={() => handleView(salida)}>
-                        <EyeIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                    <td className=' text-red-800'>
-                      <button onClick={(event) => console.log('event')}>
-                        <DeleteIcon clases={'size-7 cursor-pointer'} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                salidas
+                  .filter(
+                    (salida) =>
+                      salida.clienteNombre
+                        .toLowerCase()
+                        .includes(buscarCliente.toLowerCase()) &&
+                      (!numeroFactura || salida.id === parseInt(numeroFactura))
+                  )
+                  .map((salida, index) => (
+                    <tr className='text-center even:bg-slate-100' key={index}>
+                      <td>{salida.id}</td>
+                      <td>
+                        {new Date(salida.fechaFactura).toLocaleString('es-ES', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </td>
+                      <td>{salida.clienteNombre}</td>
+                      <td>{salida.totalPagarConDescuento}</td>
+                      <td className='text-blue-800'>
+                        <button onClick={() => handleView(salida)}>
+                          <EyeIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                      <td className=' text-red-800'>
+                        <button onClick={(event) => console.log('event')}>
+                          <DeleteIcon clases={'size-7 cursor-pointer'} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>

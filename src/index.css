@@ -62,9 +62,12 @@
   .barStyle {
     @apply w-[580px] h-[250px] text-black rounded-xl mr-80 font-bold;
   }
-  .text-through {
-    text-decoration: line-through;
-    background-image: linear-gradient(transparent 50%, red 50%);
+  .row-strike-through {
+    background-color: #f9a8a8; /* Color de fondo rojo */
+  }
+
+  .row-strike-through td {
+    text-decoration: line-through; /* Tachado en el texto de las celdas */
   }
 
   .ventasGraf {
