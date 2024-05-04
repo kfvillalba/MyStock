@@ -57,13 +57,17 @@
     @apply text-gray-800 font-bold max-w-xs w-[200px] h-[100px] mt-0 p-2;
   }
   .cardList {
-    @apply w-[400px] h-[318px] text-black;
+    @apply w-[400px] h-[318px] text-black font-bold;
   }
   .barStyle {
-    @apply w-[580px] h-[250px] text-black rounded-xl;
+    @apply w-[580px] h-[250px] text-black rounded-xl mr-80 font-bold;
   }
   .text-through {
     text-decoration: line-through;
     background-image: linear-gradient(transparent 50%, red 50%);
+  }
+
+  .ventasGraf {
+    @apply w-[200px] h-[318px] text-black font-bold;
   }
 }

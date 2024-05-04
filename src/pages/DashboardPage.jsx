@@ -4,7 +4,7 @@ import ClienteIcon from "../assets/ClienteIcon";
 import ProductosIcon from "../assets/ProductosIcon";
 import { CardGeneral } from "../components/CardGeneral";
 import ProvedoresIcon from "../assets/ProveedoresIcon";
-import { CategoryList } from "../components/CategoryList";
+import CategoryList from "../components/CategoryList";
 import FacturaIcon from "../assets/FacturaIcon";
 import ExistenciaTotalIcon from "../assets/ExistenciaTotalIcon";
 import ExistenciaVendidaIcon from "../assets/ExistenciaVendidaIcon";
@@ -14,8 +14,8 @@ import ImportePagadoIcon from "../assets/ImportePagado";
 import ImporteRestanteIcon from "../assets/ImporteRestante";
 import BeneficioBrutoIcon from "../assets/BeneficioBrutoIcon";
 import BeneficioTotalIcon from "../assets/BeneficioTotalIcon";
-import { CategoryLists } from "../components/CategoryLists";
 import { ClientsBar } from "../components/ClientsBar";
+import { VentasGraf } from "../components/VentasGraf";
 
 const fetchData = (url, setter) => {
   fetch(url)
@@ -95,8 +95,8 @@ const Page = () => {
   }, []);
 
   return (
-    <div>
-      <section className="flex flex-wrap justify-evenly gap-4 p-4">
+    <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}>
+      <section className="flex flex-wrap justify-between gap-4 p-4 ">
         <CardGeneral
           nombre={"Clientes"}
           cantidad={totalClientes}
@@ -171,8 +171,9 @@ const Page = () => {
           color={"bg-[#71c55b]"}
         />
         {/* <CategoryList /> */}
-        <CategoryLists color={"bg-[#1f7e26]"} />
+        <CategoryList color={"bg-[#1f7e26]"} />
         <ClientsBar color={"bg-[#4ea93b]"} />
+        {/* <VentasGraf /> */}
       </section>
     </div>
   );

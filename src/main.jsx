@@ -11,6 +11,7 @@ import PageCategorias from "./pages/PageCategorias.jsx";
 import PageClientes from "./pages/PageClientes.jsx";
 import PageEntradas from "./pages/PageEntradas.jsx";
 import PageSalidas from "./pages/PageSalidas.jsx";
+import PagePerfil from "./pages/PagePerfil.jsx";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,11 @@ const router = createBrowserRouter([
   {
     path: "/stock/salidas",
     element: <PageSalidas />,
+    errorElement: <PageNotFound />,
+  },
+  {
+    path: "/editar-perfil",
+    element: <PagePerfil />,
     errorElement: <PageNotFound />,
   },
 ]);
