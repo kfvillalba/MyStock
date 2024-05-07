@@ -12,203 +12,6 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = async (data) => {
-    try {
-      if (detalleFactura.length === 0) {
-        Swal.fire('Error', 'Debe agregar un producto', 'error')
-
-        return
-      }
-
-      const idCliente = parseInt(data.cliente)
-      const cantidadProductos = detalleFactura.length
-      const totalPagarSinDescuento = totales.totalSinDescuento
-      const totalDescuento = totales.totalDescuento
-      const totalPagarConDescuento = totales.totalPagar
-
-      const productoSalidas = detalleFactura.map((detalle) => {
-        return {
-          idCategoria: parseInt(detalle.idCategoria),
-          idProducto: parseInt(detalle.idProducto),
-          idEntrada: parseInt(detalle.idEntrada),
-          precio: parseFloat(detalle.precio),
-          cantidad: parseFloat(detalle.cantidad),
-          descuento: parseFloat(detalle.descuento),
-          valorDescuento: parseFloat(detalle.valorDescuento),
-          total: parseFloat(detalle.total),
-        }
-      })
-
-      const factura = {
-        idCliente,
-        cantidadProductos,
-        totalPagarConDescuento,
-        totalPagarSinDescuento,
-        totalDescuento,
-        productoSalidas,
-      }
-      console.log(factura)
-
-      const response = await fetch(
-        'https://localhost:7073/inventario-service/Salidas/Agregar',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(factura),
-        }
-      )
-
-      if (response.ok) {
-        const idsEntradas = detalleFactura.map((detalle) => detalle.idEntrada)
-        const cantidades = detalleFactura.map((detalle) => detalle.cantidad)
-        console.log(detalleFactura)
-
-        for (let i = 0; i < idsEntradas.length; i++) {
-          const idEntrada = idsEntradas[i]
-          const quitarExistencia = cantidades[i]
-          const restarExistenciasResponse = await fetch(
-            `https://localhost:7073/inventario-service/Entradas/RestarExistencia?id=${idEntrada}&quitarExistencia=${quitarExistencia}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({}),
-            }
-          )
-          if (!restarExistenciasResponse.ok) {
-            throw new Error('Error al restar existencias')
-          }
-        }
-
-        Swal.fire('¡Factura registrada!', '', 'success')
-        reset()
-        onClose()
-      } else {
-        throw new Error('Error al registrar la factura')
-      }
-    } catch (error) {
-      console.error(error)
-      Swal.fire('Error', error.message, 'error')
-    }
-  }
-
-  const total = [
-    (
-      Math.floor(
-        parseFloat(
-          watch('cantidad') * watch('precio') -
-            (watch('cantidad') * watch('precio') * watch('descuento')) / 100
-        ) * 100
-      ) / 100
-    ).toFixed(2),
-  ]
-  const totales = {}
-  const [detalleFactura, setDetalleFactura] = useState([])
-  function getTotales() {
-    totales.totalProductos = 0
-    totales.totalSinDescuento = 0
-    totales.totalDescuento = 0
-    totales.totalPagar = 0
-    detalleFactura.map((detalle) => {
-      console.log(detalleFactura)
-      totales.totalProductos += parseFloat(detalle.cantidad)
-      totales.totalSinDescuento += parseFloat(detalle.cantidad * detalle.precio)
-      totales.totalDescuento += parseFloat(detalle.valorDescuento)
-      totales.totalPagar += parseFloat(detalle.total)
-    })
-  }
-  getTotales()
-  const agregarDetalle = (e) => {
-    e.preventDefault()
-
-    const categoriaSeleccionada = categoriasOptions.find(
-      (categoria) => categoria.idCategoria === parseInt(watch('categoria'))
-    )
-    const productoSeleccionado = productosOptions.find(
-      (producto) => producto.idProducto === parseInt(watch('producto'))
-    )
-
-    const stockSeleccionado = stockOptions.find(
-      (stock) => stock.id === parseInt(watch('idEntrada'))
-    )
-
-    const stock = stockOptions.map((stock) => stock.existenciaActual)
-
-    if (!categoriaSeleccionada) {
-      Swal.fire('Error', 'Debe seleccionar una categoría', 'error')
-      return
-    }
-    if (!productoSeleccionado) {
-      Swal.fire('Error', 'Debe seleccionar un producto', 'error')
-      return
-    }
-    if (!stockSeleccionado) {
-      Swal.fire('Error', 'Debe seleccionar el stock', 'error')
-      return
-    }
-
-    const cantidad = parseFloat(watch('cantidad'))
-    const precio = parseFloat(watch('precio'))
-    const descuento = parseFloat(watch('descuento'))
-
-    if (cantidad <= 0) {
-      Swal.fire(
-        'Error',
-        'La cantidad ingresada no puede ser menor o igual a 0 ',
-        'error'
-      )
-      return
-    }
-    if (isNaN(cantidad)) {
-      Swal.fire('Error', 'La cantidad no puede estar vacia', 'error')
-      return
-    }
-    if (cantidad > stock) {
-      Swal.fire('Error', 'La cantidad no puede ser mayor al stock', 'error')
-      return
-    }
-    if (precio <= 0 || isNaN(precio)) {
-      Swal.fire('Error', 'El precio ingresado no es válido', 'error')
-      return
-    }
-    if (descuento < 0 || isNaN(descuento) || descuento % 1 !== 0) {
-      Swal.fire('Error', 'El descuento ingresado no es válido', 'error')
-      return
-    }
-
-    const detalle = {
-      categoria: categoriaSeleccionada
-        ? categoriaSeleccionada.nombreCategoria
-        : '',
-      producto: productoSeleccionado ? productoSeleccionado.nombreProducto : '',
-      idCategoria: categoriaSeleccionada
-        ? categoriaSeleccionada.idCategoria
-        : 0,
-      idEntrada: parseInt(watch('idEntrada')),
-      stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
-      idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
-      cantidad: parseFloat(watch('cantidad')),
-      precio: parseFloat(watch('precio')),
-      descuento: parseFloat(watch('descuento')),
-      valorDescuento: parseFloat(
-        (watch('cantidad') * watch('precio') * watch('descuento')) / 100
-      ).toFixed(2),
-      total: total[0],
-    }
-    setDetalleFactura([
-      ...detalleFactura,
-      { ...detalle, id: Math.random().toString(36).substring(7) },
-    ])
-    reset()
-  }
-
-  const eliminarDetalle = (index) => {
-    setDetalleFactura(detalleFactura.filter((detalle, idx) => idx !== index))
-  }
-
   const [categoriasOptions, setCategoriasOptions] = useState([])
   const [productosOptions, setProductosOptions] = useState([])
   const [clientesOptions, setClientesOptions] = useState([])
@@ -307,13 +110,16 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
         if (response.ok) {
           const data = await response.json()
           const stockSet = new Set()
-          const stock = data.reduce((acc, { id, existenciaActual }) => {
-            if (!stockSet.has(id) && existenciaActual > 0) {
-              stockSet.add(id)
-              acc.push({ id, existenciaActual })
-            }
-            return acc
-          }, [])
+          const stock = data.reduce(
+            (acc, { id, existenciaActual, precioVenta }) => {
+              if (!stockSet.has(id) && existenciaActual > 0) {
+                stockSet.add(id)
+                acc.push({ id, existenciaActual, precioVenta })
+              }
+              return acc
+            },
+            []
+          )
           setStockOptions(stock)
         } else {
           throw new Error('Error al cargar el stock')
@@ -321,6 +127,204 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       } catch (error) {
         console.error(error)
       }
+    }
+  }
+
+  const total = [
+    (
+      Math.floor(
+        parseFloat(
+          watch('cantidad') * watch('precio') -
+            (watch('cantidad') * watch('precio') * watch('descuento')) / 100
+        ) * 100
+      ) / 100
+    ).toFixed(2),
+  ]
+  const totales = {}
+  const [detalleFactura, setDetalleFactura] = useState([])
+  function getTotales() {
+    totales.totalProductos = 0
+    totales.totalSinDescuento = 0
+    totales.totalDescuento = 0
+    totales.totalPagar = 0
+    detalleFactura.map((detalle) => {
+      console.log(detalleFactura)
+      totales.totalProductos += parseFloat(detalle.cantidad)
+      totales.totalSinDescuento += parseFloat(detalle.cantidad * detalle.precio)
+      totales.totalDescuento += parseFloat(detalle.valorDescuento)
+      totales.totalPagar += parseFloat(detalle.total)
+    })
+  }
+  getTotales()
+  const agregarDetalle = (e) => {
+    e.preventDefault()
+
+    const categoriaSeleccionada = categoriasOptions.find(
+      (categoria) => categoria.idCategoria === parseInt(watch('categoria'))
+    )
+    const productoSeleccionado = productosOptions.find(
+      (producto) => producto.idProducto === parseInt(watch('producto'))
+    )
+
+    const stockSeleccionado = stockOptions.find(
+      (stock) => stock.id === parseInt(watch('idEntrada'))
+    )
+
+    const existenciaActual = stockSeleccionado
+      ? stockSeleccionado.existenciaActual
+      : 0
+
+    if (!categoriaSeleccionada) {
+      Swal.fire('Error', 'Debe seleccionar una categoría', 'error')
+      return
+    }
+    if (!productoSeleccionado) {
+      Swal.fire('Error', 'Debe seleccionar un producto', 'error')
+      return
+    }
+    if (!stockSeleccionado) {
+      Swal.fire('Error', 'Debe seleccionar el stock', 'error')
+      return
+    }
+
+    const cantidad = parseFloat(watch('cantidad'))
+    const precio = parseFloat(watch('precio'))
+    const descuento = parseFloat(watch('descuento'))
+
+    if (cantidad <= 0) {
+      Swal.fire(
+        'Error',
+        'La cantidad ingresada no puede ser menor o igual a 0 ',
+        'error'
+      )
+      return
+    }
+    if (isNaN(cantidad)) {
+      Swal.fire('Error', 'La cantidad no puede estar vacia', 'error')
+      return
+    }
+    if (cantidad > existenciaActual) {
+      Swal.fire('Error', 'La cantidad no puede ser mayor al stock', 'error')
+      return
+    }
+    if (precio <= 0 || isNaN(precio)) {
+      Swal.fire('Error', 'El precio ingresado no es válido', 'error')
+      return
+    }
+    if (descuento < 0 || isNaN(descuento) || descuento % 1 !== 0) {
+      Swal.fire('Error', 'El descuento ingresado no es válido', 'error')
+      return
+    }
+
+    const detalle = {
+      categoria: categoriaSeleccionada
+        ? categoriaSeleccionada.nombreCategoria
+        : '',
+      producto: productoSeleccionado ? productoSeleccionado.nombreProducto : '',
+      idCategoria: categoriaSeleccionada
+        ? categoriaSeleccionada.idCategoria
+        : 0,
+      idEntrada: parseInt(watch('idEntrada')),
+      stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
+      idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
+      cantidad: parseFloat(watch('cantidad')),
+      precio: parseFloat(watch('precio')),
+      descuento: parseFloat(watch('descuento')),
+      valorDescuento: parseFloat(
+        (watch('cantidad') * watch('precio') * watch('descuento')) / 100
+      ).toFixed(2),
+      total: total[0],
+    }
+    setDetalleFactura([
+      ...detalleFactura,
+      { ...detalle, id: Math.random().toString(36).substring(7) },
+    ])
+    reset()
+  }
+
+  const eliminarDetalle = (index) => {
+    setDetalleFactura(detalleFactura.filter((detalle, idx) => idx !== index))
+  }
+
+  const onSubmit = async (data) => {
+    try {
+      if (detalleFactura.length === 0) {
+        Swal.fire('Error', 'Debe agregar un producto', 'error')
+
+        return
+      }
+      const idCliente = parseInt(data.cliente)
+      const cantidadProductos = detalleFactura.length
+      const totalPagarSinDescuento = totales.totalSinDescuento
+      const totalDescuento = totales.totalDescuento
+      const totalPagarConDescuento = totales.totalPagar
+
+      const productoSalidas = detalleFactura.map((detalle) => {
+        return {
+          idCategoria: parseInt(detalle.idCategoria),
+          idProducto: parseInt(detalle.idProducto),
+          idEntrada: parseInt(detalle.idEntrada),
+          precio: parseFloat(detalle.precio),
+          cantidad: parseFloat(detalle.cantidad),
+          descuento: parseFloat(detalle.descuento),
+          valorDescuento: parseFloat(detalle.valorDescuento),
+          total: parseFloat(detalle.total),
+        }
+      })
+
+      const factura = {
+        idCliente,
+        cantidadProductos,
+        totalPagarConDescuento,
+        totalPagarSinDescuento,
+        totalDescuento,
+        productoSalidas,
+      }
+      console.log(factura)
+
+      const response = await fetch(
+        'https://localhost:7073/inventario-service/Salidas/Agregar',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(factura),
+        }
+      )
+
+      if (response.ok) {
+        const idsEntradas = detalleFactura.map((detalle) => detalle.idEntrada)
+        const cantidades = detalleFactura.map((detalle) => detalle.cantidad)
+        console.log(detalleFactura)
+
+        for (let i = 0; i < idsEntradas.length; i++) {
+          const idEntrada = idsEntradas[i]
+          const quitarExistencia = cantidades[i]
+          const restarExistenciasResponse = await fetch(
+            `https://localhost:7073/inventario-service/Entradas/RestarExistencia?id=${idEntrada}&quitarExistencia=${quitarExistencia}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({}),
+            }
+          )
+          if (!restarExistenciasResponse.ok) {
+            throw new Error('Error al restar existencias')
+          }
+        }
+
+        Swal.fire('¡Factura registrada!', '', 'success')
+        reset()
+        onClose()
+      } else {
+        throw new Error('Error al registrar la factura')
+      }
+    } catch (error) {
+      console.error(error)
+      Swal.fire('Error', error.message, 'error')
     }
   }
 
@@ -484,15 +488,22 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                         <input
                           type='number'
                           className='input__form'
+                          value={
+                            stockOptions.find(
+                              (stock) =>
+                                stock.id === parseInt(watch('idEntrada'))
+                            )?.precioVenta || ''
+                          }
                           {...register('precio', {
                             required: false,
                             min: {
                               value: 0,
-                              message: 'Ingrese numeros validos',
+                              message: 'Ingrese números válidos',
                             },
                             valueAsNumber: true,
                           })}
                         />
+
                         <span className='message'>
                           {errors?.precio?.message}
                         </span>
