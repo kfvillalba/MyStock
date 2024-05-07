@@ -49,7 +49,7 @@ const PagePerfil = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">Editar Perfil</h1>
+      <h1 className="text-2xl font-bold mb-4">Mi Perfil</h1>
       <div className="max-w-md w-full bg-purple-dark shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4 text-center">
           <img
@@ -126,6 +126,14 @@ const PagePerfil = () => {
               onClick={handleSave}
             >
               Guardar Perfil
+            </button>
+            <div style={{ width: "10px" }}></div>
+            <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="button"
+              onClick={() => history.goBack()} // Redirige a la vista anterior
+            >
+              Regresar
             </button>
           </div>
         </form>

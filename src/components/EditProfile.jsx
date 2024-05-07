@@ -31,7 +31,7 @@ const EditProfile = () => {
 
   return (
     <div>
-      <h2>Editar Perfil</h2>
+      <h2>Mi Perfil</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Nombre de usuario:

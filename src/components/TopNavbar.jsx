@@ -41,7 +41,7 @@ const TopNavbar = () => {
                 to="/editar-perfil"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                Editar Perfil {/* Enlace a la página de edición de perfil */}
+                Mi Perfil {/* Enlace a la página de edición de perfil */}
               </Link>
               <a
                 href="#"
