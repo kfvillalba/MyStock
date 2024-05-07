@@ -16,6 +16,7 @@ import BeneficioBrutoIcon from "../assets/BeneficioBrutoIcon";
 import BeneficioTotalIcon from "../assets/BeneficioTotalIcon";
 import { ClientsBar } from "../components/ClientsBar";
 import { VentasGraf } from "../components/VentasGraf";
+import ProductosMasVendidosList from "../components/ProductosMasVendidosList";
 
 const fetchData = (url, setter) => {
   fetch(url)
@@ -95,8 +96,8 @@ const Page = () => {
   }, []);
 
   return (
-    <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}>
-      <section className="flex flex-wrap justify-between gap-4 p-4 ">
+    <div style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}>
+      <section className="flex flex-wrap justify-evenly gap-4 p-4 ">
         <CardGeneral
           nombre={"Clientes"}
           cantidad={totalClientes}
@@ -173,7 +174,8 @@ const Page = () => {
         {/* <CategoryList /> */}
         <CategoryList color={"bg-[#1f7e26]"} />
         <ClientsBar color={"bg-[#4ea93b]"} />
-        {/* <VentasGraf /> */}
+        <VentasGraf color={"bg-[#4ea93b]"} />
+        <ProductosMasVendidosList color={"bg-[#1f7e26]"} />
       </section>
     </div>
   );

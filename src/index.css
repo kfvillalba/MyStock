@@ -60,7 +60,7 @@
     @apply w-[400px] h-[318px] text-black font-bold;
   }
   .barStyle {
-    @apply w-[580px] h-[250px] text-black rounded-xl mr-80 font-bold;
+    @apply w-[580px] h-[250px] text-black rounded-xl font-bold;
   }
   .row-strike-through {
     background-color: #f9a8a8; /* Color de fondo rojo */
@@ -70,7 +70,7 @@
     text-decoration: line-through; /* Tachado en el texto de las celdas */
   }
 
-  .ventasGraf {
+  /* .ventasGraf {
     @apply w-[200px] h-[318px] text-black font-bold;
-  }
+  } */
 }
