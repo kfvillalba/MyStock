@@ -38,7 +38,7 @@ const TopNavbar = () => {
           <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-md z-10">
             <div className="py-1">
               <Link
-                to="/editar-perfil"
+                to="/perfil"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Mi Perfil {/* Enlace a la página de edición de perfil */}

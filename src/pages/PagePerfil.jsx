@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import defaultAvatar from "../assets/perfil.png";
 import Swal from "sweetalert2";
 import "../index.css";
+import PanelDivisor from "../components/PanelDivisor";
 
-const PagePerfil = () => {
+const Page = () => {
   const [avatar, setAvatar] = useState(defaultAvatar);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -48,9 +49,8 @@ const PagePerfil = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">Mi Perfil</h1>
-      <div className="max-w-md w-full bg-purple-dark shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="flex flex-col items-center justify-center h-full shadow-md bg-purple-dark">
+      <div>
         <div className="mb-4 text-center">
           <img
             src={avatar}
@@ -140,6 +140,10 @@ const PagePerfil = () => {
       </div>
     </div>
   );
+};
+
+const PagePerfil = () => {
+  return <PanelDivisor Page={<Page />} />;
 };
 
 export default PagePerfil;
