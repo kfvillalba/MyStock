@@ -53,18 +53,30 @@ const ProductosMasVendidosList = ({ color }) => {
   }
 
   return (
+<<<<<<< HEAD
+    <Card className={`max-w-lg ventasGraf ${color}`}>
+      <h3 className="text-tremor-title text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
+        PRODUCTOS
+=======
     <Card className={`max-w-lg cardList ${color}`}>
       <h3 className='text-tremor-title text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium'>
         TOP 5 PRODUCTOS MÁS VENDIDOS
+>>>>>>> d0beb8c8ca7503d07a8116ef5b6ff8137be6217b
       </h3>
       <p className='mt-4 mr-5 text-tremor-default flex items-center justify-between text-tremor-content dark:text-dark-tremor-content'>
         <span>TOP</span>
         <span>Cantidad de ventas</span>
       </p>
       <BarList
+<<<<<<< HEAD
+        data={data.map((item) => ({
+          name: item.nombreProducto,
+          value: item.cantidadProductos,
+=======
         data={data.slice(0, 5).map((item) => ({
           name: item.nombreProducto,
           value: `${item.cantidadVentas} Ventas`,
+>>>>>>> d0beb8c8ca7503d07a8116ef5b6ff8137be6217b
           icon: Icon,
         }))}
         className='mt-2 mr-12'
