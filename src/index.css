@@ -25,6 +25,9 @@
   .bnt__primary {
     @apply rounded-lg w-fit text-white bg-purple-dark  hover:text-white hover:bg-purple-light p-2 text-center;
   }
+  .btn__reportes {
+    @apply w-60 text-white bg-purple-dark  hover:text-white hover:bg-purple-light p-2 text-center;
+  }
   .bnt__danger {
     @apply rounded-lg w-fit text-white bg-red-900  hover:text-white hover:bg-red-700 p-2    text-center;
   }
