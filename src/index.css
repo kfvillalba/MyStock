@@ -70,7 +70,7 @@
     text-decoration: line-through; /* Tachado en el texto de las celdas */
   }
 
-  /* .ventasGraf {
+  .ventasGraf {
     @apply w-[200px] h-[318px] text-black font-bold;
-  } */
+  }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BarList, Card } from "@tremor/react";
 
-const ProductosMasVendidosList = ({ color }) => {
+const ProductosMenosVendidosList = ({ color }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const ProductosMasVendidosList = ({ color }) => {
         PRODUCTOS
       </h3>
       <p className="mt-4 text-tremor-default flex items-center justify-between text-tremor-content dark:text-dark-tremor-content">
-        <span>TOP Productos mas vendidos</span>
+        <span>TOP Productos menos vendidos</span>
         <span>Cantidad de productos</span>
       </p>
       <BarList
@@ -73,4 +73,4 @@ const ProductosMasVendidosList = ({ color }) => {
   );
 };
 
-export default ProductosMasVendidosList;
+export default ProductosMenosVendidosList;
