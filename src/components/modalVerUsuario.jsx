@@ -1,24 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import LogOutIcon from '../assets/LogOutIcon'
 import { useNavigate } from 'react-router-dom'
 
 const ProfileModal = ({ open, onClose }) => {
   const Navigate = useNavigate()
+
   const Logout = () => {
     localStorage.clear()
-    console.log(localStorage)
     Navigate('/login')
   }
 
   const perfil = () => {
     Navigate('/editar-perfil')
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (open && !event.target.closest('.bg-slate-100')) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [open, onClose])
+
   if (!open) return null
 
   return (
     <>
-      <div className='fixed w-full top-0 left-0 h-full z-10 flex items-center justify-center'>
-        <div className='fixed inset-0 flex justify-end items-center h-96 mr-7'>
+      <div className='fixed w-full top-0 left-0 z-10 flex items-center justify-center'>
+        <div className='fixed inset-0 flex justify-end items-center mr-7'>
           <div className='bg-slate-100 p-8 rounded-lg'>
             <section className='flex-wrap border-separate border-b-2 border-gray-300'>
               <div className='Profile flex flex-wrap items-center mb-3'>
@@ -28,7 +42,7 @@ const ProfileModal = ({ open, onClose }) => {
                   alt='avatar'
                 />
                 <div className='ml-3 text-sm'>
-                  <p>
+                  <p className='text-bold'>
                     {localStorage.getItem('userName')?.length > 20
                       ? localStorage.getItem('userName').substring(0, 20) +
                         '...'
