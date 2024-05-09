@@ -63,9 +63,6 @@ const ModalVerFactura = ({ open, onClose, salida }) => {
             </div>
           </section>
           <div className='flex gap-4 justify-center'>
-            <button type='submit' className='bnt__primary mt-3'>
-              Aceptar
-            </button>
             <button
               onClick={() => {
                 onClose()
