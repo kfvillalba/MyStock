@@ -14,7 +14,7 @@ const Page = () => {
     console.log(hola);
   };
   return (
-    <div className="h-full w-full gap-4 p-10 ">
+    <div className="h-full w-full gap-4 p-10 shadow-md  shadow-black ">
       <form
         className="bg-white rounded-lg shadow-sm flex flex-col h-full p-5"
         onSubmit={onSubmit}
