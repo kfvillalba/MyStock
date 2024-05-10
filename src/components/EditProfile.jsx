@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const EditProfile = () => {
-  // Define estados para los campos del formulario
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
