@@ -18,6 +18,7 @@ import { ClientsBar } from "../components/ClientsBar";
 import { VentasGraf } from "../components/VentasGraf";
 import ProductosMasVendidosList from "../components/ProductosMasVendidosList";
 import ProductosMenosVendidosList from "../components/ProductosMenosVendidos";
+import BarChartGanancias from "../components/BarChart";
 
 const fetchData = (url, setter) => {
   fetch(url)
@@ -174,12 +175,13 @@ const Page = () => {
           color={"bg-[#71c55b]"}
         />
 
-        <CategoryList color={"bg-[#1f7e26]"} />
+        {/* <CategoryList color={"bg-[#1f7e26]"} /> */}
         <ClientsBar color={"bg-[#4ea93b]"} />
         <VentasGraf color={"bg-[#4ea93b]"} />
         <ProductosMasVendidosList color={"bg-[#1f7e26]"} />
         <ProductosMenosVendidosList color={"bg-[#1f7e26]"} />
-        <VentasGraf color={"bg-[#4ea93b]"} />
+        {/* <VentasGraf color={"bg-[#4ea93b]"} /> */}
+        <BarChartGanancias color={"bg-[#4ea93b]"} />
       </section>
     </div>
   );
