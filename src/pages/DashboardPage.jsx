@@ -18,7 +18,6 @@ import { ClientsBar } from "../components/ClientsBar";
 import { VentasGraf } from "../components/VentasGraf";
 import ProductosMasVendidosList from "../components/ProductosMasVendidosList";
 import ProductosMenosVendidosList from "../components/ProductosMenosVendidos";
-import BarChartGancias from "../components/BarChart";
 
 const fetchData = (url, setter) => {
   fetch(url)
@@ -96,7 +95,10 @@ const Page = () => {
   }, []);
 
   return (
-    <div style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}>
+    <div
+      className="shadow-md  shadow-black"
+      style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
+    >
       <section className="flex flex-wrap justify-evenly gap-4 p-4 ">
         <CardGeneral
           nombre={"Clientes"}
@@ -172,12 +174,12 @@ const Page = () => {
           color={"bg-[#71c55b]"}
         />
 
-        {/* <CategoryList color={"bg-[#1f7e26]"} /> */}
+        <CategoryList color={"bg-[#1f7e26]"} />
         <ClientsBar color={"bg-[#4ea93b]"} />
         <VentasGraf color={"bg-[#4ea93b]"} />
         <ProductosMasVendidosList color={"bg-[#1f7e26]"} />
         <ProductosMenosVendidosList color={"bg-[#1f7e26]"} />
-        <BarChartGancias color={"bg-[#1f7e26]"} />
+        <VentasGraf color={"bg-[#4ea93b]"} />
       </section>
     </div>
   );
