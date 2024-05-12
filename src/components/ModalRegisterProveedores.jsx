@@ -13,7 +13,7 @@ const ModalRegisterProveedores = ({ open, onClose, registrar }) => {
     console.log(JSON.stringify(data))
     try {
       const response = await fetch(
-        'https://localhost:7073/inventario-service/Proveerdors/Agregar',
+        'https://localhost:7073/inventario-service/Proveedors/Agregar',
         {
           method: 'POST',
           headers: {

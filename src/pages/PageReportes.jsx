@@ -1,6 +1,6 @@
-import React from "react";
-import PanelDivisor from "../components/PanelDivisor";
-import { useForm } from "react-hook-form";
+import React from 'react'
+import PanelDivisor from '../components/PanelDivisor'
+import { useForm } from 'react-hook-form'
 
 const Page = () => {
   const {
@@ -8,131 +8,131 @@ const Page = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
   const onSubmit = (data) => {
-    console.log(hola);
-  };
+    console.log(hola)
+  }
   return (
-    <div className="h-full w-full gap-4 p-10 shadow-md  shadow-black ">
+    <div className='h-full w-full gap-4 p-10 shadow-md  shadow-black '>
       <form
-        className="bg-white rounded-lg shadow-sm flex flex-col h-full p-5"
+        className='bg-white rounded-lg shadow-sm flex flex-col h-full p-5'
         onSubmit={onSubmit}
       >
-        <div className="h-full">
+        <div className='h-full'>
           <div>
-            <label className="label__form" htmlFor="tipoReporte">
+            <label className='label__form' htmlFor='tipoReporte'>
               Seleccione el Tipo de reporte
             </label>
             <select
-              className="input__form"
-              name="tipoReporte"
-              id="tipoReporte"
-              {...register("tipoReporte", { required: "Campo Obligatorio" })}
+              className='input__form'
+              name='tipoReporte'
+              id='tipoReporte'
+              {...register('tipoReporte', { required: 'Campo Obligatorio' })}
             >
-              <option value="-1">Seleccione un tipo de reporte</option>
-              <option value="1">Listado de Cliente</option>
-              <option value="2">Aqui los otros reportes :V</option>
+              <option value='-1'>Seleccione un tipo de reporte</option>
+              <option value='1'>Listado de Cliente</option>
+              <option value='2'>Aqui los otros reportes :V</option>
             </select>
-            <span className="message">{errors?.tipoReporte?.message}</span>
+            <span className='message'>{errors?.tipoReporte?.message}</span>
           </div>
           <div>
-            <label className="label__form" htmlFor="fechaInicio">
+            <label className='label__form' htmlFor='fechaInicio'>
               Fecha de Incio
             </label>
             <input
-              {...register("fechaInicio", { required: "Campo Obligatorio" })}
-              className="input__form"
-              type="date"
-              name=""
-              id="fechaInicio"
+              {...register('fechaInicio', { required: 'Campo Obligatorio' })}
+              className='input__form'
+              type='date'
+              name=''
+              id='fechaInicio'
             />
-            <span className="message">{errors?.fechaInicio?.message}</span>
+            <span className='message'>{errors?.fechaInicio?.message}</span>
           </div>
           <div>
-            <label className="label__form" htmlFor="fechaFinal">
+            <label className='label__form' htmlFor='fechaFinal'>
               Fecha de Final
             </label>
             <input
-              {...register("fechaFinal", { required: "Campo Obligatorio" })}
-              className="input__form"
-              type="date"
-              name=""
-              id="fechaFinal"
+              {...register('fechaFinal', { required: 'Campo Obligatorio' })}
+              className='input__form'
+              type='date'
+              name=''
+              id='fechaFinal'
             />
-            <span className="message">{errors?.fechaFinal?.message}</span>
+            <span className='message'>{errors?.fechaFinal?.message}</span>
           </div>
           <div>
-            <label className="label__form" htmlFor="categoria">
+            <label className='label__form' htmlFor='categoria'>
               Seleccione una Categoria (Opcional)
             </label>
             <select
-              className="input__form"
-              name="categoria"
-              id="tipoReporte"
-              {...register("categoria")}
+              className='input__form'
+              name='categoria'
+              id='tipoReporte'
+              {...register('categoria')}
             >
-              <option value="-1">Seleccione una categoria</option>
+              <option value='-1'>Seleccione una categoria</option>
               //listado de categorias con .map copia de los otro :V
             </select>
-            <span className="message">{errors?.categoria?.message}</span>
+            <span className='message'>{errors?.categoria?.message}</span>
           </div>
           <div>
-            <label className="label__form" htmlFor="producto">
+            <label className='label__form' htmlFor='producto'>
               Seleccione un producto (Opcional)
             </label>
             <select
-              className="input__form"
-              name="producto"
-              id="tipoReporte"
-              {...register("producto")}
+              className='input__form'
+              name='producto'
+              id='tipoReporte'
+              {...register('producto')}
             >
-              <option value="-1">Seleccione un producto</option>
+              <option value='-1'>Seleccione un producto</option>
               //listado de productoes con .map copia de los otro :V
             </select>
-            <span className="message">{errors?.producto?.message}</span>
+            <span className='message'>{errors?.producto?.message}</span>
           </div>
           <div>
-            <label className="label__form" htmlFor="cliente">
+            <label className='label__form' htmlFor='cliente'>
               Seleccione un cliente (Opcional)
             </label>
             <select
-              className="input__form"
-              name="cliente"
-              id="tipoReporte"
-              {...register("cliente")}
+              className='input__form'
+              name='cliente'
+              id='tipoReporte'
+              {...register('cliente')}
             >
-              <option value="-1">Seleccione un cliente</option>
+              <option value='-1'>Seleccione un cliente</option>
               //listado de clientes con .map copia de los otro :V
             </select>
-            <span className="message">{errors?.cliente?.message}</span>
+            <span className='message'>{errors?.cliente?.message}</span>
           </div>
           <div>
-            <label className="label__form" htmlFor="proveedor">
+            <label className='label__form' htmlFor='proveedor'>
               Seleccione un proveedor (Opcional)
             </label>
             <select
-              className="input__form"
-              name="proveedor"
-              id="tipoReporte"
-              {...register("proveedor")}
+              className='input__form'
+              name='proveedor'
+              id='tipoReporte'
+              {...register('proveedor')}
             >
-              <option value="-1">Seleccione un proveedor</option>
+              <option value='-1'>Seleccione un proveedor</option>
               //listado de proveedores con .map copia de los otro :V
             </select>
-            <span className="message">{errors?.proveedor?.message}</span>
+            <span className='message'>{errors?.proveedor?.message}</span>
           </div>
         </div>
-        <section className="self-end">
-          <button className="bnt__primary mt-5 ">Generar Reporte</button>
+        <section className='self-end'>
+          <button className='bnt__primary mt-5 '>Generar Reporte</button>
         </section>
       </form>
     </div>
-  );
-};
+  )
+}
 
 const PageReportes = () => {
-  return <PanelDivisor Page={<Page />} />;
-};
+  return <PanelDivisor Page={<Page />} />
+}
 
-export default PageReportes;
+export default PageReportes

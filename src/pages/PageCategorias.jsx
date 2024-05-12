@@ -45,7 +45,6 @@ const Page = () => {
         try {
           await deleteCategory(id)
           fetchCategories().then((categoria) => setData(categoria))
-
           Swal.fire({
             title: 'Borrado!',
             text: 'Se ha borrado con éxito',
@@ -81,7 +80,7 @@ const Page = () => {
           setformRegister(false)
         }}
         registrar={(dataForm) => {
-          setData([...data, dataForm])
+          fetchCategories().then((categoria) => setData(categoria))
         }}
       />
       <ModalEditCategoria
@@ -92,7 +91,6 @@ const Page = () => {
         }}
         editar={(dataForm) => {
           console.log(dataForm)
-          //con esta dataForm modifican
         }}
       />
       <div className='p-5 h-full flex flex-col shadow-md rounded-sm shadow-black '>
@@ -110,87 +108,92 @@ const Page = () => {
         </section>
 
         <div className='container__table'>
-          <table className='w-full '>
-            <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
-              <tr>
-                <th className='text-start pl-3'>Nombre</th>
-                <th className='text-center w-28'>Editar</th>
-                <th className='text-center w-28'>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
+          <div
+            className='table-wrapper'
+            style={{ maxHeight: '430px', overflowY: 'auto' }}
+          >
+            <table className='w-full '>
+              <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
                 <tr>
-                  <td colSpan='5' className='text-center py-4'>
-                    <div className='flex items-center justify-center'>
-                      <svg
-                        className='animate-spin h-8 w-8 mr-3 text-blue-900'
-                        viewBox='0 0 24 24'
-                      >
-                        <circle
-                          cx='12'
-                          cy='12'
-                          r='10'
-                          fill='none'
-                          strokeWidth='2'
-                          stroke='currentColor'
-                          strokeLinecap='round'
-                          strokeDasharray='31.415, 31.415'
-                          transform='rotate(96 12 12)'
-                        >
-                          <animateTransform
-                            attributeName='transform'
-                            type='rotate'
-                            from='0 12 12'
-                            to='360 12 12'
-                            dur='1s'
-                            repeatCount='indefinite'
-                          />
-                        </circle>
-                      </svg>
-                      <span className='text-lg font-bold text-gray-900'>
-                        Cargando...
-                      </span>
-                    </div>
-                  </td>
+                  <th className='text-start pl-3'>Nombre</th>
+                  <th className='text-center w-28'>Editar</th>
+                  <th className='text-center w-28'>Eliminar</th>
                 </tr>
-              ) : (
-                data
-                  .filter((data) =>
-                    data.nombre
-                      .toLowerCase()
-                      .includes(buscarCategoria.toLowerCase())
-                  )
-                  .map((categoria, index) => (
-                    <tr className='even:bg-slate-100' key={index}>
-                      <td className='pl-3'>{categoria.nombre}</td>
-                      <td className='text-center text-blue-800'>
-                        <button
-                          onClick={(event) =>
-                            editarCategoria(
-                              event,
-                              categoria.id,
-                              categoria.nombre
-                            )
-                          }
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan='5' className='text-center py-4'>
+                      <div className='flex items-center justify-center'>
+                        <svg
+                          className='animate-spin h-8 w-8 mr-3 text-blue-900'
+                          viewBox='0 0 24 24'
                         >
-                          <EditIcon clases={'size-7 cursor-pointer'} />
-                        </button>
-                      </td>
-                      <td className='text-center text-red-800'>
-                        <button
-                          onClick={(event) =>
-                            eliminarCategoria(event, categoria.id)
-                          }
-                        >
-                          <DeleteIcon clases={'size-7 cursor-pointer'} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
+                          <circle
+                            cx='12'
+                            cy='12'
+                            r='10'
+                            fill='none'
+                            strokeWidth='2'
+                            stroke='currentColor'
+                            strokeLinecap='round'
+                            strokeDasharray='31.415, 31.415'
+                            transform='rotate(96 12 12)'
+                          >
+                            <animateTransform
+                              attributeName='transform'
+                              type='rotate'
+                              from='0 12 12'
+                              to='360 12 12'
+                              dur='1s'
+                              repeatCount='indefinite'
+                            />
+                          </circle>
+                        </svg>
+                        <span className='text-lg font-bold text-gray-900'>
+                          Cargando...
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  data
+                    .filter((data) =>
+                      data.nombre
+                        .toLowerCase()
+                        .includes(buscarCategoria.toLowerCase())
+                    )
+                    .map((categoria, index) => (
+                      <tr className='even:bg-slate-100' key={index}>
+                        <td className='pl-3'>{categoria.nombre}</td>
+                        <td className='text-center text-blue-800'>
+                          <button
+                            onClick={(event) =>
+                              editarCategoria(
+                                event,
+                                categoria.id,
+                                categoria.nombre
+                              )
+                            }
+                          >
+                            <EditIcon clases={'size-7 cursor-pointer'} />
+                          </button>
+                        </td>
+                        <td className='text-center text-red-800'>
+                          <button
+                            onClick={(event) =>
+                              eliminarCategoria(event, categoria.id)
+                            }
+                          >
+                            <DeleteIcon clases={'size-7 cursor-pointer'} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         <section className='self-end mt-2'>
           <button

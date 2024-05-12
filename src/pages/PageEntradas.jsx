@@ -202,133 +202,142 @@ const Page = () => {
           </div>
         </section>
         <div className='container__table'>
-          <table className='w-full table-auto'>
-            <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
-              <tr>
-                <th className='text-start pl-3'>Categoria</th>
-                <th className='text-start pl-3'>Producto</th>
-                <th className='text-start pl-3'>Proveedor</th>
-                <th className='text-center'>Existencia Inicial</th>
-                <th className='text-center'>Existencia Actual</th>
-                <th className='text-center'>Precio de Compra</th>
-                <th className='text-center'>Precio de Venta</th>
-                <th className='text-center'>Fecha de Entrada</th>
-                <th className='text-center'>Nota</th>
-                <th className='text-center'>Editar</th>
-                <th className='text-center'>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {' '}
-              {isLoading ? (
+          <div
+            className='table-wrapper'
+            style={{ maxHeight: '430px', overflowY: 'auto' }}
+          >
+            <table className='w-full table-auto'>
+              <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
                 <tr>
-                  <td colSpan='9' className='text-center py-4'>
-                    <div className='flex items-center justify-center'>
-                      <svg
-                        className='animate-spin h-8 w-8 mr-3 text-blue-900'
-                        viewBox='0 0 24 24'
-                      >
-                        <circle
-                          cx='12'
-                          cy='12'
-                          r='10'
-                          fill='none'
-                          strokeWidth='2'
-                          stroke='currentColor'
-                          strokeLinecap='round'
-                          strokeDasharray='31.415, 31.415'
-                          transform='rotate(96 12 12)'
-                        >
-                          <animateTransform
-                            attributeName='transform'
-                            type='rotate'
-                            from='0 12 12'
-                            to='360 12 12'
-                            dur='1s'
-                            repeatCount='indefinite'
-                          />
-                        </circle>
-                      </svg>
-                      <span className='text-lg font-bold text-gray-900'>
-                        Cargando...
-                      </span>
-                    </div>
-                  </td>
+                  <th className='text-start pl-3'>Categoria</th>
+                  <th className='text-start pl-3'>Producto</th>
+                  <th className='text-start pl-3'>Proveedor</th>
+                  <th className='text-center'>Existencia Inicial</th>
+                  <th className='text-center'>Existencia Actual</th>
+                  <th className='text-center'>Precio de Compra</th>
+                  <th className='text-center'>Precio de Venta</th>
+                  <th className='text-center'>Fecha de Entrada</th>
+                  <th className='text-center'>Nota</th>
+                  <th className='text-center'>Editar</th>
+                  <th className='text-center'>Eliminar</th>
                 </tr>
-              ) : (
-                existencia
-                  .filter((categoria) =>
-                    categoriaSeleccionada
-                      ? parseInt(categoria.idCategoria) ===
-                        parseInt(categoriaSeleccionada)
-                      : true
-                  )
-                  .filter((producto) =>
-                    producto.nombreProducto
-                      .toLowerCase()
-                      .includes(buscarProducto.toLowerCase())
-                  )
-                  .filter((proveedor) =>
-                    proveedorSeleccionado
-                      ? parseInt(proveedor.idProveedor) ===
-                        parseInt(proveedorSeleccionado)
-                      : true
-                  )
-                  .map((existencia, index) => (
-                    <tr
-                      className={`even:bg-slate-100 ${
-                        existencia.existenciaActual === 0
-                          ? 'row-strike-through'
-                          : ''
-                      }`}
-                      key={index}
-                    >
-                      <td className='pl-3'>{existencia.nombreCategoria}</td>
-                      <td className='pl-3'>{existencia.nombreProducto}</td>
-                      <td className='pl-3'>{existencia.nombreProveedor}</td>
-                      <td className='text-center'>
-                        {existencia.existenciaInicial}
-                      </td>
-                      <td className='text-center'>
-                        {existencia.existenciaActual}
-                      </td>
-                      <td className='text-center'>{existencia.precioCompra}</td>
-                      <td className='text-center'>{existencia.precioVenta}</td>
-                      <td className='text-center pl-1'>
-                        {existencia.fechaEntrada}
-                      </td>
-                      <td className='text-start pl-5'>{existencia.nota}</td>
-                      <td className='text-center text-blue-800'>
-                        <button
-                          onClick={(event) =>
-                            editarExistencia(
-                              event,
-                              existencia.id,
-                              existencia.nombreCategoria,
-                              existencia.nombreProducto,
-                              existencia.nombreProveedor,
-                              existencia.precioCompra,
-                              existencia.precioVenta,
-                              existencia.existenciaInicial,
-                              existencia.nota
-                            )
-                          }
+              </thead>
+              <tbody>
+                {' '}
+                {isLoading ? (
+                  <tr>
+                    <td colSpan='9' className='text-center py-4'>
+                      <div className='flex items-center justify-center'>
+                        <svg
+                          className='animate-spin h-8 w-8 mr-3 text-blue-900'
+                          viewBox='0 0 24 24'
                         >
-                          <EditIcon clases={'size-7 cursor-pointer'} />
-                        </button>
-                      </td>
-                      <td className='text-center text-red-800'>
-                        <button
-                          onClick={() => eliminarExistencia(existencia.id)}
-                        >
-                          <DeleteIcon clases={'size-7 cursor-pointer'} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
+                          <circle
+                            cx='12'
+                            cy='12'
+                            r='10'
+                            fill='none'
+                            strokeWidth='2'
+                            stroke='currentColor'
+                            strokeLinecap='round'
+                            strokeDasharray='31.415, 31.415'
+                            transform='rotate(96 12 12)'
+                          >
+                            <animateTransform
+                              attributeName='transform'
+                              type='rotate'
+                              from='0 12 12'
+                              to='360 12 12'
+                              dur='1s'
+                              repeatCount='indefinite'
+                            />
+                          </circle>
+                        </svg>
+                        <span className='text-lg font-bold text-gray-900'>
+                          Cargando...
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  existencia
+                    .filter((categoria) =>
+                      categoriaSeleccionada
+                        ? parseInt(categoria.idCategoria) ===
+                          parseInt(categoriaSeleccionada)
+                        : true
+                    )
+                    .filter((producto) =>
+                      producto.nombreProducto
+                        .toLowerCase()
+                        .includes(buscarProducto.toLowerCase())
+                    )
+                    .filter((proveedor) =>
+                      proveedorSeleccionado
+                        ? parseInt(proveedor.idProveedor) ===
+                          parseInt(proveedorSeleccionado)
+                        : true
+                    )
+                    .map((existencia, index) => (
+                      <tr
+                        className={`even:bg-slate-100 ${
+                          existencia.existenciaActual === 0
+                            ? 'row-strike-through'
+                            : ''
+                        }`}
+                        key={index}
+                      >
+                        <td className='pl-3'>{existencia.nombreCategoria}</td>
+                        <td className='pl-3'>{existencia.nombreProducto}</td>
+                        <td className='pl-3'>{existencia.nombreProveedor}</td>
+                        <td className='text-center'>
+                          {existencia.existenciaInicial}
+                        </td>
+                        <td className='text-center'>
+                          {existencia.existenciaActual}
+                        </td>
+                        <td className='text-center'>
+                          {existencia.precioCompra}
+                        </td>
+                        <td className='text-center'>
+                          {existencia.precioVenta}
+                        </td>
+                        <td className='text-center pl-1'>
+                          {existencia.fechaEntrada}
+                        </td>
+                        <td className='text-start pl-5'>{existencia.nota}</td>
+                        <td className='text-center text-blue-800'>
+                          <button
+                            onClick={(event) =>
+                              editarExistencia(
+                                event,
+                                existencia.id,
+                                existencia.nombreCategoria,
+                                existencia.nombreProducto,
+                                existencia.nombreProveedor,
+                                existencia.precioCompra,
+                                existencia.precioVenta,
+                                existencia.existenciaInicial,
+                                existencia.nota
+                              )
+                            }
+                          >
+                            <EditIcon clases={'size-7 cursor-pointer'} />
+                          </button>
+                        </td>
+                        <td className='text-center text-red-800'>
+                          <button
+                            onClick={() => eliminarExistencia(existencia.id)}
+                          >
+                            <DeleteIcon clases={'size-7 cursor-pointer'} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>{' '}
         <section className='self-end mt-2'>
           <button
