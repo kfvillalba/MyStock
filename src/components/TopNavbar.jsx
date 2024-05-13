@@ -35,7 +35,7 @@ const TopNavbar = () => {
             <img
               className='rounded-full size-14'
               src={
-                localStorage.getItem('photoURL') || '../src/assets/perfil.png'
+                localStorage.getItem('photoURL') || '../src/assets/perfil1.png'
               }
               alt='avatar'
             />

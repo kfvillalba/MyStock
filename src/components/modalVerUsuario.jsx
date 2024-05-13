@@ -41,7 +41,10 @@ const ProfileModal = ({ open, onClose }) => {
               <div className='Profile flex flex-wrap items-center mb-3'>
                 <img
                   className='w-18 h-17 rounded-full cursor-pointer'
-                  src={localStorage.getItem('photoURL')}
+                  src={
+                    localStorage.getItem('photoURL') ||
+                    '../src/assets/perfil1.png'
+                  }
                   alt='avatar'
                 />
                 <div className='ml-3 text-sm text-center'>
@@ -64,14 +67,7 @@ const ProfileModal = ({ open, onClose }) => {
                 Mi Perfil
               </button>
 
-              <button
-                className=' btn__menu'
-                onClick={() => {
-                  onClose()
-                }}
-              >
-                Cerrar
-              </button>
+              <button className=' btn__menu'>Cambiar contraseña</button>
             </section>
             <button onClick={Logout} className='btn__menu'>
               <LogOutIcon clases={'mr-3  size-7'} />
