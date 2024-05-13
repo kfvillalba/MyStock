@@ -3,6 +3,7 @@ const API_INVENTARIO = 'https://localhost:7073/inventario-service'
 // -------------------------------------------------------------------------------
 export const fetchCategories = async () => {
   const response = await fetch(`${API_INVENTARIO}/Categorias/Consultar`)
+
   return await response.json()
 }
 
@@ -93,7 +94,7 @@ export const fetchProviders = async () => {
 export const deleteProvider = async (id) => {
   try {
     const response = await fetch(
-      `${API_INVENTARIO}/Proveerdors/Eliminar?id=${id}`,
+      `${API_INVENTARIO}/Proveedors/Eliminar?id=${id}`,
       {
         method: 'DELETE',
       }
@@ -158,4 +159,4 @@ export const fetchSalidas = async () => {
   }
 }
 
-export default fetchProviders
+export default deleteProduct

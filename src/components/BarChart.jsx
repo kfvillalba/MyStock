@@ -1,48 +1,30 @@
-import { BarChart } from "@tremor/react";
-
-const chartdata = [
-  {
-    name: "Amphibians",
-    Ganancia: 2488,
-  },
-  {
-    name: "Birds",
-    Ganancia: 1445,
-  },
-  {
-    name: "Crustaceans",
-    Ganancia: 743,
-  },
-  {
-    name: "Ferns",
-    Ganancia: 281,
-  },
-  {
-    name: "Arachnids",
-    Ganancia: 251,
-  },
-  {
-    name: "Corals",
-    Ganancia: 232,
-  },
-  {
-    name: "Algae",
-    Ganancia: 98,
-  },
-  {
-    name: "Pan",
-    Ganancia: 232,
-  },
-  {
-    name: "Peto",
-    Ganancia: 98,
-  },
-];
-
-const dataFormatter = (number) =>
-  Intl.NumberFormat("us").format(number).toString();
+import { useState, useEffect } from 'react'
+import { BarChart } from '@tremor/react'
 
 const BarChartGanancias = ({ color }) => {
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7073/inventario-service/Dashboard/Grafica/GananciaPorProducto'
+        )
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos')
+        }
+        const jsonData = await response.json()
+        setData(jsonData)
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    }
+    fetchData()
+  }, [])
+
+  const dataFormatter = (number) =>
+    Intl.NumberFormat('us').format(number).toString()
+
   return (
     <>
       <h3
@@ -51,16 +33,19 @@ const BarChartGanancias = ({ color }) => {
         Ganancia por productos
       </h3>
       <BarChart
-        className="mt-6"
-        data={chartdata}
-        index="name"
-        categories={["Ganancia"]}
-        colors={["green"]}
+        className='mt-6'
+        data={data.map((item) => ({
+          name: item.nombreProducto,
+          Ganancia: item.ganancia,
+        }))}
+        index='name'
+        categories={['Ganancia']}
+        colors={['green']}
         valueFormatter={dataFormatter}
         yAxisWidth={48}
       />
     </>
-  );
-};
+  )
+}
 
-export default BarChartGanancias;
+export default BarChartGanancias

@@ -91,91 +91,100 @@ const Page = () => {
         </section>
 
         <div className='container__table'>
-          <table className='w-full table-auto '>
-            <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
-              <tr>
-                <th className='text-center'>Num Factura</th>
-                <th className='text-center'>Fecha</th>
-                <th className='text-center'>Cliente</th>
-                <th className='text-center'>Total Pagado</th>
-                <th className='text-center'>Mostrar</th>
-                <th className='text-center'>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
+          <div
+            className='table-wrapper'
+            style={{ maxHeight: '430px', overflowY: 'auto' }}
+          >
+            <table className='w-full table-auto '>
+              <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
                 <tr>
-                  <td colSpan='5' className='text-center py-4'>
-                    <div className='flex items-center justify-center'>
-                      <svg
-                        className='animate-spin h-8 w-8 mr-3 text-blue-900'
-                        viewBox='0 0 24 24'
-                      >
-                        <circle
-                          cx='12'
-                          cy='12'
-                          r='10'
-                          fill='none'
-                          strokeWidth='2'
-                          stroke='currentColor'
-                          strokeLinecap='round'
-                          strokeDasharray='31.415, 31.415'
-                          transform='rotate(96 12 12)'
-                        >
-                          <animateTransform
-                            attributeName='transform'
-                            type='rotate'
-                            from='0 12 12'
-                            to='360 12 12'
-                            dur='1s'
-                            repeatCount='indefinite'
-                          />
-                        </circle>
-                      </svg>
-                      <span className='text-lg font-bold text-gray-900'>
-                        Cargando...
-                      </span>
-                    </div>
-                  </td>
+                  <th className='text-center'>Num Factura</th>
+                  <th className='text-center'>Fecha</th>
+                  <th className='text-center'>Cliente</th>
+                  <th className='text-center'>Total Pagado</th>
+                  <th className='text-center'>Mostrar</th>
+                  <th className='text-center'>Eliminar</th>
                 </tr>
-              ) : (
-                salidas
-                  .filter(
-                    (salida) =>
-                      salida.clienteNombre
-                        .toLowerCase()
-                        .includes(buscarCliente.toLowerCase()) &&
-                      (!numeroFactura || salida.id === parseInt(numeroFactura))
-                  )
-                  .map((salida, index) => (
-                    <tr className='text-center even:bg-slate-100' key={index}>
-                      <td>{salida.id}</td>
-                      <td>
-                        {new Date(salida.fechaFactura).toLocaleString('es-ES', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        })}
-                      </td>
-                      <td>{salida.clienteNombre}</td>
-                      <td>{salida.totalPagarConDescuento}</td>
-                      <td className='text-blue-800'>
-                        <button onClick={() => handleView(salida)}>
-                          <EyeIcon clases={'size-7 cursor-pointer'} />
-                        </button>
-                      </td>
-                      <td className=' text-red-800'>
-                        <button onClick={(event) => console.log('event')}>
-                          <DeleteIcon clases={'size-7 cursor-pointer'} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan='5' className='text-center py-4'>
+                      <div className='flex items-center justify-center'>
+                        <svg
+                          className='animate-spin h-8 w-8 mr-3 text-blue-900'
+                          viewBox='0 0 24 24'
+                        >
+                          <circle
+                            cx='12'
+                            cy='12'
+                            r='10'
+                            fill='none'
+                            strokeWidth='2'
+                            stroke='currentColor'
+                            strokeLinecap='round'
+                            strokeDasharray='31.415, 31.415'
+                            transform='rotate(96 12 12)'
+                          >
+                            <animateTransform
+                              attributeName='transform'
+                              type='rotate'
+                              from='0 12 12'
+                              to='360 12 12'
+                              dur='1s'
+                              repeatCount='indefinite'
+                            />
+                          </circle>
+                        </svg>
+                        <span className='text-lg font-bold text-gray-900'>
+                          Cargando...
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  salidas
+                    .filter(
+                      (salida) =>
+                        salida.clienteNombre
+                          .toLowerCase()
+                          .includes(buscarCliente.toLowerCase()) &&
+                        (!numeroFactura ||
+                          salida.id === parseInt(numeroFactura))
+                    )
+                    .map((salida, index) => (
+                      <tr className='text-center even:bg-slate-100' key={index}>
+                        <td>{salida.id}</td>
+                        <td>
+                          {new Date(salida.fechaFactura).toLocaleString(
+                            'es-ES',
+                            {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                            }
+                          )}
+                        </td>
+                        <td>{salida.clienteNombre}</td>
+                        <td>{salida.totalPagarConDescuento}</td>
+                        <td className='text-blue-800'>
+                          <button onClick={() => handleView(salida)}>
+                            <EyeIcon clases={'size-7 cursor-pointer'} />
+                          </button>
+                        </td>
+                        <td className=' text-red-800'>
+                          <button onClick={(event) => console.log('event')}>
+                            <DeleteIcon clases={'size-7 cursor-pointer'} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         <section className='self-end mt-2'>
           <button

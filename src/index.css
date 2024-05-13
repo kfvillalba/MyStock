@@ -69,10 +69,6 @@
     background-color: #f9a8a8; /* Color de fondo rojo */
   }
 
-  .row-strike-through td {
-    text-decoration: line-through; /* Tachado en el texto de las celdas */
-  }
-
   .ventasGraf {
     @apply w-[200px] h-[318px] text-black font-bold;
   }
