@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PanelDivisor from '../components/PanelDivisor'
 import { useForm } from 'react-hook-form'
+import { generateVentasPDF } from '../components/TablasReportes'
 
 const Page = () => {
   const {
@@ -10,14 +11,195 @@ const Page = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(hola)
+  const onSubmit = async (data) => {
+    if (tipoReporte === '1') {
+      try {
+        const pdfUrl = await generateVentasPDF(data)
+        setPdfData(pdfUrl)
+        setBotonTexto('Descargar PDF')
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
+
+  const [pdfData, setPdfData] = useState('')
+
+  const [categoriasOptions, setCategoriasOptions] = useState([])
+  const [productosOptions, setProductosOptions] = useState([])
+  const [clientesOptions, setClientesOptions] = useState([])
+  const [proveedoresOptions, setProveedoresOptions] = useState([])
+
+  useEffect(() => {
+    const fetchClientes = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7073/inventario-service/Salidas/ConsultarTodo'
+        )
+        if (response.ok) {
+          const data = await response.json()
+          const clientesSet = new Set()
+          const clientes = data.reduce((acc, { clienteId, clienteNombre }) => {
+            if (!clientesSet.has(clienteId)) {
+              clientesSet.add(clienteId)
+              acc.push({ clienteId, clienteNombre })
+            }
+            return acc
+          }, [])
+          setClientesOptions(clientes)
+        } else {
+          throw new Error('Error al cargar las categorías')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const fetchProveedores = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7073/inventario-service/Entradas/Consultar'
+        )
+        if (response.ok) {
+          const data = await response.json()
+          const proveedoresSet = new Set()
+          const proveedores = data.reduce(
+            (acc, { idProveedor, nombreProveedor }) => {
+              if (!proveedoresSet.has(idProveedor)) {
+                proveedoresSet.add(idProveedor)
+                acc.push({ idProveedor, nombreProveedor })
+              }
+              return acc
+            },
+            []
+          )
+          setProveedoresOptions(proveedores)
+        } else {
+          throw new Error('Error al cargar las categorías')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const fetchEntradasCategorias = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7073/inventario-service/Entradas/Consultar'
+        )
+        if (response.ok) {
+          const data = await response.json()
+          const categoriasSet = new Set()
+          const categorias = data.reduce(
+            (acc, { idCategoria, nombreCategoria }) => {
+              if (!categoriasSet.has(idCategoria)) {
+                categoriasSet.add(idCategoria)
+                acc.push({ idCategoria, nombreCategoria })
+              }
+              return acc
+            },
+            []
+          )
+          setCategoriasOptions(categorias)
+        } else {
+          throw new Error('Error al cargar las categorías')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchClientes()
+    fetchProveedores()
+    fetchEntradasCategorias()
+  }, [])
+
+  const handleCategoriaChange = async (event) => {
+    const idCategoria = event.target.value
+    setProductosOptions([])
+
+    if (idCategoria !== '-1') {
+      try {
+        const response = await fetch(
+          `https://localhost:7073/inventario-service//Entradas/Filtrar/IdCategoria?idCategoria=${idCategoria}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          const productosSet = new Set()
+          const productosUnicos = data.reduce(
+            (acc, { idProducto, nombreProducto }) => {
+              if (!productosSet.has(idProducto)) {
+                productosSet.add(idProducto)
+                acc.push({ idProducto, nombreProducto })
+              }
+              return acc
+            },
+            []
+          )
+          setProductosOptions(productosUnicos)
+        } else {
+          throw new Error('Error al cargar los productos')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const handleProductoChange = async (event) => {
+    const idProducto = event.target.value
+
+    if (idProducto !== '-1') {
+      try {
+        const response = await fetch(
+          `https://localhost:7073/inventario-service/Entradas/Filtrar/IdProductos?idProductos=${idProducto}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          const stockSet = new Set()
+          const stock = data.reduce((acc, { id }) => {
+            if (!stockSet.has(id)) {
+              stockSet.add(id)
+              acc.push({ id })
+            }
+            return acc
+          }, [])
+        } else {
+          throw new Error('Error al cargar el stock')
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const [tipoReporte, setTipoReporte] = useState('-1')
+
+  const handleTipoReporteChange = (event) => {
+    setTipoReporte(event.target.value)
+  }
+
+  const [botonTexto, setBotonTexto] = useState('Generar Reporte')
+
+  const handleButtonClick = () => {
+    if (pdfData) {
+      const link = document.createElement('a')
+      link.href = pdfData
+      link.download = 'reporte.pdf'
+      link.click()
+    } else {
+      document.getElementById('reporteForm').submit()
+    }
+  }
+
   return (
-    <div className='h-full w-full gap-4 p-10 shadow-md  shadow-black '>
+    <div
+      className='gap-4 p-10 shadow-md  shadow-black '
+      style={{ maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}
+    >
       <form
         className='bg-white rounded-lg shadow-sm flex flex-col h-full p-5'
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div className='h-full'>
           <div>
@@ -28,40 +210,108 @@ const Page = () => {
               className='input__form'
               name='tipoReporte'
               id='tipoReporte'
-              {...register('tipoReporte', { required: 'Campo Obligatorio' })}
+              value={tipoReporte}
+              onChange={handleTipoReporteChange}
             >
               <option value='-1'>Seleccione un tipo de reporte</option>
-              <option value='1'>Listado de Cliente</option>
-              <option value='2'>Aqui los otros reportes :V</option>
+              <option value='1'>Reporte Entre Fechas</option>
+              <option value='2'>Reporte Día Actual</option>
+              <option value='3'>Reporte de Información Productos</option>
             </select>
-            <span className='message'>{errors?.tipoReporte?.message}</span>
+            {tipoReporte === '1' && (
+              <div>
+                <label className='label__form' htmlFor='producto'>
+                  Seleccionar reporte
+                </label>
+                <select
+                  className='input__form'
+                  name='producto'
+                  id='tipoReporte'
+                  {...register('producto')}
+                >
+                  <option value='-1'>Seleccione el tipo de reporte</option>
+                  <option value='-1'>Ventas</option>
+                  <option value='-1'>Salidas de clientes</option>
+                  <option value='-1'>Compras</option>
+                  <option value='-1'>Entrada de proveedores</option>
+                  <option value='-1'>Productos vendidos</option>
+                </select>
+                <span className='message'>{errors?.producto?.message}</span>
+              </div>
+            )}
+            {tipoReporte === '1' && (
+              <div>
+                <label className='label__form' htmlFor='fechaInicio'>
+                  Fecha de Inicio
+                </label>
+                <input
+                  className='input__form'
+                  type='date'
+                  name='fechaInicio'
+                  id='fechaInicio'
+                  {...register('fechaInicio')}
+                />
+                <span className='message'></span>
+              </div>
+            )}
+
+            {tipoReporte === '1' && (
+              <div>
+                <label className='label__form' htmlFor='fechaFinal'>
+                  Fecha de Final
+                </label>
+                <input
+                  className='input__form'
+                  type='date'
+                  name='fechaFinal'
+                  id='fechaFinal'
+                  {...register('fechaFinal')}
+                />
+                <span className='message'></span>
+              </div>
+            )}
+
+            {tipoReporte === '2' && (
+              <div>
+                <label className='label__form' htmlFor='producto'>
+                  Seleccionar reporte
+                </label>
+                <select
+                  className='input__form'
+                  name='producto'
+                  id='tipoReporte'
+                  {...register('producto')}
+                >
+                  <option value='-0'>Selecciones el tipo de reporte</option>
+                  <option value='-1'>Ventas</option>
+                  <option value='-2'>Cliente salidas</option>
+                  <option value='-3'>Compras</option>
+                  <option value='-4'>Entrada de proveedores</option>
+                  <option value='-5'>Salida de productos</option>
+                </select>
+                <span className='message'>{errors?.producto?.message}</span>
+              </div>
+            )}
+            {tipoReporte === '3' && (
+              <div>
+                <label className='label__form' htmlFor='producto'>
+                  Seleccionar reporte
+                </label>
+                <select
+                  className='input__form'
+                  name='producto'
+                  id='tipoReporte'
+                  {...register('producto')}
+                >
+                  <option value='-1'>Seleccione el tipo de reporte</option>
+                  <option value='-1'>Productos sin existencia</option>
+                  <option value='-1'>Productos con baja existencia</option>
+                </select>
+                <span className='message'>{errors?.producto?.message}</span>
+              </div>
+            )}
           </div>
-          <div>
-            <label className='label__form' htmlFor='fechaInicio'>
-              Fecha de Incio
-            </label>
-            <input
-              {...register('fechaInicio', { required: 'Campo Obligatorio' })}
-              className='input__form'
-              type='date'
-              name=''
-              id='fechaInicio'
-            />
-            <span className='message'>{errors?.fechaInicio?.message}</span>
-          </div>
-          <div>
-            <label className='label__form' htmlFor='fechaFinal'>
-              Fecha de Final
-            </label>
-            <input
-              {...register('fechaFinal', { required: 'Campo Obligatorio' })}
-              className='input__form'
-              type='date'
-              name=''
-              id='fechaFinal'
-            />
-            <span className='message'>{errors?.fechaFinal?.message}</span>
-          </div>
+
           <div>
             <label className='label__form' htmlFor='categoria'>
               Seleccione una Categoria (Opcional)
@@ -71,9 +321,16 @@ const Page = () => {
               name='categoria'
               id='tipoReporte'
               {...register('categoria')}
+              onChange={handleCategoriaChange}
             >
               <option value='-1'>Seleccione una categoria</option>
-              //listado de categorias con .map copia de los otro :V
+              {categoriasOptions?.map((categoria) => {
+                return (
+                  <option key={categoria.id} value={`${categoria.idCategoria}`}>
+                    {categoria.nombreCategoria}
+                  </option>
+                )
+              })}
             </select>
             <span className='message'>{errors?.categoria?.message}</span>
           </div>
@@ -86,9 +343,19 @@ const Page = () => {
               name='producto'
               id='tipoReporte'
               {...register('producto')}
+              onChange={handleProductoChange}
             >
               <option value='-1'>Seleccione un producto</option>
-              //listado de productoes con .map copia de los otro :V
+              {productosOptions?.map((producto) => {
+                return (
+                  <option
+                    key={producto.idProducto}
+                    value={`${producto.idProducto}`}
+                  >
+                    {producto.nombreProducto}
+                  </option>
+                )
+              })}
             </select>
             <span className='message'>{errors?.producto?.message}</span>
           </div>
@@ -103,7 +370,16 @@ const Page = () => {
               {...register('cliente')}
             >
               <option value='-1'>Seleccione un cliente</option>
-              //listado de clientes con .map copia de los otro :V
+              {clientesOptions?.map((cliente) => {
+                return (
+                  <option
+                    key={cliente.clienteId}
+                    value={`${cliente.clienteId}`}
+                  >
+                    {cliente.clienteNombre}
+                  </option>
+                )
+              })}
             </select>
             <span className='message'>{errors?.cliente?.message}</span>
           </div>
@@ -118,13 +394,28 @@ const Page = () => {
               {...register('proveedor')}
             >
               <option value='-1'>Seleccione un proveedor</option>
-              //listado de proveedores con .map copia de los otro :V
+              {proveedoresOptions?.map((proveedor) => {
+                return (
+                  <option
+                    key={proveedor.idProveedor}
+                    value={`${proveedor.idProveedor}`}
+                  >
+                    {proveedor.nombreProveedor}
+                  </option>
+                )
+              })}
             </select>
             <span className='message'>{errors?.proveedor?.message}</span>
           </div>
         </div>
         <section className='self-end'>
-          <button className='bnt__primary mt-5 '>Generar Reporte</button>
+          <button
+            type='submit'
+            className='bnt__primary mt-5'
+            onClick={handleButtonClick}
+          >
+            {botonTexto}
+          </button>
         </section>
       </form>
     </div>

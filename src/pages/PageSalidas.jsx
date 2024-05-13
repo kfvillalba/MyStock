@@ -93,7 +93,7 @@ const Page = () => {
         <div className='container__table'>
           <div
             className='table-wrapper'
-            style={{ maxHeight: '430px', overflowY: 'auto' }}
+            style={{ maxHeight: '375px', overflowY: 'auto' }}
           >
             <table className='w-full table-auto '>
               <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
