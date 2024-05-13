@@ -175,8 +175,8 @@ const Page = () => {
           color={"bg-[#71c55b]"}
         />
 
-        {/* <CategoryList color={"bg-[#1f7e26]"} /> */}
-        <ClientsBar color={"bg-[#4ea93b]"} />
+        <CategoryList color={"bg-[#1f7e26]"} />
+        {/* <ClientsBar color={"bg-[#4ea93b]"} /> */}
         <VentasGraf color={"bg-[#4ea93b]"} />
         <ProductosMasVendidosList color={"bg-[#1f7e26]"} />
         <ProductosMenosVendidosList color={"bg-[#1f7e26]"} />
