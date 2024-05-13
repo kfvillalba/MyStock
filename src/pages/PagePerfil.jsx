@@ -12,6 +12,8 @@ const PagePerfil = () => {
   const [genero, setGenero] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState({ type: "", message: "" }); // Estado de error
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inputUsername, setInputUsername] = useState("");
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("userName");
@@ -23,30 +25,43 @@ const PagePerfil = () => {
     setAvatar(storedAvatar || defaultAvatar); // Si no hay imagen de usuario, utiliza la imagen por defecto
   }, []);
 
-  const handleSave = () => {
-    // Lógica para guardar los cambios del perfil
-    if (password !== confirmPassword) {
+  const handleDelete = () => {
+    // Lógica para eliminar el perfil
+    // Verificar si el nombre de usuario coincide antes de eliminar el perfil
+    if (inputUsername.trim() === username) {
+      // Eliminar el perfil
+      // Swal.fire({
+      //   position: "top-center",
+      //   icon: "success",
+      //   title: "Perfil eliminado",
+      //   showConfirmButton: false,
+      //   timer: 1500,
+      // }).then(() => {
+      //   // Aquí puedes realizar acciones adicionales después de mostrar el SweetAlert
+      //   // Por ejemplo, redirigir a otra página o limpiar los datos del perfil
+      // });
+    } else {
+      // Mostrar un mensaje de error si el nombre de usuario no coincide
       setError({
         type: "manual",
-        message: "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.",
+        message:
+          "El nombre de usuario no coincide. Por favor, inténtalo de nuevo.",
       });
-      return;
     }
-
-    // Simulación de éxito al guardar el perfil
-    // Swal.fire({
-    //   position: "top-center",
-    //   icon: "success",
-    //   title: "Perfil actualizado",
-    //   showConfirmButton: false,
-    //   timer: 1500,
-    // }).then(() => {
-    //   // Aquí puedes realizar acciones adicionales después de mostrar el SweetAlert
-    //   // Por ejemplo, redirigir a otra página o resetear el formulario
-    //   reset(); // Asegúrate de definir la función reset
-    //   handleShowAuthForm(); // Asegúrate de definir la función handleShowAuthForm
-    // });
   };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Limpia el campo de entrada del nombre de usuario al cerrar el modal
+    setInputUsername("");
+    // Limpia cualquier error mostrado
+    setError({ type: "", message: "" });
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -99,7 +114,7 @@ const PagePerfil = () => {
                   readOnly // Hacer el campo de solo lectura
                 />
               </div>
-              {/* <div className="mb-4">
+              <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="password"
@@ -128,7 +143,7 @@ const PagePerfil = () => {
                   value={confirmPassword}
                   readOnly // Hacer el campo de solo lectura
                 />
-              </div> */}
+              </div>
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -144,32 +159,17 @@ const PagePerfil = () => {
                   onChange={(e) => setGenero(e.target.value)}
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="interests"
-                >
-                  Intereses
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="interests"
-                  type="text"
-                  value={intereses}
-                  onChange={(e) => setIntereses(e.target.value)}
-                />
-              </div>
               <div className="flex items-center justify-center">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
-                  onClick={handleSave}
+                  onClick={handleOpenModal}
                 >
-                  Guardar Perfil
+                  Eliminar Perfil
                 </button>
                 <div style={{ width: "10px" }}></div>
                 <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                   onClick={() => history.goBack()} // Redirige a la vista anterior
                 >
@@ -224,6 +224,42 @@ const PagePerfil = () => {
           </div>
         </div>
       </div>
+      {/* Modal de confirmación para eliminar perfil */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-8 w-96 rounded-lg">
+            <h2 className="text-lg font-bold mb-4">Eliminar Perfil</h2>
+            <p className="mb-4">
+              Por favor, ingresa tu nombre de usuario para confirmar la
+              eliminación del perfil.
+            </p>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+              type="text"
+              placeholder="Nombre de Usuario"
+              value={inputUsername}
+              onChange={(e) => setInputUsername(e.target.value)}
+            />
+            {error.type === "manual" && (
+              <p className="text-red-500 text-sm mb-4">{error.message}</p>
+            )}
+            <div className="flex justify-end">
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4"
+                onClick={handleDelete}
+              >
+                Eliminar
+              </button>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                onClick={handleCloseModal}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
