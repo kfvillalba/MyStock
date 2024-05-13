@@ -133,7 +133,7 @@ const Page = () => {
         />
         <CardGeneral
           nombre={'Existencia total'}
-          cantidad={existenciaTotal}
+          cantidad={existenciaTotal.toLocaleString()}
           logo={<ExistenciaTotalIcon clases={'size-16'} />}
           color={'bg-[#61ba5e]'}
         />
@@ -145,32 +145,32 @@ const Page = () => {
         />
         <CardGeneral
           nombre={'Existencia actual'}
-          cantidad={existenciaActual}
+          cantidad={existenciaActual.toLocaleString()}
           logo={<ExistenciaActualIcon clases={'size-16'} />}
           color={'bg-[#90c014]'}
         />
         <CardGeneral
           nombre={'Importe vendido'}
-          cantidad={totalImporteVendido}
+          cantidad={totalImporteVendido.toLocaleString()}
           logo={<ImporteVendidoIcon clases={'size-16'} />}
           color={'bg-[#b4ff9a]'}
         />
         <CardGeneral
           nombre={'Importe pagado'}
-          cantidad={totalImportePagado}
+          cantidad={totalImportePagado.toLocaleString()}
           logo={<ImportePagadoIcon clases={'size-16'} />}
           color={'bg-[#5f800d]'}
         />
 
         <CardGeneral
           nombre={'Beneficio bruto'}
-          cantidad={totalBeneficioBruto}
+          cantidad={totalBeneficioBruto.toLocaleString()}
           logo={<BeneficioBrutoIcon clases={'size-16'} />}
           color={'bg-[#32a45e]'}
         />
         <CardGeneral
           nombre={'Beneficio neto'}
-          cantidad={totalBeneficioNeto}
+          cantidad={totalBeneficioNeto.toLocaleString()}
           logo={<BeneficioTotalIcon clases={'size-16'} />}
           color={'bg-[#71c55b]'}
         />
