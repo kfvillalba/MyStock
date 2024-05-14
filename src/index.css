@@ -60,7 +60,7 @@
     @apply text-gray-800 font-bold max-w-xs w-[200px] h-[100px] mt-0 p-2;
   }
   .cardList {
-    @apply w-[400px] h-[318px] text-black font-bold;
+    @apply w-[400px] h-[318px] text-black font-bold overflow-y-auto;
   }
   .barStyle {
     @apply w-[580px] h-[250px] text-black rounded-xl font-bold;

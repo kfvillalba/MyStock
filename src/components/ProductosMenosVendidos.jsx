@@ -55,11 +55,11 @@ const ProductosMenosVendidosList = ({ color }) => {
   return (
     <Card className={`max-w-lg ventasGraf ${color}`}>
       <h3 className='text-tremor-title text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium'>
-        PRODUCTOS
+        PRODUCTOS MENOS VENDIDOS
       </h3>
-      <p className='mt-4 text-tremor-default flex items-center justify-between text-tremor-content dark:text-dark-tremor-content'>
-        <span>TOP Productos menos vendidos</span>
-        <span>Cantidad de productos</span>
+      <p className='mt-4 mr-11 text-tremor-default flex items-center justify-between text-tremor-content dark:text-dark-tremor-content'>
+        <span>TOP</span>
+        <span>Cantidad</span>
       </p>
       <BarList
         data={data.slice(0, 5).map((item) => ({
