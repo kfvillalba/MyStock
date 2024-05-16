@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 
-const ModalRegisterClientes = ({ open, onClose, registrar }) => {
+const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
   const {
     register,
     handleSubmit,
@@ -53,9 +53,12 @@ const ModalRegisterClientes = ({ open, onClose, registrar }) => {
           className='bg-white rounded-lg shadow-sm p-5'
           onSubmit={handleSubmit(onSubmit)}
         >
+          <div className='text-center font-bold py-2'>
+            <label>DATOS DE LA EMPRESA</label>
+          </div>
           <div>
             <label htmlFor='nombre' className='label__form'>
-              Nombre del cliente
+              Nombre de la empresa
             </label>
             <input
               id='nombre'
@@ -72,7 +75,7 @@ const ModalRegisterClientes = ({ open, onClose, registrar }) => {
           </div>
           <div>
             <label htmlFor='celular' className='label__form'>
-              Telefono del cliente
+              Telefono de la empresa
             </label>
             <input
               id='celular'
@@ -97,7 +100,7 @@ const ModalRegisterClientes = ({ open, onClose, registrar }) => {
           </div>
           <div>
             <label htmlFor='correo' className='label__form'>
-              Correo del cliente
+              Dirección de la empresa
             </label>
             <input
               id='correo'
@@ -135,4 +138,4 @@ const ModalRegisterClientes = ({ open, onClose, registrar }) => {
   )
 }
 
-export default ModalRegisterClientes
+export default ModalDatosEmpresa

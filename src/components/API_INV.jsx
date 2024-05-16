@@ -158,5 +158,3 @@ export const fetchSalidas = async () => {
     throw error
   }
 }
-
-export default deleteProduct

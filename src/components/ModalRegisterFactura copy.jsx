@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 import DeleteIcon from '../assets/DeleteIcon'
+import ModalRegisterClientes from './ModalRegisterClientes'
+import { fetchClients } from './API_INV'
 
 const ModalRegisterFactura = ({ open, onClose, registrar }) => {
   const {
@@ -369,286 +371,316 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       Swal.fire('Error', error.message, 'error')
     }
   }
+  const [formRegister, setformRegister] = useState(false)
 
   if (!open) return null
   return (
-    <div className='fixed w-full top-0 left-0 h-full z-10 flex items-center justify-center bg-black/50'>
-      <form
-        className='bg-white rounded-lg shadow-sm p-5 w-full mx-32'
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className='p-5 shadow-md rounded-sm shadow-black h-full'>
-          <h3>Nueva Factura</h3>
-          <section className='flex flex-col gap-4 my-5'>
-            <div className='flex flex-col'>
-              <select
-                type='text'
-                className='select'
-                {...register('cliente', {
-                  min: { value: 0, message: 'Seleccione un Cliente' },
-                })}
+    <>
+      <ModalRegisterClientes
+        open={formRegister}
+        onClose={() => {
+          setformRegister(false)
+        }}
+        registrar={(dataForm) => {
+          fetchClients().then((clientes) => setClientesOptions(clientes))
+        }}
+      />
+      <div className='fixed w-full top-0 left-0 h-full z-10 flex items-center justify-center bg-black/50'>
+        <form
+          className='bg-white rounded-lg shadow-sm p-5 w-full mx-32'
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className='p-5 shadow-md rounded-sm shadow-black h-full'>
+            <h3>Nueva Factura</h3>
+            <section className='flex flex-col gap-4 my-5'>
+              <div className='flex flex-row'>
+                <div className='flex flex-col'>
+                  <select
+                    type='text'
+                    className='select'
+                    {...register('cliente', {
+                      min: { value: 0, message: 'Seleccione un Cliente' },
+                    })}
+                  >
+                    <option value='-1'>Seleccione un Cliente</option>
+                    {clientesOptions?.map((cliente) => {
+                      return (
+                        <option key={cliente.id} value={`${cliente.id}`}>
+                          {cliente.nombre}
+                        </option>
+                      )
+                    })}
+                  </select>
+                  <span className='message'>{errors?.cliente?.message}</span>
+                </div>
+                <button
+                  type='button'
+                  className='bnt__primary ml-2'
+                  onClick={() => setformRegister(true)}
+                >
+                  Agregar cliente
+                </button>
+              </div>
+
+              <div className='h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm'>
+                <table className='w-full table-auto '>
+                  <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
+                    <tr>
+                      <th>#</th>
+                      <th>Categoria</th>
+                      <th>Producto</th>
+                      <th>Stock</th>
+                      <th>Cantidad</th>
+                      <th>Precio</th>
+                      <th>Descuento %</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {detalleFactura?.map((detalle, index) => {
+                      return (
+                        <tr
+                          className='text-center even:bg-slate-100'
+                          key={index}
+                        >
+                          <td className='text-center text-red-800'>
+                            <button
+                              type='button'
+                              onClick={() => eliminarDetalle(index)}
+                            >
+                              <DeleteIcon clases={'size-7 cursor-pointer'} />
+                            </button>
+                          </td>
+                          <td>{detalle.categoria}</td>
+                          <td>{detalle.producto}</td>
+                          <td>{detalle.stock}</td>
+                          <td>{detalle.cantidad}</td>
+                          <td>{detalle.precio}</td>
+                          <td>{detalle.descuento}</td>
+                          <td>{detalle.total}</td>
+                        </tr>
+                      )
+                    })}
+                    <tr className='even:bg-slate-100'>
+                      <td className='text-center text-red-800'></td>
+                      <td>
+                        <div className='flex flex-col'>
+                          <select
+                            type='text'
+                            className='select__table'
+                            {...register('categoria')}
+                            onChange={handleCategoriaChange}
+                          >
+                            <option value='-1'>Seleccione un categoria</option>
+                            {categoriasOptions?.map((categoria) => {
+                              return (
+                                <option
+                                  key={categoria.id}
+                                  value={`${categoria.idCategoria}`}
+                                >
+                                  {categoria.nombreCategoria}
+                                </option>
+                              )
+                            })}
+                          </select>
+                          <span className='message'>
+                            {errors?.categoria?.message}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className='flex flex-col'>
+                          <select
+                            type='text'
+                            className='select__table'
+                            {...register('producto')}
+                            onChange={handleProductoChange}
+                          >
+                            <option value='-1'>Seleccione un producto</option>
+                            {productosOptions?.map((producto) => {
+                              return (
+                                <option
+                                  key={producto.idProducto}
+                                  value={`${producto.idProducto}`}
+                                >
+                                  {producto.nombreProducto}
+                                </option>
+                              )
+                            })}
+                          </select>
+                          <span className='message'>
+                            {errors?.producto?.message}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className='flex flex-col'>
+                          <select
+                            type='text'
+                            className='select__table'
+                            {...register('idEntrada')}
+                          >
+                            <option value='-1'>Seleccione el stock</option>
+                            {stockOptions?.map((stock) => {
+                              return (
+                                <option key={stock.id} value={`${stock.id}`}>
+                                  {stock.existenciaActual}
+                                </option>
+                              )
+                            })}
+                          </select>
+                          <span className='message'>
+                            {errors?.idEntrada?.message}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <input
+                            type='number'
+                            className='input__form'
+                            {...register('cantidad', {
+                              required: false,
+                              min: {
+                                value: 0,
+                                message: 'Ingrese numeros validos',
+                              },
+                              valueAsNumber: true,
+                            })}
+                          />
+                          <span className='message'>
+                            {errors?.cantidad?.message}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <input
+                            type='number'
+                            className='input__form'
+                            value={
+                              stockOptions.find(
+                                (stock) =>
+                                  stock.id === parseInt(watch('idEntrada'))
+                              )?.precioVenta || ''
+                            }
+                            {...register('precio', {
+                              required: false,
+                              min: {
+                                value: 0,
+                                message: 'Ingrese números válidos',
+                              },
+                              valueAsNumber: true,
+                            })}
+                          />
+
+                          <span className='message'>
+                            {errors?.precio?.message}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <input
+                            type='number'
+                            className='input__form'
+                            defaultValue={0}
+                            {...register('descuento', {
+                              required: false,
+                              min: {
+                                value: 0,
+                                message: 'Ingrese numeros validos',
+                              },
+                              max: {
+                                value: 100,
+                                message: 'Ingrese numeros validos',
+                              },
+                              valueAsNumber: true,
+                            })}
+                          />
+                          <span className='message'>
+                            {errors?.descuento?.message}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <input
+                            placeholder={total}
+                            disabled
+                            type='number'
+                            className='input__form'
+                            {...register('total', {
+                              required: false,
+                              min: {
+                                value: 0,
+                                message: 'Ingrese numeros validos',
+                              },
+                              valueAsNumber: true,
+                            })}
+                          />
+                          <span className='message'>
+                            {errors?.total?.message}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot className='py-2'>
+                    <tr className='bg-purple-light text-white [&>td]:py-2 '>
+                      <td>Total</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>Productos: {totales.totalProductos}</td>
+                      <td>
+                        Total sin descuento:{' '}
+                        {(
+                          Math.floor(totales.totalSinDescuento * 100) / 100
+                        ).toFixed(2)}
+                      </td>
+                      <td>
+                        Total Descuento:{' '}
+                        {(
+                          Math.floor(totales.totalDescuento * 100) / 100
+                        ).toFixed(2)}
+                      </td>
+                      <td>
+                        Total a Pagar:{' '}
+                        {(Math.floor(totales.totalPagar * 100) / 100).toFixed(
+                          2
+                        )}
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <button
+                type='button'
+                onClick={(e) => agregarDetalle(e)}
+                className='bnt__primary mt-3'
               >
-                <option value='-1'>Seleccione un Cliente</option>
-                {clientesOptions?.map((cliente) => {
-                  return (
-                    <option key={cliente.id} value={`${cliente.id}`}>
-                      {cliente.nombre}
-                    </option>
-                  )
-                })}
-              </select>
-              <span className='message'>{errors?.cliente?.message}</span>
+                Agregar
+              </button>
+            </section>
+            <div className='flex gap-4 justify-center'>
+              <button type='submit' className='bnt__primary mt-3'>
+                Aceptar
+              </button>
+              <button
+                onClick={() => {
+                  SumarExistencias(), setDetalleFactura([]), onClose()
+                }}
+                className='bnt__danger mt-3 '
+              >
+                Cancelar
+              </button>
             </div>
-
-            <div className='h-3/4 overflow-y-auto snap-y shadow-sm shadow-black rounded-sm'>
-              <table className='w-full table-auto '>
-                <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
-                  <tr>
-                    <th>#</th>
-                    <th>Categoria</th>
-                    <th>Producto</th>
-                    <th>Stock</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Descuento %</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {detalleFactura?.map((detalle, index) => {
-                    return (
-                      <tr className='text-center even:bg-slate-100' key={index}>
-                        <td className='text-center text-red-800'>
-                          <button onClick={() => eliminarDetalle(index)}>
-                            <DeleteIcon clases={'size-7 cursor-pointer'} />
-                          </button>
-                        </td>
-                        <td>{detalle.categoria}</td>
-                        <td>{detalle.producto}</td>
-                        <td>{detalle.stock}</td>
-                        <td>{detalle.cantidad}</td>
-                        <td>{detalle.precio}</td>
-                        <td>{detalle.descuento}</td>
-                        <td>{detalle.total}</td>
-                      </tr>
-                    )
-                  })}
-                  <tr className='even:bg-slate-100'>
-                    <td className='text-center text-red-800'></td>
-                    <td>
-                      <div className='flex flex-col'>
-                        <select
-                          type='text'
-                          className='select__table'
-                          {...register('categoria')}
-                          onChange={handleCategoriaChange}
-                        >
-                          <option value='-1'>Seleccione un categoria</option>
-                          {categoriasOptions?.map((categoria) => {
-                            return (
-                              <option
-                                key={categoria.id}
-                                value={`${categoria.idCategoria}`}
-                              >
-                                {categoria.nombreCategoria}
-                              </option>
-                            )
-                          })}
-                        </select>
-                        <span className='message'>
-                          {errors?.categoria?.message}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className='flex flex-col'>
-                        <select
-                          type='text'
-                          className='select__table'
-                          {...register('producto')}
-                          onChange={handleProductoChange}
-                        >
-                          <option value='-1'>Seleccione un producto</option>
-                          {productosOptions?.map((producto) => {
-                            return (
-                              <option
-                                key={producto.idProducto}
-                                value={`${producto.idProducto}`}
-                              >
-                                {producto.nombreProducto}
-                              </option>
-                            )
-                          })}
-                        </select>
-                        <span className='message'>
-                          {errors?.producto?.message}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className='flex flex-col'>
-                        <select
-                          type='text'
-                          className='select__table'
-                          {...register('idEntrada')}
-                        >
-                          <option value='-1'>Seleccione el stock</option>
-                          {stockOptions?.map((stock) => {
-                            return (
-                              <option key={stock.id} value={`${stock.id}`}>
-                                {stock.existenciaActual}
-                              </option>
-                            )
-                          })}
-                        </select>
-                        <span className='message'>
-                          {errors?.idEntrada?.message}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          type='number'
-                          className='input__form'
-                          {...register('cantidad', {
-                            required: false,
-                            min: {
-                              value: 0,
-                              message: 'Ingrese numeros validos',
-                            },
-                            valueAsNumber: true,
-                          })}
-                        />
-                        <span className='message'>
-                          {errors?.cantidad?.message}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          type='number'
-                          className='input__form'
-                          value={
-                            stockOptions.find(
-                              (stock) =>
-                                stock.id === parseInt(watch('idEntrada'))
-                            )?.precioVenta || ''
-                          }
-                          {...register('precio', {
-                            required: false,
-                            min: {
-                              value: 0,
-                              message: 'Ingrese números válidos',
-                            },
-                            valueAsNumber: true,
-                          })}
-                        />
-
-                        <span className='message'>
-                          {errors?.precio?.message}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          type='number'
-                          className='input__form'
-                          defaultValue={0}
-                          {...register('descuento', {
-                            required: false,
-                            min: {
-                              value: 0,
-                              message: 'Ingrese numeros validos',
-                            },
-                            max: {
-                              value: 100,
-                              message: 'Ingrese numeros validos',
-                            },
-                            valueAsNumber: true,
-                          })}
-                        />
-                        <span className='message'>
-                          {errors?.descuento?.message}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <input
-                          placeholder={total}
-                          disabled
-                          type='number'
-                          className='input__form'
-                          {...register('total', {
-                            required: false,
-                            min: {
-                              value: 0,
-                              message: 'Ingrese numeros validos',
-                            },
-                            valueAsNumber: true,
-                          })}
-                        />
-                        <span className='message'>
-                          {errors?.total?.message}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-                <tfoot className='py-2'>
-                  <tr className='bg-purple-light text-white [&>td]:py-2 '>
-                    <td>Total</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Productos: {totales.totalProductos}</td>
-                    <td>
-                      Total sin descuento:{' '}
-                      {(
-                        Math.floor(totales.totalSinDescuento * 100) / 100
-                      ).toFixed(2)}
-                    </td>
-                    <td>
-                      Total Descuento:{' '}
-                      {(Math.floor(totales.totalDescuento * 100) / 100).toFixed(
-                        2
-                      )}
-                    </td>
-                    <td>
-                      Total a Pagar:{' '}
-                      {(Math.floor(totales.totalPagar * 100) / 100).toFixed(2)}
-                    </td>
-                    <td></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-            <button
-              onClick={(e) => agregarDetalle(e)}
-              className='bnt__primary mt-3'
-            >
-              Agregar
-            </button>
-          </section>
-          <div className='flex gap-4 justify-center'>
-            <button type='submit' className='bnt__primary mt-3'>
-              Aceptar
-            </button>
-            <button
-              onClick={() => {
-                SumarExistencias(), setDetalleFactura([]), onClose()
-              }}
-              className='bnt__danger mt-3 '
-            >
-              Cancelar
-            </button>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   )
 }
 
