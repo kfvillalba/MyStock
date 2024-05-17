@@ -43,10 +43,10 @@ const ProductosMenosVendidosList = ({ color }) => {
           fill='#ffffff;'
         />
         <path
-          clip-rule='evenodd'
+          clipRule='evenodd'
           d='M16.7725 9.47766C16.7725 9.89187 17.1082 10.2277 17.5225 10.2277C17.9367 10.2277 18.2725 9.89187 18.2725 9.47766V7.22766H20.5225C20.9367 7.22766 21.2725 6.89187 21.2725 6.47766C21.2725 6.06345 20.9367 5.72766 20.5225 5.72766H18.2725V3.47766C18.2725 3.06345 17.9367 2.72766 17.5225 2.72766C17.1082 2.72766 16.7725 3.06345 16.7725 3.47766L16.7725 5.72766H14.5225C14.1082 5.72766 13.7725 6.06345 13.7725 6.47766C13.7725 6.89187 14.1082 7.22766 14.5225 7.22766H16.7725L16.7725 9.47766Z'
           fill='#ffffff;'
-          fill-rule='evenodd'
+          fillRule='evenodd'
         />
       </svg>
     )
@@ -55,11 +55,11 @@ const ProductosMenosVendidosList = ({ color }) => {
   return (
     <Card className={`max-w-lg ventasGraf ${color}`}>
       <h3 className='text-tremor-title text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium'>
-        PRODUCTOS
+        PRODUCTOS MENOS VENDIDOS
       </h3>
-      <p className='mt-4 text-tremor-default flex items-center justify-between text-tremor-content dark:text-dark-tremor-content'>
-        <span>TOP Productos menos vendidos</span>
-        <span>Cantidad de productos</span>
+      <p className='mt-4 mr-11 text-tremor-default flex items-center justify-between text-tremor-content dark:text-dark-tremor-content'>
+        <span>TOP</span>
+        <span>Cantidad</span>
       </p>
       <BarList
         data={data.slice(0, 5).map((item) => ({

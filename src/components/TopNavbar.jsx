@@ -29,6 +29,7 @@ const TopNavbar = () => {
 
         <div className='relative'>
           <button
+            type='button'
             className='Profile flex flex-wrap items-center rounded-full border-2 border-purple-dark'
             onClick={() => setIsMenuOpen(true)}
           >

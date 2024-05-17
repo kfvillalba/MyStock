@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import LogOutIcon from '../assets/LogOutIcon'
 import { useNavigate } from 'react-router-dom'
+import ModalDatosEmpresa from './ModalDatosEmpresa'
 
 const ProfileModal = ({ open, onClose }) => {
   const Navigate = useNavigate()
-
+  const [formRegister, setformRegister] = useState(false)
   const Logout = () => {
     localStorage.clear()
     Navigate('/login')
@@ -16,7 +17,12 @@ const ProfileModal = ({ open, onClose }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (open && !event.target.closest('.bg-slate-100')) {
+      const isProfileModal = event.target.closest('.bg-slate-100')
+      const isDataModal = event.target.closest('.modalDatos')
+      if (open && !isProfileModal) {
+        if (formRegister && !isDataModal) {
+          return
+        }
         onClose()
       }
     }
@@ -25,12 +31,19 @@ const ProfileModal = ({ open, onClose }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [open, onClose])
+  }, [open, formRegister, onClose])
 
   if (!open) return null
 
   return (
     <>
+      <ModalDatosEmpresa
+        customClassName='modalDatos'
+        open={formRegister}
+        onClose={() => {
+          setformRegister(false)
+        }}
+      />
       <div className='fixed w-full top-0 left-0 z-10 flex items-center justify-center'>
         <div
           className='fixed inset-0 flex justify-end items-center mr-7 '
@@ -63,11 +76,17 @@ const ProfileModal = ({ open, onClose }) => {
               </div>
             </section>
             <section className='border-b-2 border-gray-300'>
-              <button onClick={perfil} className='mt-3 btn__menu'>
+              <button type='button' onClick={perfil} className='mt-3 btn__menu'>
                 Mi Perfil
               </button>
 
-              <button className=' btn__menu'>Cambiar contraseña</button>
+              <button
+                type='button'
+                onClick={() => setformRegister(true)}
+                className='btn__menu mt-0'
+              >
+                Datos Empresa
+              </button>
             </section>
             <button onClick={Logout} className='btn__menu'>
               <LogOutIcon clases={'mr-3  size-7'} />

@@ -19,6 +19,26 @@ import { VentasGraf } from "../components/VentasGraf";
 import ProductosMasVendidosList from "../components/ProductosMasVendidosList";
 import ProductosMenosVendidosList from "../components/ProductosMenosVendidos";
 import BarChartGanancias from "../components/BarChart";
+import React, { useState, useEffect } from "react";
+import PanelDivisor from "../components/PanelDivisor";
+import ClienteIcon from "../assets/ClienteIcon";
+import ProductosIcon from "../assets/ProductosIcon";
+import { CardGeneral } from "../components/CardGeneral";
+import ProvedoresIcon from "../assets/ProveedoresIcon";
+import CategoryList from "../components/CategoryList";
+import FacturaIcon from "../assets/FacturaIcon";
+import ExistenciaTotalIcon from "../assets/ExistenciaTotalIcon";
+import ExistenciaVendidaIcon from "../assets/ExistenciaVendidaIcon";
+import ExistenciaActualIcon from "../assets/ExistenciaActualIcon";
+import ImporteVendidoIcon from "../assets/ImporteVendido";
+import ImportePagadoIcon from "../assets/ImportePagado";
+import ImporteRestanteIcon from "../assets/ImporteRestante";
+import BeneficioBrutoIcon from "../assets/BeneficioBrutoIcon";
+import BeneficioTotalIcon from "../assets/BeneficioTotalIcon";
+import { VentasGraf } from "../components/VentasGraf";
+import ProductosMasVendidosList from "../components/ProductosMasVendidosList";
+import ProductosMenosVendidosList from "../components/ProductosMenosVendidos";
+import BarChartGanancias from "../components/BarChart";
 
 const fetchData = (url, setter) => {
   fetch(url)
@@ -176,10 +196,10 @@ const Page = () => {
         />
 
         {/* <CategoryList color={"bg-[#1f7e26]"} /> */}
-        <ClientsBar color={"bg-[#61ba5e]"} />
+        <ClientsBar color={"bg-[#4ea93b]"} />
         <VentasGraf color={"bg-[#4ea93b]"} />
         <ProductosMasVendidosList color={"bg-[#1f7e26]"} />
-        <ProductosMenosVendidosList color={"bg-[#89cc86]"} />
+        <ProductosMenosVendidosList color={"bg-[#1f7e26]"} />
         {/* <VentasGraf color={"bg-[#4ea93b]"} /> */}
         <BarChartGanancias color={"bg-[#4ea93b]"} />
       </section>
