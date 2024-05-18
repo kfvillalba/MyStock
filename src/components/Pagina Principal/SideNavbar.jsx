@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import DashboardIcon from '../assets/DashboardIcon'
+import DashboardIcon from '../../assets/DashboardIcon'
 import { NavLink, useNavigate } from 'react-router-dom'
-import ClienteIcon from '../assets/ClienteIcon'
-import ProductosIcon from '../assets/ProductosIcon'
-import ControlExistenciasIcon from '../assets/ControlExistenciasIcon'
-import ReportesIcon from '../assets/ReportesIcon'
-import LogOutIcon from '../assets/LogOutIcon'
+import ClienteIcon from '../../assets/ClienteIcon'
+import ProductosIcon from '../../assets/ProductosIcon'
+import ControlExistenciasIcon from '../../assets/ControlExistenciasIcon'
+import ReportesIcon from '../../assets/ReportesIcon'
 import DropDown from './DropDown'
-import CategoriasIcon from '../assets/CategoriasIcon'
-import ProveedoresIcon from '../assets/ProveedoresIcon'
+import CategoriasIcon from '../../assets/CategoriasIcon'
+import ProveedoresIcon from '../../assets/ProveedoresIcon'
 
 const SideNavbar = () => {
   const Navigate = useNavigate()

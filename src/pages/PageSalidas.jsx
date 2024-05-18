@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import PanelDivisor from '../components/PanelDivisor'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
 import DeleteIcon from '../assets/DeleteIcon'
 import EyeIcon from '../assets/verIcon'
 import Swal from 'sweetalert2'
-import ModalRegisterFactura from '../components/ModalRegisterFactura copy'
-import ModalEditFactura from '../components/ModalEditFactura'
-import { fetchSalidas } from '../components/API_INV'
-import ModalVerFactura from '../components/ModalVerFactura'
+import ModalRegisterFactura from '../components/Facturación/ModalRegisterFactura'
+import ModalEditFactura from '../components/Facturación/ModalEditFactura'
+import { fetchSalidas } from '../components/Fetchs/API_INV'
+import ModalVerFactura from '../components/Facturación/ModalVerFactura'
 
 const Page = () => {
   const [salidas, setSalidas] = useState([])

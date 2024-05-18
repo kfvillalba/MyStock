@@ -10,7 +10,7 @@ import {
   fetchProductosSalidaActualReport,
   fetchProductosbajaExistenciaReport,
   fetchProductosExistencia0Report,
-} from './fetchReportes'
+} from '../Fetchs/fetchReportes'
 
 export async function generateVentasPDF(data) {
   const { fechaInicio, fechaFinal } = data

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PanelDivisor from '../components/PanelDivisor'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
 import { useForm } from 'react-hook-form'
 import {
   generateVentasPDF,
@@ -11,9 +11,9 @@ import {
   generateProductosSalidaActualPDF,
   generateProductosExistencia0PDF,
   generateProductosBajaExistenciaPDF,
-} from '../components/TablasReportes'
+} from '../components/Reportes/TablasReportes'
 import Swal from 'sweetalert2'
-import ModalVerReporte from '../components/modalVerReporte'
+import ModalVerReporte from '../components/Reportes/modalVerReporte'
 
 const Page = () => {
   const {

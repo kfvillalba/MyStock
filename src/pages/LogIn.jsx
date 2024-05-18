@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import RegisterForm from '../components/RegisterForm'
+import RegisterForm from '../components/Usuario y Empresa/RegisterForm'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -12,7 +12,7 @@ import {
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
 import Swal from 'sweetalert2'
 import depositoImage from '../assets/Login.gif'
-import { loginWithEmailPassword, sendEmail } from '../components/API_USU'
+import { loginWithEmailPassword, sendEmail } from '../components/Fetchs/API_USU'
 
 const LogIn = () => {
   const [provider, setProvider] = useState('')

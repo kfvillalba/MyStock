@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import PanelDivisor from '../components/PanelDivisor'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
 import DeleteIcon from '../assets/DeleteIcon'
 import EditIcon from '../assets/EditIcon'
-import ModalRegisterClientes from '../components/ModalRegisterClientes'
-import ModalEditClientes from '../components/ModalEditClientes'
+import ModalRegisterClientes from '../components/Clientes/ModalRegisterClientes'
+import ModalEditClientes from '../components/Clientes/ModalEditClientes'
 import Swal from 'sweetalert2'
-import { fetchClients, deleteClient } from '../components/API_INV'
+import { fetchClients, deleteClient } from '../components/Fetchs/API_INV'
 
 const Page = () => {
   const [clientes, setClientes] = useState([])

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import PanelDivisor from '../components/PanelDivisor'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
 import DeleteIcon from '../assets/DeleteIcon'
 import EditIcon from '../assets/EditIcon'
 import Swal from 'sweetalert2'
-import ModalRegisterExistencias from '../components/ModalRegisterExistencias'
-import ModalEditExistencias from '../components/ModalEditExistencias'
+import ModalRegisterExistencias from '../components/Entradas/ModalRegisterExistencias'
+import ModalEditExistencias from '../components/Entradas/ModalEditExistencias'
 import {
   fetchExistencias,
   deleteExistencia,
   fetchProducts,
   fetchCategories,
   fetchProviders,
-} from '../components/API_INV'
+} from '../components/Fetchs/API_INV'
 
 const Page = () => {
   const [existencia, setExistencia] = useState([])

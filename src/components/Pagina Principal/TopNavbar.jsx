@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import ProfileModal from '../components/modalVerUsuario'
+import ProfileModal from '../Usuario y Empresa/modalVerUsuario'
 
 const TopNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

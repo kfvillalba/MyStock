@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import PanelDivisor from '../components/PanelDivisor'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
 import DeleteIcon from '../assets/DeleteIcon'
 import EditIcon from '../assets/EditIcon'
-import ModalRegisterProducto from '../components/ModalRegisterProducto'
+import ModalRegisterProducto from '../components/Productos/ModalRegisterProducto'
 import Swal from 'sweetalert2'
-import ModalEditProducto from '../components/ModalEditProducto'
+import ModalEditProducto from '../components/Productos/ModalEditProducto'
 import {
   fetchProducts,
   fetchCategories,
   deleteProduct,
-} from '../components/API_INV'
+} from '../components/Fetchs/API_INV'
 
 const Page = () => {
   const [productos, setProductos] = useState([])

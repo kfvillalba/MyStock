@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import PanelDivisor from '../components/PanelDivisor'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
 import DeleteIcon from '../assets/DeleteIcon'
 import EditIcon from '../assets/EditIcon'
-import ModalRegisterCategoria from '../components/ModalRegisterCategoria'
+import ModalRegisterCategoria from '../components/Categorias/ModalRegisterCategoria'
 import Swal from 'sweetalert2'
-import ModalEditCategoria from '../components/ModalEditCategoria'
-import { fetchCategories, deleteCategory } from '../components/API_INV'
+import ModalEditCategoria from '../components/Categorias/ModalEditCategoria'
+import { fetchCategories, deleteCategory } from '../components/Fetchs/API_INV'
 
 const Page = () => {
   const [data, setData] = useState([])

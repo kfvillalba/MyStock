@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import ArrowDownIcon from '../assets/ArrowDownIcon'
-import ArrowUpIcon from '../assets/ArrowUpIcon'
+import ArrowDownIcon from '../../assets/ArrowDownIcon'
+import ArrowUpIcon from '../../assets/ArrowUpIcon'
 import { NavLink } from 'react-router-dom'
 
 const DropDown = ({ nombre, Icon, val, childrens }) => {

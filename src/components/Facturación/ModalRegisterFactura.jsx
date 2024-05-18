@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
-import DeleteIcon from '../assets/DeleteIcon'
-import ModalRegisterClientes from './ModalRegisterClientes'
-import { fetchClients } from './API_INV'
+import DeleteIcon from '../../assets/DeleteIcon'
+import ModalRegisterClientes from '../Clientes/ModalRegisterClientes'
+import { fetchClients } from '../Fetchs/API_INV'
 
 const ModalRegisterFactura = ({ open, onClose, registrar }) => {
   const {

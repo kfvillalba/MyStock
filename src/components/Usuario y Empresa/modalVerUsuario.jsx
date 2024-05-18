@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import LogOutIcon from '../assets/LogOutIcon'
+import LogOutIcon from '../../assets/LogOutIcon'
 import { useNavigate } from 'react-router-dom'
 import ModalDatosEmpresa from './ModalDatosEmpresa'
 
