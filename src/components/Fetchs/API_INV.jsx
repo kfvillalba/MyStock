@@ -1,160 +1,73 @@
 const API_INVENTARIO = 'https://localhost:7073/inventario-service'
 
-// -------------------------------------------------------------------------------
-export const fetchCategories = async () => {
-  const response = await fetch(`${API_INVENTARIO}/Categorias/Consultar`)
+const fetchFromAPI = async (endpoint, options = {}) => {
+  try {
+    const response = await fetch(`${API_INVENTARIO}${endpoint}`, options)
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.statusText}`)
+    }
+    return await response.json()
+  } catch (error) {
+    throw new Error(`Fetch error: ${error.message}`)
+  }
+}
 
-  return await response.json()
+const deleteFromAPI = async (endpoint, id) => {
+  try {
+    const response = await fetch(`${API_INVENTARIO}${endpoint}?id=${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      throw new Error(`Error al eliminar: ${response.statusText}`)
+    }
+    return true
+  } catch (error) {
+    throw new Error(`Delete error: ${error.message}`)
+  }
+}
+
+export const fetchCategories = async () => {
+  return await fetchFromAPI('/Categorias/Consultar')
 }
 
 export const deleteCategory = async (id) => {
-  try {
-    const response = await fetch(
-      `${API_INVENTARIO}/Categorias/Eliminar?id=${id}`,
-      {
-        method: 'DELETE',
-      }
-    )
-
-    if (response.ok) {
-      return true
-    } else {
-      throw new Error('Error al intentar borrar la categoría')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await deleteFromAPI('/Categorias/Eliminar', id)
 }
-// -----------------------------------------------------------------------------
 
 export const fetchClients = async () => {
-  const response = await fetch(`${API_INVENTARIO}/Clientes/Consultar`)
-  return await response.json()
+  return await fetchFromAPI('/Clientes/Consultar')
 }
 
 export const deleteClient = async (id) => {
-  try {
-    const response = await fetch(
-      `${API_INVENTARIO}/Clientes/Eliminar?id=${id}`,
-      {
-        method: 'DELETE',
-      }
-    )
-
-    if (response.ok) {
-      return true
-    } else {
-      throw new Error('Error al intentar borrar el cliente')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await deleteFromAPI('/Clientes/Eliminar', id)
 }
 
-// -----------------------------------------------------------------------------
 export const fetchProducts = async () => {
-  const response = await fetch(`${API_INVENTARIO}/Productos/Consultar`)
-  return await response.json()
+  return await fetchFromAPI('/Productos/Consultar')
 }
 
 export const deleteProduct = async (id) => {
-  try {
-    const response = await fetch(
-      `${API_INVENTARIO}/Productos/Eliminar?id=${id}`,
-      {
-        method: 'DELETE',
-      }
-    )
-
-    if (response.ok) {
-      return true
-    } else {
-      throw new Error('Error al intentar borrar el producto')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await deleteFromAPI('/Productos/Eliminar', id)
 }
 
-// -------------------------------------------------------------------------------
-
 export const fetchProviders = async () => {
-  try {
-    const response = await fetch(`${API_INVENTARIO}/Proveedors/Consultar`)
-    if (response.ok) {
-      return response.json()
-    } else {
-      throw new Error('Error al consultar los proveedores')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await fetchFromAPI('/Proveedors/Consultar')
 }
 
 export const deleteProvider = async (id) => {
-  try {
-    const response = await fetch(
-      `${API_INVENTARIO}/Proveedors/Eliminar?id=${id}`,
-      {
-        method: 'DELETE',
-      }
-    )
-
-    if (response.ok) {
-      return true
-    } else {
-      throw new Error('Error al intentar borrar el proveedor')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await deleteFromAPI('/Proveedors/Eliminar', id)
 }
-
-// ---------------------------------------------------------------------------------
 
 export const fetchExistencias = async () => {
-  try {
-    const response = await fetch(`${API_INVENTARIO}/Entradas/Consultar`)
-    if (response.ok) {
-      return response.json()
-    } else {
-      throw new Error('Error al obtener las existencias')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await fetchFromAPI('/Entradas/Consultar')
 }
 
-export const deleteExistencia = async (idExistencia) => {
-  try {
-    const response = await fetch(
-      `${API_INVENTARIO}/Entradas/Eliminar?id=${idExistencia}`,
-      {
-        method: 'DELETE',
-      }
-    )
-
-    if (response.ok) {
-      return true
-    } else {
-      throw new Error('Error al eliminar la existencia')
-    }
-  } catch (error) {
-    throw error
-  }
+export const deleteExistencia = async (id) => {
+  return await deleteFromAPI('/Entradas/Eliminar', id)
 }
-
-// ----------------------------------------------------------------------------
 
 export const fetchSalidas = async () => {
-  try {
-    const response = await fetch(`${API_INVENTARIO}/Salidas/ConsultarTodo`)
-    if (response.ok) {
-      return response.json()
-    } else {
-      throw new Error('Error al obtener las salidas')
-    }
-  } catch (error) {
-    throw error
-  }
+  return await fetchFromAPI('/Salidas/ConsultarTodo')
 }
+
+export default fetchClients

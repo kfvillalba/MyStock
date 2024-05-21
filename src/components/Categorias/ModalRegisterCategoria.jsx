@@ -46,7 +46,7 @@ const ModalRegisterCategoria = ({ open, onClose, registrar }) => {
   }
   if (!open) return null
   return (
-    <div className='fixed w-full top-0 left-0 h-full z-10 flex items-center justify-center bg-black/50'>
+    <div className='fixed w-full top-0 left-0 h-full z-20 flex items-center justify-center bg-black/50'>
       <div className=''>
         <form
           className='bg-white rounded-lg shadow-sm p-5'
