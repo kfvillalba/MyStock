@@ -1,18 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 
-const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
+const ModalDatosEdit = ({ open, onClose, empresa }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm()
 
   const getUsuarioFromLocalStorage = () => {
     return localStorage.getItem('email') || ''
   }
+
+  useEffect(() => {
+    if (empresa) {
+      setValue('nombre', empresa.nombre)
+      setValue('telefono', empresa.telefono)
+      setValue('direccion', empresa.direccion)
+    }
+  }, [empresa, setValue, open])
 
   const onSubmit = async (data) => {
     const formData = {
@@ -20,13 +29,13 @@ const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
       usuario: getUsuarioFromLocalStorage(),
     }
 
-    console.log(JSON.stringify(formData))
-
     try {
       const response = await fetch(
-        'https://localhost:7073/inventario-service/Empresas/Agregar',
+        `https://localhost:7073/inventario-service/Empresas/Actualizar?email=${localStorage.getItem(
+          'email'
+        )}`,
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -60,13 +69,13 @@ const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
 
   return (
     <div className='fixed w-full top-0 left-0 h-full z-20 flex items-center justify-center bg-black/50'>
-      <div className=''>
+      <div>
         <form
           className='bg-white rounded-lg shadow-sm p-5'
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className='text-center font-bold py-2'>
-            <label>DATOS DE LA EMPRESA</label>
+            <label>EDITAR DATOS DE LA EMPRESA</label>
           </div>
           <div>
             <label htmlFor='nombre' className='label__form'>
@@ -77,10 +86,7 @@ const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
               type='text'
               className='input__form'
               {...register('nombre', {
-                required: {
-                  value: true,
-                  message: 'El nombre es obligatorio',
-                },
+                required: { value: true, message: 'El nombre es obligatorio' },
               })}
             />
             <span className='message'>{errors?.nombre?.message}</span>
@@ -129,14 +135,15 @@ const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
           </div>
           <div className='flex gap-4 justify-center'>
             <button type='submit' className='bnt__primary mt-3'>
-              Aceptar
+              Actualizar
             </button>
             <button
+              type='button'
               onClick={() => {
                 reset()
                 onClose()
               }}
-              className='bnt__danger mt-3 '
+              className='bnt__danger mt-3'
             >
               Cancelar
             </button>
@@ -147,4 +154,4 @@ const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
   )
 }
 
-export default ModalDatosEmpresa
+export default ModalDatosEdit

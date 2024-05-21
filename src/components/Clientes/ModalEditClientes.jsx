@@ -45,6 +45,7 @@ const ModalEditClientes = ({ open, onClose, editar, dataCliente }) => {
     }
   }
   if (!open) return null
+
   return (
     <div className='fixed w-full top-0 left-0 h-full z-10 flex items-center justify-center bg-black/50'>
       <div className=''>

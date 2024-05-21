@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import Chart from 'chart.js/auto' // Importar Chart.js de esta manera en React
 
 const LineComprasVentas = ({ color }) => {
   const [ventasData, setVentasData] = useState([])
   const [comprasData, setComprasData] = useState([])
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    // Función para obtener datos de la API de ventas
     const fetchVentasData = async () => {
       try {
         const response = await fetch(
@@ -20,10 +19,10 @@ const LineComprasVentas = ({ color }) => {
         setVentasData(data)
       } catch (error) {
         console.error('Error fetching ventas data:', error)
+        setError(error.message)
       }
     }
 
-    // Función para obtener datos de la API de compras
     const fetchComprasData = async () => {
       try {
         const response = await fetch(
@@ -36,18 +35,29 @@ const LineComprasVentas = ({ color }) => {
         setComprasData(data)
       } catch (error) {
         console.error('Error fetching compras data:', error)
+        setError(error.message)
       }
     }
 
-    // Llamar a las funciones de obtención de datos al montar el componente
     fetchVentasData()
     fetchComprasData()
   }, [])
 
-  // Procesar los datos para usarlos en el gráfico
-  const labels = ventasData.map((item) => item.mes)
-  const ventas = ventasData.map((item) => item.cantidadSalidas)
-  const compras = comprasData.map((item) => item.cantidadEntradas)
+  let labels = []
+  let ventas = []
+  let compras = []
+
+  if (!error) {
+    labels = ventasData.map((item) => item.mes)
+    ventas = ventasData.map((item) => item.cantidadSalidas)
+    compras = comprasData.map((item) => item.cantidadEntradas)
+  } else {
+    for (let i = 1; i <= 12; i++) {
+      labels.push(`Mes ${i}`)
+      ventas.push(Math.floor(Math.random() * 100) + 50)
+      compras.push(Math.floor(Math.random() * 100) + 50)
+    }
+  }
 
   const data = {
     labels,

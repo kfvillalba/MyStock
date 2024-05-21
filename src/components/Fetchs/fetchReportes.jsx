@@ -160,11 +160,6 @@ export async function fetchProductosSalidaActualReport() {
       const formattedData = responseData.map((row) => {
         return {
           ...row,
-          fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          }),
         }
       })
       return formattedData
@@ -223,4 +218,4 @@ export async function fetchProductosExistencia0Report() {
   }
 }
 
-export default fetchVentasReport
+export default fetchProductosExistencia0Report

@@ -76,7 +76,7 @@ const Page = () => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Hubo un problema al generar el informe',
+        text: 'No hay datos',
       })
     }
   }
@@ -84,10 +84,7 @@ const Page = () => {
   const [pdfData, setPdfData] = useState('')
   const [showModal, setShowModal] = useState(false)
 
-  // Función para abrir el modal y mostrar el PDF
   const handleGenerateReport = () => {
-    // Lógica para generar el PDF
-    // Supongamos que aquí obtienes el PDF y lo asignas a pdfData
     setPdfData(pdfData)
     setShowModal(true)
   }
@@ -115,10 +112,11 @@ const Page = () => {
           }, [])
           setClientesOptions(clientes)
         } else {
-          throw new Error('Error al cargar las categorías')
+          const errorText = await response.text()
+          throw new Error(errorText)
         }
       } catch (error) {
-        console.error(error)
+        console.error('Error al cargar los clientes:', error)
       }
     }
 
@@ -142,10 +140,11 @@ const Page = () => {
           )
           setProveedoresOptions(proveedores)
         } else {
-          throw new Error('Error al cargar las categorías')
+          const errorText = await response.text()
+          throw new Error(errorText)
         }
       } catch (error) {
-        console.error(error)
+        console.error('Error al cargar los proveedores:', error)
       }
     }
 
@@ -169,10 +168,11 @@ const Page = () => {
           )
           setCategoriasOptions(categorias)
         } else {
-          throw new Error('Error al cargar las categorías')
+          const errorText = await response.text()
+          throw new Error(errorText)
         }
       } catch (error) {
-        console.error(error)
+        console.error('Error al cargar las categorías:', error)
       }
     }
 
@@ -188,7 +188,7 @@ const Page = () => {
     if (idCategoria !== '-1') {
       try {
         const response = await fetch(
-          `https://localhost:7073/inventario-service//Entradas/Filtrar/IdCategoria?idCategoria=${idCategoria}`
+          `https://localhost:7073/inventario-service/Entradas/Filtrar/IdCategoria?idCategoria=${idCategoria}`
         )
         if (response.ok) {
           const data = await response.json()
@@ -205,10 +205,11 @@ const Page = () => {
           )
           setProductosOptions(productosUnicos)
         } else {
-          throw new Error('Error al cargar los productos')
+          const errorText = await response.text()
+          throw new Error(errorText)
         }
       } catch (error) {
-        console.error(error)
+        console.error('Error al cargar los productos:', error)
       }
     }
   }
@@ -232,10 +233,11 @@ const Page = () => {
             return acc
           }, [])
         } else {
-          throw new Error('Error al cargar el stock')
+          const errorText = await response.text()
+          throw new Error(errorText)
         }
       } catch (error) {
-        console.error(error)
+        console.error('Error al cargar el stock:', error)
       }
     }
   }
@@ -259,7 +261,7 @@ const Page = () => {
         </ModalVerReporte>
       )}
       <div
-        className='gap-4 p-10 shadow-md  shadow-black '
+        className='gap-4 p-10 shadow-md shadow-black'
         style={{ maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}
       >
         <form
@@ -479,7 +481,7 @@ const Page = () => {
           <section className='self-end'>
             <button
               type='submit'
-              className='bnt__primary mt-5 '
+              className='bnt__primary mt-5'
               onClick={handleGenerateReport}
             >
               Generar Reporte

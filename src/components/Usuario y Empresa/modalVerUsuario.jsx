@@ -2,18 +2,43 @@ import React, { useState, useEffect } from 'react'
 import LogOutIcon from '../../assets/LogOutIcon'
 import { useNavigate } from 'react-router-dom'
 import ModalDatosEmpresa from './ModalDatosEmpresa'
+import ModalDatosEdit from './ModalEditDatos'
 
 const ProfileModal = ({ open, onClose }) => {
-  const Navigate = useNavigate()
-  const [formRegister, setformRegister] = useState(false)
-  const Logout = () => {
+  const navigate = useNavigate()
+  const [formRegister, setFormRegister] = useState(false)
+  const [hasCompany, setHasCompany] = useState(null)
+  const [empresa, setEmpresa] = useState(null)
+
+  const logout = () => {
     localStorage.clear()
-    Navigate('/login')
+    navigate('/login')
   }
 
   const perfil = () => {
-    Navigate('/perfil')
+    navigate('/perfil')
   }
+
+  useEffect(() => {
+    if (open) {
+      const checkCompany = async () => {
+        try {
+          const response = await fetch(
+            `https://localhost:7113/api/Empresas/Filtrar/EmpresaUsuario?email=${localStorage.getItem(
+              'email'
+            )}`
+          )
+          const data = await response.json()
+          setHasCompany(data.length > 0)
+          setEmpresa(data.length > 0 ? data[0] : null)
+        } catch (error) {
+          console.error('Error fetching company data:', error)
+          setHasCompany(false)
+        }
+      }
+      checkCompany()
+    }
+  }, [open])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,16 +62,27 @@ const ProfileModal = ({ open, onClose }) => {
 
   return (
     <>
-      <ModalDatosEmpresa
-        customClassName='modalDatos'
-        open={formRegister}
-        onClose={() => {
-          setformRegister(false)
-        }}
-      />
+      {hasCompany !== null && (
+        <>
+          {hasCompany ? (
+            <ModalDatosEdit
+              customClassName='modalDatos'
+              open={formRegister}
+              onClose={() => setFormRegister(false)}
+              empresa={empresa}
+            />
+          ) : (
+            <ModalDatosEmpresa
+              customClassName='modalDatos'
+              open={formRegister}
+              onClose={() => setFormRegister(false)}
+            />
+          )}
+        </>
+      )}
       <div className='fixed w-full top-0 left-0 z-10 flex items-center justify-center'>
         <div
-          className='fixed inset-0 flex justify-end items-center mr-7 '
+          className='fixed inset-0 flex justify-end items-center mr-7'
           style={{ height: '79vh' }}
         >
           <div className='bg-slate-100 p-8 rounded-lg'>
@@ -79,17 +115,16 @@ const ProfileModal = ({ open, onClose }) => {
               <button type='button' onClick={perfil} className='mt-3 btn__menu'>
                 Mi Perfil
               </button>
-
               <button
                 type='button'
-                onClick={() => setformRegister(true)}
+                onClick={() => setFormRegister(true)}
                 className='btn__menu mt-0'
               >
                 Datos Empresa
               </button>
             </section>
-            <button onClick={Logout} className='btn__menu'>
-              <LogOutIcon clases={'mr-3  size-7'} />
+            <button onClick={logout} className='btn__menu'>
+              <LogOutIcon clases={'mr-3 size-7'} />
               LogOut
             </button>
           </div>

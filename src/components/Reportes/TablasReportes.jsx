@@ -287,6 +287,7 @@ export async function generateProductosSalidaActualPDF(data) {
   try {
     const responseData = await fetchProductosSalidaActualReport(data)
     const doc = new jsPDF()
+    const fechaActual = new Date().toLocaleDateString('es-ES') // Obtiene la fecha actual en formato DD/MM/YYYY
     doc.setFontSize(18)
     doc.text(
       'Productos Salidas Día Actual',
@@ -310,7 +311,7 @@ export async function generateProductosSalidaActualPDF(data) {
         ],
       ],
       body: responseData.map((row) => [
-        { content: row.fechaFactura, styles: { halign: 'center' } },
+        { content: fechaActual, styles: { halign: 'center' } },
         { content: row.productoNombre, styles: { halign: 'center' } },
         { content: row.categoriaNombre, styles: { halign: 'center' } },
         { content: row.precio, styles: { halign: 'center' } },
@@ -372,6 +373,8 @@ export async function generateProductosBajaExistenciaPDF() {
     throw error
   }
 }
+
+// -------------------------------------------------------------------------------------------
 
 export async function generateProductosExistencia0PDF() {
   try {

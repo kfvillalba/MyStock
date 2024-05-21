@@ -39,54 +39,54 @@ const Page = () => {
   const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0)
 
   const fetchItems = [
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaClientes',
-      setter: setTotalClientes,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProveedors',
-      setter: setTotalProveedores,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaCategorias',
-      setter: setTotalCategorias,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProductos',
-      setter: setTotalProductos,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaFacturas',
-      setter: setTotalFacturas,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasTotales',
-      setter: setExistenciaTotal,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasVendidas',
-      setter: setExistenciaVendida,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales',
-      setter: setExistenciaActual,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImporteVendido',
-      setter: setTotalImporteVendido,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado',
-      setter: setTotalImportePagado,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioBruto',
-      setter: setTotalbeneficioBruto,
-    },
-    {
-      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto',
-      setter: setTotalBeneficioNeto,
-    },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaClientes',
+    //   setter: setTotalClientes,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProveedors',
+    //   setter: setTotalProveedores,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaCategorias',
+    //   setter: setTotalCategorias,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProductos',
+    //   setter: setTotalProductos,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaFacturas',
+    //   setter: setTotalFacturas,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasTotales',
+    //   setter: setExistenciaTotal,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasVendidas',
+    //   setter: setExistenciaVendida,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales',
+    //   setter: setExistenciaActual,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImporteVendido',
+    //   setter: setTotalImporteVendido,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado',
+    //   setter: setTotalImportePagado,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioBruto',
+    //   setter: setTotalbeneficioBruto,
+    // },
+    // {
+    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto',
+    //   setter: setTotalBeneficioNeto,
+    // },
   ]
 
   useEffect(() => {

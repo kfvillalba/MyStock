@@ -9,7 +9,7 @@ const TopVendidos = ({ color }) => {
     labels: [],
     datasets: [
       {
-        label: ' Top 5 Productos Vendidos',
+        label: 'Top 5 Productos Vendidos',
         data: [],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -55,7 +55,12 @@ const TopVendidos = ({ color }) => {
     fetch(
       'https://localhost:7073/inventario-service/Dashboard/Grafica/TopProductosMasVendidos'
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
       .then((data) => {
         const labels = data.map((item) => item.nombreProducto)
         const chartData = data.map((item) => item.cantidadVentas)
@@ -86,7 +91,42 @@ const TopVendidos = ({ color }) => {
           ],
         })
       })
-      .catch((error) => console.error('Error fetching data:', error))
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+
+        setChartData({
+          labels: [
+            'Producto A',
+            'Producto B',
+            'Producto C',
+            'Producto D',
+            'Producto E',
+          ],
+          datasets: [
+            {
+              label: 'Cantidad de Ventas',
+              data: [12, 19, 3, 5, 2],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+              ],
+              borderWidth: 1,
+            },
+          ],
+        })
+      })
   }, [])
 
   return (
