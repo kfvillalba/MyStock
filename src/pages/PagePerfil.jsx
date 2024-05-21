@@ -1,16 +1,228 @@
 import React, { useState, useEffect } from "react";
-import defaultAvatar from "../assets/perfil.png";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import defaultAvatar from "../assets/perfil.png";
+import defaultCover from "../assets/portada.png";
+import { FiArrowLeft, FiTrash } from "react-icons/fi";
+
+const ProfileHeader = ({
+  avatar,
+  cover,
+  handleImageChange,
+  handleDelete,
+  navigateBack,
+}) => {
+  return (
+    <div className="relative w-full h-64">
+      <img src={cover} alt="Cover" className="w-full h-full object-cover" />
+      <div className="absolute top-2 left-2">
+        <button
+          onClick={navigateBack}
+          className="text-black hover:text-black text-3xl"
+        >
+          <FiArrowLeft />
+        </button>
+      </div>
+      <div className="absolute top-2 right-2">
+        <button
+          onClick={handleDelete}
+          className="text-red-500 hover:text-red-600 text-3xl"
+        >
+          <FiTrash />
+        </button>
+      </div>
+      <label
+        htmlFor="cover"
+        className="absolute bottom-2 right-2 bg-white rounded-full p-2 cursor-pointer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 text-gray-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h7l2-2h4a1 1 0 011 1v14z"
+          />
+        </svg>
+        <input
+          id="cover"
+          type="file"
+          className="hidden"
+          accept="image/*"
+          onChange={(e) => handleImageChange(e, "cover")}
+        />
+      </label>
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-32 h-32 bg-gray-200 rounded-full overflow-hidden border-4 border-white">
+        <img src={avatar} alt="Avatar" className="object-cover w-full h-full" />
+        <label
+          htmlFor="image"
+          className="absolute bottom-0 right-0 bg-white rounded-full p-2 cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-gray-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h7l2-2h4a1 1 0 011 1v14z"
+            />
+          </svg>
+          <input
+            id="image"
+            type="file"
+            className="hidden"
+            accept="image/*"
+            onChange={(e) => handleImageChange(e, "avatar")}
+          />
+        </label>
+      </div>
+    </div>
+  );
+};
+
+const UserInfo = ({ username, email, password, confirmPassword }) => {
+  return (
+    <div className="w-full rounded-radius md:w-1/2 p-4">
+      <h2 className="text-2xl font-bold mb-4 text-center">Mi Perfil</h2>
+      <div className="grid grid-cols-1 gap-6">
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Nombre de Usuario
+          </label>
+          <input
+            id="username"
+            type="text"
+            className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            value={username}
+            readOnly
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Correo Electrónico
+          </label>
+          <input
+            id="email"
+            type="email"
+            className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            value={email}
+            readOnly
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Contraseña
+          </label>
+          <input
+            id="password"
+            type="password"
+            className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            value={password}
+            readOnly
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Confirmar Contraseña
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            value={confirmPassword}
+            readOnly
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AdditionalInfo = ({ genero, intereses, setGenero, setIntereses }) => {
+  return (
+    <div className="w-full md:w-1/2 p-4">
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Información Adicional
+      </h2>
+      <div className="grid grid-cols-1 gap-6">
+        <div>
+          <label
+            htmlFor="gender"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Género
+          </label>
+          <input
+            id="gender"
+            type="text"
+            className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            value={genero}
+            onChange={(e) => setGenero(e.target.value)}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="intereses"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Intereses
+          </label>
+          <input
+            id="intereses"
+            type="text"
+            className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            value={intereses}
+            onChange={(e) => setIntereses(e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const PagePerfil = () => {
-  const [avatar, setAvatar] = useState(defaultAvatar);
+  const [avatar, setAvatar] = useState(null);
+  const [cover, setCover] = useState(null);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [intereses, setIntereses] = useState("");
-  const [genero, setGenero] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [genero, setGenero] = useState("");
+  const [intereses, setIntereses] = useState("");
   const [error, setError] = useState({ type: "", message: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputUsername, setInputUsername] = useState("");
@@ -20,10 +232,12 @@ const PagePerfil = () => {
     const storedUsername = localStorage.getItem("userName");
     const storedEmail = localStorage.getItem("email");
     const storedAvatar = localStorage.getItem("photoURL");
+    const storedCover = localStorage.getItem("coverURL");
 
     setUsername(storedUsername || "");
     setEmail(storedEmail || "");
     setAvatar(storedAvatar || defaultAvatar);
+    setCover(storedCover || defaultCover);
   }, []);
 
   const handleDelete = () => {
@@ -58,213 +272,57 @@ const PagePerfil = () => {
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: "No se pudo eliminar el perfil. Por favor, inténtalo de nuevo.",
+            text: "No se pudo eliminar el perfil. Por favor, inténtalo de nuevo más tarde.",
           });
         });
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "El nombre de usuario no coincide. Por favor, inténtalo de nuevo.",
+      setError({
+        type: "username",
+        message: "El nombre de usuario no coincide",
       });
     }
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setInputUsername("");
-    setError({ type: "", message: "" });
-  };
-
-  const handleImageChange = (e) => {
+  const handleImageChange = (e, type) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setAvatar(reader.result);
-    };
-
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (type === "avatar") {
+          setAvatar(reader.result);
+          localStorage.setItem("photoURL", reader.result);
+        } else if (type === "cover") {
+          setCover(reader.result);
+          localStorage.setItem("coverURL", reader.result);
+        }
+      };
       reader.readAsDataURL(file);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-      <div className="max-w-xl w-full bg-white shadow-lg rounded-lg p-8 flex flex-col items-center relative">
-        <div className="w-48 h-48 bg-gray-200 rounded-full overflow-hidden mb-4 relative z-10">
-          <img
-            src={avatar}
-            alt="Avatar"
-            className="object-cover w-full h-full"
-          />
-          <label
-            htmlFor="image"
-            className="absolute bottom-0 right-0 bg-white rounded-full p-2 cursor-pointer"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h7l2-2h4a1 1 0 011 1v14z"
-              />
-            </svg>
-            <input
-              id="image"
-              type="file"
-              className="hidden"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </label>
-        </div>
-        <div className="w-full">
-          <h2 className="text-2xl font-bold mb-4">Mi Perfil</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Nombre de Usuario
-              </label>
-              <input
-                id="username"
-                type="text"
-                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={username}
-                readOnly
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Correo Electrónico
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={email}
-                readOnly
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Contraseña
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={password}
-                readOnly
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirmar Contraseña
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={confirmPassword}
-                readOnly
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="gender"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Género
-              </label>
-              <input
-                id="gender"
-                type="text"
-                className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={genero}
-                onChange={(e) => setGenero(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="mt-6 flex justify-between w-full">
-          <button
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 mr-4"
-            onClick={handleOpenModal}
-          >
-            Eliminar Perfil
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => Navigate("/")}
-          >
-            Regresar
-          </button>
-        </div>
+    <div className="min-h-screen bg-gray-100">
+      <ProfileHeader
+        avatar={avatar}
+        cover={cover}
+        handleImageChange={handleImageChange}
+        handleDelete={handleDelete}
+        navigateBack={() => Navigate("/Dashboard")}
+      />
+      <div className="flex justify-center">
+        <UserInfo
+          username={username}
+          email={email}
+          password={password}
+          confirmPassword={confirmPassword}
+        />
+        <AdditionalInfo
+          genero={genero}
+          intereses={intereses}
+          setGenero={setGenero}
+          setIntereses={setIntereses}
+        />
       </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg w-96">
-            <h2 className="text-lg font-bold mb-4">Eliminar Perfil</h2>
-            <p className="mb-4">
-              Por favor, ingresa tu nombre de usuario para confirmar la
-              eliminación del perfil.
-            </p>
-            <input
-              type="text"
-              className="mt-1 p-2 block w-full border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Nombre de Usuario"
-              value={inputUsername}
-              onChange={(e) => setInputUsername(e.target.value)}
-            />
-            {error.type === "manual" && (
-              <p className="text-red-500 text-sm mt-2">{error.message}</p>
-            )}
-            <div className="flex justify-end mt-4">
-              <button
-                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 mr-2"
-                onClick={handleDelete}
-              >
-                Eliminar
-              </button>
-              <button
-                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                onClick={handleCloseModal}
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
