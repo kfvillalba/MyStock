@@ -1,49 +1,99 @@
-import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import React, { useState, useEffect } from 'react'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Doughnut } from 'react-chartjs-2'
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 const TopVendidos = ({ color }) => {
-  const data = {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "# of Votes",
-        data: [12, 19, 3, 5, 2, 3],
+        label: ' Top 5 Productos Vendidos',
+        data: [],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
         ],
         borderWidth: 1,
       },
     ],
-  };
+  })
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        align: 'center',
+        labels: {
+          boxWidth: 20,
+          padding: 10,
+          usePointStyle: true,
+        },
+      },
+      title: {
+        display: true,
+        text: 'Top 5 productos más vendidos',
+      },
+    },
+  }
+
+  useEffect(() => {
+    fetch(
+      'https://localhost:7073/inventario-service/Dashboard/Grafica/TopProductosMasVendidos'
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const labels = data.map((item) => item.nombreProducto)
+        const chartData = data.map((item) => item.cantidadVentas)
+        setChartData({
+          labels: labels,
+          datasets: [
+            {
+              label: 'Cantidad de Ventas',
+              data: chartData,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+              ],
+              borderWidth: 1,
+            },
+          ],
+        })
+      })
+      .catch((error) => console.error('Error fetching data:', error))
+  }, [])
 
   return (
-    <>
-      <div className="w-full bg-[#ffffff]">
-        <h3
-          className={`text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong`}
-        >
-          Ganancia por productos
-        </h3>
-        <Doughnut data={data} />
-      </div>
-    </>
-  );
-};
+    <div className='h-[350px] w-[370px] bg-[#ffffff]'>
+      <Doughnut data={chartData} options={options} />
+    </div>
+  )
+}
 
-export default TopVendidos;
+export default TopVendidos

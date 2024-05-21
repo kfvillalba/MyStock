@@ -72,4 +72,9 @@
   .ventasGraf {
     @apply w-[200px] h-[318px] text-black font-bold;
   }
+  .w-px {
+    width: 2000px; /* Initial width in pixels */
+    resize: horizontal; /* Allow horizontal resizing */
+    overflow: auto; /* Add scrollbar when content overflows */
+  }
 }
