@@ -11,7 +11,7 @@ const LineComprasVentas = ({ color }) => {
     const fetchVentasData = async () => {
       try {
         const response = await fetch(
-          'https://localhost:7113/api/Dashboard/Grafica/VentasPorMes'
+          'https://localhost:7073/inventario-service/Dashboard/Grafica/VentasPorMes'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch ventas data')
@@ -27,7 +27,7 @@ const LineComprasVentas = ({ color }) => {
     const fetchComprasData = async () => {
       try {
         const response = await fetch(
-          'https://localhost:7113/api/Dashboard/Grafica/ComprasPorMes'
+          'https://localhost:7073/inventario-service/Dashboard/Grafica/ComprasPorMes'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch compras data')
