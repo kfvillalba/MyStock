@@ -6,12 +6,15 @@ import {
   fetchComprasReport,
   fetchEntradaProveedorReport,
   fetchProductosVendidosReport,
+  fetchVentasActualReport,
   fetchClienteSalidaActualReport,
+  fetchComprasActualReport,
   fetchProductosSalidaActualReport,
+  fetchEntradaProveedoresActualReport,
   fetchProductosbajaExistenciaReport,
   fetchProductosExistencia0Report,
 } from '../Fetchs/fetchReportes'
-
+// --------------------------Entre fechas--------------------------------------------------
 export async function generateVentasPDF(data) {
   const { fechaInicio, fechaFinal } = data
   try {
@@ -248,11 +251,53 @@ export async function generateProductosVendidosPDF(data) {
   }
 }
 
-// ----------------------------------------------------------------------------------------------------------
-export async function generateSalidaClientesActualPDF(data) {
+// -------------------------------Día actual---------------------------------------------------------------------------
+export async function generateVentasActualPDF() {
+  ///Se debe modificar
+  try {
+    const responseData = await fetchVentasActualReport(data)
+    const doc = new jsPDF()
+    const fechaActual = new Date().toLocaleDateString('es-ES')
+    doc.setFontSize(18)
+    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
+      align: 'center',
+    })
+    doc.setFontSize(12)
+    doc.text(doc.internal.pageSize.getWidth() / 2, 22, {
+      align: 'center',
+    })
+    doc.autoTable({
+      head: [
+        [
+          { content: 'Fecha Factura', styles: { halign: 'center' } },
+          { content: 'Nombre Cliente', styles: { halign: 'center' } },
+          { content: 'Cantidad Productos', styles: { halign: 'center' } },
+          { content: 'Total con Descuento', styles: { halign: 'center' } },
+          { content: 'Total sin Descuento', styles: { halign: 'center' } },
+          { content: 'Total Descuento', styles: { halign: 'center' } },
+        ],
+      ],
+      body: responseData.map((row) => [
+        { content: fechaActual, styles: { halign: 'center' } },
+        { content: row.clienteNombre, styles: { halign: 'center' } },
+        { content: row.cantidadProductos, styles: { halign: 'center' } },
+        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
+        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
+        { content: row.totalDescuento, styles: { halign: 'center' } },
+      ]),
+      startY: 25,
+    })
+    return doc.output('bloburl')
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function generateSalidaClientesActualPDF() {
   try {
     const responseData = await fetchClienteSalidaActualReport(data)
     const doc = new jsPDF()
+    const fechaActual = new Date().toLocaleDateString('es-ES')
     doc.setFontSize(18)
     doc.text(
       'Reporte de Cliente Salidas Día Actual',
@@ -271,7 +316,7 @@ export async function generateSalidaClientesActualPDF(data) {
         ],
       ],
       body: responseData.map((row) => [
-        { content: row.fechaFactura, styles: { halign: 'center' } },
+        { content: fechaActual, styles: { halign: 'center' } },
         { content: row.clienteNombre, styles: { halign: 'center' } },
         { content: row.clienteId, styles: { halign: 'center' } },
       ]),
@@ -283,11 +328,95 @@ export async function generateSalidaClientesActualPDF(data) {
   }
 }
 
-export async function generateProductosSalidaActualPDF(data) {
+export async function generateComprasActualPDF() {
+  ///Se debe modificar...
+
+  try {
+    const responseData = await fetchComprasActualReport(data)
+    const doc = new jsPDF()
+    const fechaActual = new Date().toLocaleDateString('es-ES')
+    doc.setFontSize(18)
+    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
+      align: 'center',
+    })
+    doc.setFontSize(12)
+    doc.text(doc.internal.pageSize.getWidth() / 2, 22, {
+      align: 'center',
+    })
+    doc.autoTable({
+      head: [
+        [
+          { content: 'Fecha Factura', styles: { halign: 'center' } },
+          { content: 'Nombre Cliente', styles: { halign: 'center' } },
+          { content: 'Cantidad Productos', styles: { halign: 'center' } },
+          { content: 'Total con Descuento', styles: { halign: 'center' } },
+          { content: 'Total sin Descuento', styles: { halign: 'center' } },
+          { content: 'Total Descuento', styles: { halign: 'center' } },
+        ],
+      ],
+      body: responseData.map((row) => [
+        { content: fechaActual, styles: { halign: 'center' } },
+        { content: row.clienteNombre, styles: { halign: 'center' } },
+        { content: row.cantidadProductos, styles: { halign: 'center' } },
+        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
+        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
+        { content: row.totalDescuento, styles: { halign: 'center' } },
+      ]),
+      startY: 25,
+    })
+    return doc.output('bloburl')
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function generateEntradaProveedoresActualPDF() {
+  ///Se debe modificar
+
+  try {
+    const responseData = await fetchEntradaProveedoresActualReport(data)
+    const doc = new jsPDF()
+    const fechaActual = new Date().toLocaleDateString('es-ES')
+    doc.setFontSize(18)
+    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
+      align: 'center',
+    })
+    doc.setFontSize(12)
+    doc.text(doc.internal.pageSize.getWidth() / 2, 22, {
+      align: 'center',
+    })
+    doc.autoTable({
+      head: [
+        [
+          { content: 'Fecha Factura', styles: { halign: 'center' } },
+          { content: 'Nombre Cliente', styles: { halign: 'center' } },
+          { content: 'Cantidad Productos', styles: { halign: 'center' } },
+          { content: 'Total con Descuento', styles: { halign: 'center' } },
+          { content: 'Total sin Descuento', styles: { halign: 'center' } },
+          { content: 'Total Descuento', styles: { halign: 'center' } },
+        ],
+      ],
+      body: responseData.map((row) => [
+        { content: fechaActual, styles: { halign: 'center' } },
+        { content: row.clienteNombre, styles: { halign: 'center' } },
+        { content: row.cantidadProductos, styles: { halign: 'center' } },
+        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
+        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
+        { content: row.totalDescuento, styles: { halign: 'center' } },
+      ]),
+      startY: 25,
+    })
+    return doc.output('bloburl')
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function generateProductosSalidaActualPDF() {
   try {
     const responseData = await fetchProductosSalidaActualReport(data)
     const doc = new jsPDF()
-    const fechaActual = new Date().toLocaleDateString('es-ES') // Obtiene la fecha actual en formato DD/MM/YYYY
+    const fechaActual = new Date().toLocaleDateString('es-ES')
     doc.setFontSize(18)
     doc.text(
       'Productos Salidas Día Actual',
@@ -328,7 +457,7 @@ export async function generateProductosSalidaActualPDF(data) {
   }
 }
 
-// ----------------------------------------------------------------------------------------------------------
+// ------------------------------información de productos-------------------------------------------------
 
 export async function generateProductosBajaExistenciaPDF() {
   try {
@@ -373,8 +502,6 @@ export async function generateProductosBajaExistenciaPDF() {
     throw error
   }
 }
-
-// -------------------------------------------------------------------------------------------
 
 export async function generateProductosExistencia0PDF() {
   try {

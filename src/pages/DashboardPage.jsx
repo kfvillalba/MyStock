@@ -4,7 +4,6 @@ import ClienteIcon from '../assets/ClienteIcon'
 import ProductosIcon from '../assets/ProductosIcon'
 import { CardGeneral } from '../components/Dashboard/CardGeneral'
 import ProvedoresIcon from '../assets/ProveedoresIcon'
-import CategoryList from '../components/Dashboard/CategoryList'
 import FacturaIcon from '../assets/FacturaIcon'
 import ExistenciaTotalIcon from '../assets/ExistenciaTotalIcon'
 import ExistenciaVendidaIcon from '../assets/ExistenciaVendidaIcon'
@@ -17,6 +16,7 @@ import BeneficioTotalIcon from '../assets/BeneficioTotalIcon'
 import BarChartGanancias from '../components/Dashboard/BarChart'
 import LineComprasVentas from '../components/Dashboard/LineChart'
 import TopVendidos from '../components/Dashboard/DoughnutChart'
+import UtilidadProductos from '../components/Dashboard/utilidadProduct'
 
 const fetchData = (url, setter) => {
   fetch(url)
@@ -181,6 +181,7 @@ const Page = () => {
         <LineComprasVentas />
         <BarChartGanancias />
         <TopVendidos />
+        <UtilidadProductos />
       </section>
     </div>
   )

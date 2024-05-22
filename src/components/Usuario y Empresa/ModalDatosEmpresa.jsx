@@ -17,7 +17,7 @@ const ModalDatosEmpresa = ({ open, onClose, registrar }) => {
   const onSubmit = async (data) => {
     const formData = {
       ...data,
-      usuario: getUsuarioFromLocalStorage(),
+      email: getUsuarioFromLocalStorage(),
     }
 
     console.log(JSON.stringify(formData))

@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-const TopVendidos = ({ color }) => {
+const UtilidadProductos = ({ color }) => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -48,12 +48,15 @@ const TopVendidos = ({ color }) => {
         display: true,
         text: 'Top 5 productos más vendidos',
       },
+      tooltip: {
+        enabled: false,
+      },
     },
   }
 
   useEffect(() => {
     fetch(
-      'https://localhost:7073/inventario-service/Dashboard/Grafica/TopProductosMasVendidos'
+      'https://localhost:7073/inventario-service/Dashboard/Grafica/UtilidadPorProducto'
     )
       .then((response) => {
         if (!response.ok) {
@@ -136,4 +139,4 @@ const TopVendidos = ({ color }) => {
   )
 }
 
-export default TopVendidos
+export default UtilidadProductos

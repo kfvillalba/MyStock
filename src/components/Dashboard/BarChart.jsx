@@ -1,85 +1,98 @@
 import { useState, useEffect } from 'react'
-import { BarChart } from '@tremor/react'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-import { faker } from '@faker-js/faker'
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BarChartGanancias = ({ color }) => {
-  // const [data, setData] = useState([])
+  const [data, setData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         'https://localhost:7073/inventario-service/Dashboard/Grafica/GananciaPorProducto'
-  //       )
-  //       if (!response.ok) {
-  //         throw new Error('Error al obtener los datos')
-  //       }
-  //       const jsonData = await response.json()
-  //       setData(jsonData)
-  //     } catch (error) {
-  //       console.error('Error:', error)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
-
-  const dataFormatter = (number) =>
-    Intl.NumberFormat('us').format(number).toString()
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7113/api/Dashboard/Grafica/GananciaPorProducto'
+        )
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos')
+        }
+        const jsonData = await response.json()
+        setData(jsonData)
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error:', error)
+        setIsLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        display: false,
       },
       title: {
         display: true,
         text: 'Ganancia por productos',
       },
     },
+    scales: {
+      x: {
+        display: false,
+      },
+    },
   }
 
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-  ]
+  const randomColor = () => {
+    const r = Math.floor(Math.random() * 256)
+    const g = Math.floor(Math.random() * 256)
+    const b = Math.floor(Math.random() * 256)
+    return `rgba(${r},${g},${b},0.5)`
+  }
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Dataset 2',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
+  const generateRandomData = () => {
+    const randomData = []
+    for (let i = 0; i < 10; i++) {
+      randomData.push({
+        nombreProducto: `Producto ${i}`,
+        ganancia: Math.floor(Math.random() * 1000000),
+      })
+    }
+    return randomData
+  }
+
+  let chartData
+  if (isLoading) {
+    chartData = {
+      labels: [],
+      datasets: [
+        {
+          label: 'Ganancia',
+          data: [],
+          backgroundColor: [],
+        },
+      ],
+    }
+  } else {
+    const labels = data.map((item) => item.nombreProducto)
+    const ganancias = data.map((item) => item.ganancia)
+    const backgroundColors = data.map(() => randomColor())
+
+    chartData = {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Ganancia',
+          data: ganancias,
+          backgroundColor: backgroundColors,
+        },
+      ],
+    }
   }
 
   return (
-    <div className='h-[350px] w-[655px] bg-[#ffffff]'>
-      <Bar className='h-[380px]' data={data} options={options} />
+    <div className='w-[655px] h-[350px] bg-[#ffffff]'>
+      <Bar className='h-[380px]' data={chartData} options={options} />
     </div>
   )
 }

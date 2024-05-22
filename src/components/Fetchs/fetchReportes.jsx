@@ -1,3 +1,5 @@
+// ------------------------------Fechas---------------------------------------------------
+
 export async function fetchVentasReport(data) {
   try {
     const response = await fetch(
@@ -122,11 +124,92 @@ export async function fetchProductosVendidosReport(data) {
     throw error
   }
 }
-// ----------------------------------------------------------------------------------------------------------
-export async function fetchClienteSalidaActualReport(data) {
+// ---------------------------------Dia actual-------------------------------------------------------------------------
+export async function fetchVentasActualReport() {
+  try {
+    const response = await fetch(
+      `https://localhost:7073/inventario-service/Reportes/VentasDiaActual`
+    )
+    if (response.ok) {
+      const responseData = await response.json()
+      const formattedData = responseData.map((row) => {
+        return {
+          ...row,
+          fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          }),
+        }
+      })
+      return formattedData
+    } else {
+      throw new Error('Error al enviar la solicitud')
+    }
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export async function fetchClienteSalidaActualReport() {
   try {
     const response = await fetch(
       `https://localhost:7073/inventario-service/Reportes/ClientesSalidasDiaActual`
+    )
+    if (response.ok) {
+      const responseData = await response.json()
+      const formattedData = responseData.map((row) => {
+        return {
+          ...row,
+          fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          }),
+        }
+      })
+      return formattedData
+    } else {
+      throw new Error('Error al enviar la solicitud')
+    }
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export async function fetchComprasActualReport() {
+  try {
+    const response = await fetch(
+      `https://localhost:7073/inventario-service/Reportes/ComprasDiaActual`
+    )
+    if (response.ok) {
+      const responseData = await response.json()
+      const formattedData = responseData.map((row) => {
+        return {
+          ...row,
+          fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          }),
+        }
+      })
+      return formattedData
+    } else {
+      throw new Error('Error al enviar la solicitud')
+    }
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export async function fetchEntradaProveedoresActualReport() {
+  try {
+    const response = await fetch(
+      `https://localhost:7073/inventario-service/Reportes/ProveedoresEntradasDiaActual`
     )
     if (response.ok) {
       const responseData = await response.json()
@@ -172,7 +255,7 @@ export async function fetchProductosSalidaActualReport() {
   }
 }
 
-// ----------------------------------------------------------------------------------------------------------
+// -----------------------------------Información de productos-----------------------------------------------------------------------
 
 export async function fetchProductosbajaExistenciaReport() {
   try {

@@ -15,8 +15,10 @@ const ModalDatosEdit = ({ open, onClose, empresa }) => {
     return localStorage.getItem('email') || ''
   }
 
+  const id = empresa.id
+
   useEffect(() => {
-    if (empresa) {
+    if (empresa && open) {
       setValue('nombre', empresa.nombre)
       setValue('telefono', empresa.telefono)
       setValue('direccion', empresa.direccion)
@@ -26,13 +28,20 @@ const ModalDatosEdit = ({ open, onClose, empresa }) => {
   const onSubmit = async (data) => {
     const formData = {
       ...data,
-      usuario: getUsuarioFromLocalStorage(),
+      email: getUsuarioFromLocalStorage(),
+      id: id,
     }
+    console.log(formData)
 
     try {
+      const email = localStorage.getItem('email')
+      if (!email) {
+        throw new Error('No se encontró el email en el local storage')
+      }
+
       const response = await fetch(
-        `https://localhost:7073/inventario-service/Empresas/Actualizar?email=${localStorage.getItem(
-          'email'
+        `https://localhost:7073/inventario-service/Empresas/Actualizar?email=${encodeURIComponent(
+          email
         )}`,
         {
           method: 'PUT',
@@ -48,12 +57,12 @@ const ModalDatosEdit = ({ open, onClose, empresa }) => {
         reset()
         Swal.fire({
           icon: 'success',
-          title: 'Datos empresa guardados',
+          title: 'Datos Empresa Actualizados',
           showConfirmButton: false,
           timer: 1500,
         })
       } else {
-        throw new Error('Error al guardar el cliente')
+        throw new Error('Error al guardar los datos de la empresa')
       }
     } catch (error) {
       console.error(error)
@@ -106,11 +115,11 @@ const ModalDatosEdit = ({ open, onClose, empresa }) => {
                 },
                 minLength: {
                   value: 10,
-                  message: 'El telefono debe tener 10 Numeros',
+                  message: 'El telefono debe tener 10 números',
                 },
                 maxLength: {
                   value: 10,
-                  message: 'El telefono debe tener 10 Numeros',
+                  message: 'El telefono debe tener 10 números',
                 },
               })}
             />

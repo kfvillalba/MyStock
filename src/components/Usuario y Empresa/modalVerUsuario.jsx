@@ -117,7 +117,10 @@ const ProfileModal = ({ open, onClose }) => {
               </button>
               <button
                 type='button'
-                onClick={() => setFormRegister(true)}
+                onClick={() => {
+                  setFormRegister(true)
+                  checkCompany()
+                }}
                 className='btn__menu mt-0'
               >
                 Datos Empresa
