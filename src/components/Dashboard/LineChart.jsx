@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import Chart from 'chart.js/auto'
+import Chart from 'chart.js/auto' //Se usa no borrar xd
 
 const LineComprasVentas = ({ color }) => {
   const [ventasData, setVentasData] = useState([])
