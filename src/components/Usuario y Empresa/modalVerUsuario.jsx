@@ -75,7 +75,7 @@ const ProfileModal = ({ open, onClose }) => {
                   }
                   alt="avatar"
                 />
-                <div className="ml-3 text-sm text-center">
+                <div className="ml-3 text-sm ">
                   <p className="text-bold">
                     {localStorage.getItem("userName")?.length > 20
                       ? localStorage.getItem("userName").substring(0, 20) +
