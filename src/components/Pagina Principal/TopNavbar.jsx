@@ -21,21 +21,21 @@ const TopNavbar = () => {
           setIsNotification(false);
         }}
       />
-      <div className="h-20 shadow-sm bg-slate-200 shadow-gray-700 flex p-3 justify-between items-center ">
+      <div className="lg:h-20 md:h-12 shadow-sm bg-slate-200 shadow-gray-700 flex p-3 justify-between items-center ">
         <section className="flex items-center pl-5">
           <button>
             <img
-              className="rounded-full size-14"
+              className="rounded-full lg:size-14 md:size-9"
               src={"../src/assets/en-stock.png"}
               alt="avatar"
             />
           </button>
-          <h1 className="pl-5 text-center  text-purple-light text-5xl ">
+          <h1 className="pl-5 text-center  text-purple-light lg:text-5xl md:text-xl ">
             MyStock
           </h1>
         </section>
 
-        <div className="flex gap-10">
+        <div className="flex  lg:gap-10 md:gap-6">
           <button
             type="button"
             className="Profile flex flex-wrap items-center rounded-full "
@@ -43,12 +43,12 @@ const TopNavbar = () => {
           >
             <div>
               {Notification && (
-                <div className="absolute ml-[30px] font-semibold rounded-full min-w-fit size-6 bg-red-900 p-1 text-xs text-white text-center items-center ">
+                <div className="absolute lg:ml-[30px] md:ml-[24px]  font-semibold rounded-full min-w-fit md:size-4 lg:size-6 bg-red-900 lg:p-1 text-xs text-white text-center items-center ">
                   {Notification.length}
                 </div>
               )}
 
-              <IoIosNotifications className="size-10  transition-all  text-green-800" />
+              <IoIosNotifications className="lg:size-10 md:size-8  transition-all  text-green-800" />
             </div>
           </button>
           <button
@@ -57,7 +57,7 @@ const TopNavbar = () => {
             onClick={() => setIsMenuOpen(true)}
           >
             <img
-              className="rounded-full size-14"
+              className="rounded-full lg:size-14 md:size-8"
               src={
                 localStorage.getItem("photoURL") || "../src/assets/perfil1.png"
               }

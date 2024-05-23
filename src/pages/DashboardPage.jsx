@@ -98,7 +98,7 @@ const Page = () => {
       className="shadow-md h-full shadow-black bg-[#f5f5fe]"
       style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
     >
-      <section className="flex flex-wrap justify-evenly gap-4 p-4 ">
+      <section className="flex flex-wrap justify-evenly h-full gap-4 p-4 ">
         {/* <CardGeneral
           nombre={'Clientes'}
           cantidad={totalClientes}
