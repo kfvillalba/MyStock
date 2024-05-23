@@ -7,10 +7,10 @@ const PanelDivisor = ({ Page, titulo }) => {
     <div className="flex flex-col fixed  h-screen w-screen ">
       <TopNavbar titulo={titulo} />
       <div className="flex h-full w-full pt-1">
-        <div className="w-1/5">
+        <div className="w-1/6">
           <SideNavbar />
         </div>
-        <div className="w-4/5 relative">{Page}</div>
+        <div className="w-5/6 relative">{Page}</div>
       </div>
     </div>
   );

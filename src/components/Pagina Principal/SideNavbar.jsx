@@ -46,7 +46,7 @@ const SideNavbar = () => {
     Navigate("/login");
   };
   return (
-    <nav className="bg-slate-100 text-xs object-cover h-full text-black font-bold relative flex flex-col">
+    <nav className="bg-slate-100   md:text-xs  lg:text-sm object-cover h-full text-black font-bold relative flex flex-col">
       <section className="flex-wrap">
         <h1 className="py-3 ">Navegación Principal</h1>
       </section>
