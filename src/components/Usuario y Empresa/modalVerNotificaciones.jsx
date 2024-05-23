@@ -21,6 +21,9 @@ const ModalVerNotificaciones = ({ open, onClose }) => {
       <div className="absolute  w-full top-0  z-10 flex items-end justify-end">
         <div className="relative top-20 right-24    flex justify-end items-center">
           <div className="bg-slate-100 w-96 p-4 flex flex-col gap-2 cursor-pointer  rounded-lg">
+            <div>
+              <h1 className="text-start">Notificaciones</h1>
+            </div>
             <div className="rounded-lg p-3 flex flex-col  bg-slate-100 hover:bg-slate-200">
               <div className="self-end text-gray-400 text-xs">20/12/2024</div>
               <div>Hey ponte pilas a subir evidencias</div>

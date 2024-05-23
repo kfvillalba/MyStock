@@ -1,5 +1,5 @@
-//const API_INVENTARIO = 'https://localhost:7073/inventario-service'
-const API_INVENTARIO = "https://664139bea7500fcf1a9fdf52.mockapi.io/";
+const API_INVENTARIO = "https://localhost:7073/inventario-service";
+
 const fetchFromAPI = async (endpoint, options = {}) => {
   try {
     const response = await fetch(`${API_INVENTARIO}${endpoint}`, options);
@@ -35,8 +35,7 @@ export const deleteCategory = async (id) => {
 };
 
 export const fetchClients = async () => {
-  //return await fetchFromAPI('/Clientes/Consultar')
-  return await fetchFromAPI("/clientes/categoria");
+  return await fetchFromAPI("/Clientes/Consultar");
 };
 
 export const deleteClient = async (id) => {

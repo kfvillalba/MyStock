@@ -5,6 +5,7 @@ import { IoIosNotifications } from "react-icons/io";
 const TopNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
+  const [Notification, setNotification] = useState([[], []]);
 
   return (
     <>
@@ -34,13 +35,21 @@ const TopNavbar = () => {
           </h1>
         </section>
 
-        <div className="relative flex gap-5">
+        <div className="flex gap-10">
           <button
             type="button"
-            className="Profile flex flex-wrap items-center rounded-full hover:rotate-45 transition-all focus:rotate-45 text-green-800"
+            className="Profile flex flex-wrap items-center rounded-full "
             onClick={() => setIsNotification(true)}
           >
-            <IoIosNotifications className="size-10" />
+            <div>
+              {Notification && (
+                <div className="absolute ml-[30px] font-semibold rounded-full min-w-fit size-6 bg-red-900 p-1 text-xs text-white text-center items-center ">
+                  {Notification.length}
+                </div>
+              )}
+
+              <IoIosNotifications className="size-10  transition-all  text-green-800" />
+            </div>
           </button>
           <button
             type="button"
