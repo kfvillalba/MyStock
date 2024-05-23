@@ -1,42 +1,43 @@
-import React, { useState, useEffect } from "react";
-import PanelDivisor from "../components/Pagina Principal/PanelDivisor";
-import ClienteIcon from "../assets/ClienteIcon";
-import ProductosIcon from "../assets/ProductosIcon";
-import { CardGeneral } from "../components/Dashboard/CardGeneral";
-import ProvedoresIcon from "../assets/ProveedoresIcon";
-import FacturaIcon from "../assets/FacturaIcon";
-import ExistenciaTotalIcon from "../assets/ExistenciaTotalIcon";
-import ExistenciaVendidaIcon from "../assets/ExistenciaVendidaIcon";
-import ExistenciaActualIcon from "../assets/ExistenciaActualIcon";
-import ImporteVendidoIcon from "../assets/ImporteVendido";
-import ImportePagadoIcon from "../assets/ImportePagado";
-import ImporteRestanteIcon from "../assets/ImporteRestante";
-import BeneficioBrutoIcon from "../assets/BeneficioBrutoIcon";
-import BeneficioTotalIcon from "../assets/BeneficioTotalIcon";
-import BarChartGanancias from "../components/Dashboard/BarChart";
-import LineComprasVentas from "../components/Dashboard/LineChart";
-import TopVendidos from "../components/Dashboard/DoughnutChart";
-import UtilidadProductos from "../components/Dashboard/utilidadProduct";
+import React, { useState, useEffect } from 'react'
+import PanelDivisor from '../components/Pagina Principal/PanelDivisor'
+import ClienteIcon from '../assets/ClienteIcon'
+import ProductosIcon from '../assets/ProductosIcon'
+import { CardGeneral } from '../components/Dashboard/CardGeneral'
+import ProvedoresIcon from '../assets/ProveedoresIcon'
+import FacturaIcon from '../assets/FacturaIcon'
+import ExistenciaTotalIcon from '../assets/ExistenciaTotalIcon'
+import ExistenciaVendidaIcon from '../assets/ExistenciaVendidaIcon'
+import ExistenciaActualIcon from '../assets/ExistenciaActualIcon'
+import ImporteVendidoIcon from '../assets/ImporteVendido'
+import ImportePagadoIcon from '../assets/ImportePagado'
+import ImporteRestanteIcon from '../assets/ImporteRestante'
+import BeneficioBrutoIcon from '../assets/BeneficioBrutoIcon'
+import BeneficioTotalIcon from '../assets/BeneficioTotalIcon'
+import BarChartGanancias from '../components/Dashboard/BarChart'
+import LineComprasVentas from '../components/Dashboard/LineChart'
+import TopVendidos from '../components/Dashboard/DoughnutChart'
+import UtilidadProductos from '../components/Dashboard/utilidadProduct'
+import '../index.css'
 
 const fetchData = (url, setter) => {
   fetch(url)
     .then((response) => response.text())
-    .then((data) => setter(parseInt(data)));
-};
+    .then((data) => setter(parseInt(data)))
+}
 
 const Page = () => {
-  const [totalClientes, setTotalClientes] = useState(0);
-  const [totalProveedores, setTotalProveedores] = useState(0);
-  const [totalCategorias, setTotalCategorias] = useState(0);
-  const [totalProductos, setTotalProductos] = useState(0);
-  const [totalFacturas, setTotalFacturas] = useState(0);
-  const [existenciaTotal, setExistenciaTotal] = useState(0);
-  const [existenciaVendida, setExistenciaVendida] = useState(0);
-  const [existenciaActual, setExistenciaActual] = useState(0);
-  const [totalImporteVendido, setTotalImporteVendido] = useState(0);
-  const [totalImportePagado, setTotalImportePagado] = useState(0);
-  const [totalBeneficioBruto, setTotalbeneficioBruto] = useState(0);
-  const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0);
+  const [totalClientes, setTotalClientes] = useState(0)
+  const [totalProveedores, setTotalProveedores] = useState(0)
+  const [totalCategorias, setTotalCategorias] = useState(0)
+  const [totalProductos, setTotalProductos] = useState(0)
+  const [totalFacturas, setTotalFacturas] = useState(0)
+  const [existenciaTotal, setExistenciaTotal] = useState(0)
+  const [existenciaVendida, setExistenciaVendida] = useState(0)
+  const [existenciaActual, setExistenciaActual] = useState(0)
+  const [totalImporteVendido, setTotalImporteVendido] = useState(0)
+  const [totalImportePagado, setTotalImportePagado] = useState(0)
+  const [totalBeneficioBruto, setTotalbeneficioBruto] = useState(0)
+  const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0)
 
   const fetchItems = [
     // {
@@ -87,107 +88,35 @@ const Page = () => {
     //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto',
     //   setter: setTotalBeneficioNeto,
     // },
-  ];
+  ]
 
   useEffect(() => {
-    fetchItems.forEach(({ url, setter }) => fetchData(url, setter));
-  }, []);
+    fetchItems.forEach(({ url, setter }) => fetchData(url, setter))
+  }, [])
 
   return (
-    <div
-      className="shadow-md h-full shadow-black bg-[#f5f5fe]"
-      style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
-    >
-      <section className="flex flex-wrap justify-evenly h-full gap-4 p-4 ">
-        {/* <CardGeneral
+    <div className='shadow-md h-11-12 bg-[#f5f5fe]'>
+      <section className='flex flex-col overflow-y-auto h-full gap-2 p-4 mb-9 '>
+        {/* /* <CardGeneral
           nombre={'Clientes'}
           cantidad={totalClientes}
           logo={<ClienteIcon clases={'size-16'} />}
           color={'bg-[#72bd79]'}
-        />
-        <CardGeneral
-          nombre={'Proveedores'}
-          cantidad={totalProveedores}
-          logo={<ProvedoresIcon clases={'size-16'} />}
-          color={'bg-[#78de78]'}
-        />
-        <CardGeneral
-          nombre={'Categorias'}
-          cantidad={totalCategorias}
-          logo={<ImporteRestanteIcon clases={'size-16'} />}
-          color={'bg-[#009e72]'}
         /> */}
-        {/* <CardGeneral
-          nombre={'Productos'}
-          cantidad={totalProductos}
-          logo={<ProductosIcon clases={'size-16'} />}
-          color={'bg-[#03db50]'}
-        />
-        <CardGeneral
-          nombre={'Facturas'}
-          cantidad={totalFacturas}
-          logo={<FacturaIcon clases={'size-16'} />}
-          color={'bg-[#2c8028]'}
-        />
-        <CardGeneral
-          nombre={'Existencia total'}
-          cantidad={existenciaTotal.toLocaleString()}
-          logo={<ExistenciaTotalIcon clases={'size-16'} />}
-          color={'bg-[#61ba5e]'}
-        />
-        <CardGeneral
-          nombre={'Existencia vendida'}
-          cantidad={existenciaVendida}
-          logo={<ExistenciaVendidaIcon clases={'size-16'} />}
-          color={'bg-[#89cc86]'}
-        />
-        <CardGeneral
-          nombre={'Existencia actual'}
-          cantidad={existenciaActual.toLocaleString()}
-          logo={<ExistenciaActualIcon clases={'size-16'} />}
-          color={'bg-[#90c014]'}
-        />
-        <CardGeneral
-          nombre={'Importe vendido'}
-          cantidad={totalImporteVendido.toLocaleString()}
-          logo={<ImporteVendidoIcon clases={'size-16'} />}
-          color={'bg-[#b4ff9a]'}
-        />
-        <CardGeneral
-          nombre={'Importe pagado'}
-          cantidad={totalImportePagado.toLocaleString()}
-          logo={<ImportePagadoIcon clases={'size-16'} />}
-          color={'bg-[#5f800d]'}
-        />
-
-        <CardGeneral
-          nombre={'Beneficio bruto'}
-          cantidad={totalBeneficioBruto.toLocaleString()}
-          logo={<BeneficioBrutoIcon clases={'size-16'} />}
-          color={'bg-[#32a45e]'}
-        />
-        <CardGeneral
-          nombre={'Beneficio neto'}
-          cantidad={totalBeneficioNeto.toLocaleString()}
-          logo={<BeneficioTotalIcon clases={'size-16'} />}
-          color={'bg-[#71c55b]'}
-        /> */}
-
-        {/* <CategoryList color={'bg-[#1f7e26]'} />
-        <VentasGraf color={'bg-[#4ea93b]'} />
-        <ProductosMasVendidosList color={'bg-[#1f7e26]'} />
-        <ProductosMenosVendidosList color={'bg-[#1f7e26]'} /> */}
-        {/* <VentasGraf color={"bg-[#4ea93b]"} /> */}
-        <LineComprasVentas />
-        <BarChartGanancias />
-        <TopVendidos />
+        <div>
+          <LineComprasVentas />
+        </div>
+        <div className='flex justify-between gap-1'>
+          <BarChartGanancias />
+          <TopVendidos />
+        </div>
         <UtilidadProductos />
       </section>
     </div>
-  );
-};
+  )
+}
 const DashboardPage = () => {
-  return <PanelDivisor Page={<Page />} />;
-};
+  return <PanelDivisor Page={<Page />} />
+}
 
-export default DashboardPage;
+export default DashboardPage

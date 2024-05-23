@@ -92,7 +92,7 @@ const LineComprasVentas = ({ color }) => {
   }
 
   return (
-    <div className='w-[1040px] h-[485px] bg-[#ffffff] flex justify-center items-center'>
+    <div className='w-full h-[485px] p-5 shadow-md shadow-gray-300 bg-[#ffffff] flex justify-center items-center'>
       <Line data={data} options={options} />
     </div>
   )

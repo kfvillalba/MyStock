@@ -36,6 +36,7 @@ const UtilidadProductos = ({ color }) => {
     responsive: true,
     plugins: {
       legend: {
+        display: false,
         position: 'bottom',
         align: 'center',
         labels: {
@@ -47,9 +48,6 @@ const UtilidadProductos = ({ color }) => {
       title: {
         display: true,
         text: 'Top 5 productos más vendidos',
-      },
-      tooltip: {
-        enabled: false,
       },
     },
   }
@@ -133,7 +131,7 @@ const UtilidadProductos = ({ color }) => {
   }, [])
 
   return (
-    <div className='h-[350px] w-[370px] bg-[#ffffff] flex justify-center items-center'>
+    <div className='h-[350px] w-[370px] bg-[#ffffff] p-4 flex justify-center items-center shadow-md shadow-gray-300'>
       <Doughnut data={chartData} options={options} />
     </div>
   )

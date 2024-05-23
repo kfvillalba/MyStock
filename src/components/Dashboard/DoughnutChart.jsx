@@ -130,7 +130,7 @@ const TopVendidos = ({ color }) => {
   }, [])
 
   return (
-    <div className='h-[350px] w-[370px] bg-[#ffffff] flex justify-center items-center'>
+    <div className='h-[350px] w-1/3 p-2 bg-[#ffffff] flex justify-center items-center shadow-md shadow-gray-300'>
       <Doughnut data={chartData} options={options} />
     </div>
   )

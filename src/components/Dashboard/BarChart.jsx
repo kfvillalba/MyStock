@@ -91,7 +91,7 @@ const BarChartGanancias = ({ color }) => {
   }
 
   return (
-    <div className='w-[655px] h-[350px] bg-[#ffffff]'>
+    <div className='w-2/3 h-[350px] p-2 bg-[#ffffff] shadow-md shadow-gray-300'>
       <Bar className='h-[380px]' data={chartData} options={options} />
     </div>
   )

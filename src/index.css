@@ -77,4 +77,8 @@
     resize: horizontal; /* Allow horizontal resizing */
     overflow: auto; /* Add scrollbar when content overflows */
   }
+
+  .h-11-12 {
+    height: 93%;
+  }
 }
