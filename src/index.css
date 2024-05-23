@@ -56,9 +56,6 @@
     @apply h-full overflow-y-auto snap-y shadow-sm shadow-black rounded-sm;
   }
 
-  .cardStyle {
-    @apply text-gray-800 font-bold max-w-xs w-[200px] h-[100px] mt-0 p-2;
-  }
   .cardList {
     @apply w-[400px] h-[318px] text-black font-bold overflow-y-auto;
   }
