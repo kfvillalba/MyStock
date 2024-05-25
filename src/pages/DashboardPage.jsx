@@ -35,15 +35,16 @@ const Page = () => {
   const [existenciaVendida, setExistenciaVendida] = useState(0)
   const [existenciaActual, setExistenciaActual] = useState(0)
   const [totalImporteVendido, setTotalImporteVendido] = useState(0)
-  const [totalImportePagado, setTotalImportePagado] = useState(0)
-  const [totalBeneficioBruto, setTotalbeneficioBruto] = useState(0)
-  const [totalBeneficioNeto, setTotalBeneficioNeto] = useState(0)
+  const [TarjetaIngresos, setTarjetaIngresos] = useState(0)
+  const [TarjetaInversion, setTarjetaInversion] = useState(0)
+  const [TarjetaMargenUtilidadGlobal, setTarjetaMargenUtilidadGlobal] =
+    useState(0)
 
   const fetchItems = [
-    // {
-    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaClientes',
-    //   setter: setTotalClientes,
-    // },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaClientes',
+      setter: setTotalClientes,
+    },
     // {
     //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaProveedors',
     //   setter: setTotalProveedores,
@@ -68,26 +69,26 @@ const Page = () => {
     //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasVendidas',
     //   setter: setExistenciaVendida,
     // },
-    // {
-    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales',
-    //   setter: setExistenciaActual,
-    // },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaExistenciasActuales',
+      setter: setExistenciaActual,
+    },
     // {
     //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImporteVendido',
     //   setter: setTotalImporteVendido,
     // },
-    // {
-    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado',
-    //   setter: setTotalImportePagado,
-    // },
-    // {
-    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioBruto',
-    //   setter: setTotalbeneficioBruto,
-    // },
-    // {
-    //   url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaBeneficioNeto',
-    //   setter: setTotalBeneficioNeto,
-    // },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaImportePagado',
+      setter: setTarjetaIngresos,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaInversion',
+      setter: setTarjetaInversion,
+    },
+    {
+      url: 'https://localhost:7073/inventario-service/Dashboard/TarjetaMargenUtilidadGlobal',
+      setter: setTarjetaMargenUtilidadGlobal,
+    },
   ]
 
   useEffect(() => {
@@ -99,34 +100,34 @@ const Page = () => {
       <section className='flex flex-col overflow-y-auto h-full gap-2 p-4 mb-9 '>
         <div className='flex gap-3 justify-center'>
           <CardGeneral
-            nombre={'Clientes'}
-            cantidad={totalClientes}
-            logo={<ClienteIcon clases={'size-12'} />}
-            color={'bg-[#a0d88f]/30'}
-          />
-          <CardGeneral
-            nombre={'Clientes'}
-            cantidad={totalClientes}
-            logo={<ClienteIcon clases={'size-12'} />}
+            nombre={'Inversión'}
+            cantidad={TarjetaInversion.toLocaleString()}
+            logo={<ImporteRestanteIcon clases={'size-10'} />}
             color={'bg-[#81b872]/20'}
           />
           <CardGeneral
-            nombre={'Clientes'}
-            cantidad={totalClientes}
-            logo={<ClienteIcon clases={'size-12'} />}
+            nombre={'Ingresos'}
+            cantidad={TarjetaIngresos.toLocaleString()}
+            logo={<ClienteIcon clases={'size-10'} />}
+            color={'bg-[#a0d88f]/30'}
+          />
+          <CardGeneral
+            nombre={'Utilidad'}
+            cantidad={`${TarjetaMargenUtilidadGlobal} %`}
+            logo={<ImporteRestanteIcon clases={'size-10'} />}
+            color={'bg-[#bef7ac]/30'}
+          />
+          <CardGeneral
+            nombre={'Existencia actual'}
+            cantidad={existenciaActual}
+            logo={<ClienteIcon clases={'size-10'} />}
             color={'bg-[#bef7ac]/30'}
           />
           <CardGeneral
             nombre={'Clientes'}
             cantidad={totalClientes}
-            logo={<ClienteIcon clases={'size-12'} />}
+            logo={<ClienteIcon clases={'size-10'} />}
             color={'bg-[#a0d88f]/20'}
-          />
-          <CardGeneral
-            nombre={'Clientes'}
-            cantidad={totalClientes}
-            logo={<ClienteIcon clases={'size-12'} />}
-            color={'bg-[#bef7ac]/30'}
           />
         </div>
         <div className='flex justify-between gap-1'>
