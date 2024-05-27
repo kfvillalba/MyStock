@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-const TopVendidos = ({ color }) => {
+const UtilidadProductos = ({ color }) => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -46,14 +46,14 @@ const TopVendidos = ({ color }) => {
       },
       title: {
         display: true,
-        text: 'Top 5 productos más vendidos',
+        text: 'Top 5 Mejores Clientes',
       },
     },
   }
 
   useEffect(() => {
     fetch(
-      'https://localhost:7073/inventario-service/Dashboard/Grafica/TopProductosMasVendidos'
+      'https://localhost:7073/inventario-service/Dashboard/Grafica/TopMejoresClientes'
     )
       .then((response) => {
         if (!response.ok) {
@@ -62,8 +62,8 @@ const TopVendidos = ({ color }) => {
         return response.json()
       })
       .then((data) => {
-        const labels = data.map((item) => item.nombreProducto)
-        const chartData = data.map((item) => item.cantidadVentas)
+        const labels = data.map((item) => item.nombreCliente)
+        const chartData = data.map((item) => item.cantidadCompras)
         setChartData({
           labels: labels,
           datasets: [
@@ -130,10 +130,10 @@ const TopVendidos = ({ color }) => {
   }, [])
 
   return (
-    <div className='h-96 w-1/3 p-2 bg-[#ffffff] flex justify-center items-center shadow-md shadow-gray-300'>
+    <div className='h-96 w-1/3 bg-[#ffffff] p-4 flex justify-center items-center shadow-md shadow-gray-300'>
       <Doughnut data={chartData} options={options} />
     </div>
   )
 }
 
-export default TopVendidos
+export default UtilidadProductos

@@ -9,7 +9,7 @@ const BarChartGanancias = ({ color }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          'https://localhost:7113/api/Dashboard/Grafica/GananciaPorProducto'
+          'https://localhost:7073/inventario-service/Dashboard/Grafica/GananciaPorProducto'
         )
         if (!response.ok) {
           throw new Error('Error al obtener los datos')
