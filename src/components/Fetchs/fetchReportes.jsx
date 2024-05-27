@@ -101,7 +101,7 @@ export async function fetchEntradaProveedorReport(data) {
 export async function fetchProductosVendidosReport(data) {
   try {
     const response = await fetch(
-      `https://localhost:7073/inventario-service/Reportes/ClientesSalidasEntreFechas?fechaInicio=${data.fechaInicio}&fechaFinal=${data.fechaFinal}`
+      `https://localhost:7073/inventario-service/Reportes/ProdcutosVendidosEntreFechas?fechaInicio=${data.fechaInicio}&fechaFinal=${data.fechaFinal}`
     )
     if (response.ok) {
       const responseData = await response.json()

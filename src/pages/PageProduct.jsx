@@ -152,10 +152,7 @@ const Page = () => {
         </section>
 
         <div className='container__table'>
-          <div
-            className='table-wrapper'
-            style={{ maxHeight: '375px', overflowY: 'auto' }}
-          >
+          <div className='table-wrapper h-96'>
             <table className='w-full '>
               <thead className='[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:py-2 [&>tr>th]:bg-purple-light [&>tr>th]:text-white'>
                 <tr>

@@ -132,10 +132,10 @@ const Page = () => {
         </div>
         <div className="flex justify-between gap-1">
           <LineComprasVentas />
-          <UtilidadProductos />
+          <TopVendidos />
         </div>
         <div className="flex justify-center gap-1">
-          <TopVendidos />
+          <UtilidadProductos />
           <BarChartGanancias />
         </div>
       </section>

@@ -11,6 +11,9 @@ import {
   generateProductosSalidaActualPDF,
   generateProductosExistencia0PDF,
   generateProductosBajaExistenciaPDF,
+  generateVentasActualPDF,
+  generateComprasActualPDF,
+  generateEntradaProveedoresActualPDF,
 } from '../components/Reportes/TablasReportes'
 import Swal from 'sweetalert2'
 import ModalVerReporte from '../components/Reportes/modalVerReporte'
@@ -42,13 +45,13 @@ const Page = () => {
       }
       if (tipoReporte === '2') {
         if (data.reporte === '1') {
-          pdfUrl = await generateVentasPDF()
+          pdfUrl = await generateVentasActualPDF()
         } else if (data.reporte === '2') {
           pdfUrl = await generateSalidaClientesActualPDF()
         } else if (data.reporte === '3') {
-          // pdfUrl = await generateSalidaClientesActualPDF(data)
+          pdfUrl = await generateComprasActualPDF(data)
         } else if (data.reporte === '4') {
-          // pdfUrl = await generateSalidaClientesActualPDF(data)
+          pdfUrl = await generateEntradaProveedoresActualPDF(data)
         } else if (data.reporte === '5') {
           pdfUrl = await generateProductosSalidaActualPDF()
         }

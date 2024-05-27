@@ -14,12 +14,55 @@ import {
   fetchProductosbajaExistenciaReport,
   fetchProductosExistencia0Report,
 } from '../Fetchs/fetchReportes'
+
+async function fetchEmpresaData() {
+  const response = await fetch(
+    `https://localhost:7113/api/Empresas/Filtrar/EmpresaUsuario?email=${localStorage.getItem(
+      'email'
+    )}`
+  )
+  if (!response.ok) {
+    throw new Error('Network response was not ok')
+  }
+  const data = await response.json()
+  return data
+}
 // --------------------------Entre fechas--------------------------------------------------
 export async function generateVentasPDF(data) {
   const { fechaInicio, fechaFinal } = data
   try {
     const responseData = await fetchVentasReport(data)
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+
     doc.setFontSize(18)
     doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
       align: 'center',
@@ -28,7 +71,7 @@ export async function generateVentasPDF(data) {
     doc.text(
       `Desde: ${fechaInicio}   Hasta: ${fechaFinal}`,
       doc.internal.pageSize.getWidth() / 2,
-      22,
+      45,
       {
         align: 'center',
       }
@@ -52,7 +95,7 @@ export async function generateVentasPDF(data) {
         { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
         { content: row.totalDescuento, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -64,7 +107,36 @@ export async function generateSalidaClientesPDF(data) {
   const { fechaInicio, fechaFinal } = data
   try {
     const responseData = await fetchCienteSalidasReport(data)
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
     doc.setFontSize(18)
     doc.text(
       'Reporte de Cliente Salidas',
@@ -78,7 +150,7 @@ export async function generateSalidaClientesPDF(data) {
     doc.text(
       `Desde: ${fechaInicio}   Hasta: ${fechaFinal}`,
       doc.internal.pageSize.getWidth() / 2,
-      22,
+      45,
       {
         align: 'center',
       }
@@ -96,7 +168,7 @@ export async function generateSalidaClientesPDF(data) {
         { content: row.clienteNombre, styles: { halign: 'center' } },
         { content: row.clienteId, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -108,7 +180,36 @@ export async function generateComprasPDF(data) {
   const { fechaInicio, fechaFinal } = data
   try {
     const responseData = await fetchComprasReport(data)
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
     doc.setFontSize(18)
     doc.text('Reporte de Compras', doc.internal.pageSize.getWidth() / 2, 15, {
       align: 'center',
@@ -117,7 +218,7 @@ export async function generateComprasPDF(data) {
     doc.text(
       `Desde: ${fechaInicio}   Hasta: ${fechaFinal}`,
       doc.internal.pageSize.getWidth() / 2,
-      22,
+      45,
       {
         align: 'center',
       }
@@ -145,7 +246,7 @@ export async function generateComprasPDF(data) {
         { content: row.precioVenta, styles: { halign: 'center' } },
         { content: row.fechaEntrada, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -157,7 +258,37 @@ export async function generateEntradaProveedoresPDF(data) {
   const { fechaInicio, fechaFinal } = data
   try {
     const responseData = await fetchEntradaProveedorReport(data)
+
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
     doc.setFontSize(18)
     doc.text(
       'Reporte de Entrada de Proveedores',
@@ -171,7 +302,7 @@ export async function generateEntradaProveedoresPDF(data) {
     doc.text(
       `Desde: ${fechaInicio}   Hasta: ${fechaFinal}`,
       doc.internal.pageSize.getWidth() / 2,
-      22,
+      45,
       {
         align: 'center',
       }
@@ -189,7 +320,7 @@ export async function generateEntradaProveedoresPDF(data) {
         { content: row.nombreProveedor, styles: { halign: 'center' } },
         { content: row.fechaEntrada, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -201,7 +332,36 @@ export async function generateProductosVendidosPDF(data) {
   const { fechaInicio, fechaFinal } = data
   try {
     const responseData = await fetchProductosVendidosReport(data)
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
     doc.setFontSize(18)
     doc.text(
       'Reporte de Productos Vendidos',
@@ -215,7 +375,7 @@ export async function generateProductosVendidosPDF(data) {
     doc.text(
       `Desde: ${fechaInicio}   Hasta: ${fechaFinal}`,
       doc.internal.pageSize.getWidth() / 2,
-      22,
+      45,
       {
         align: 'center',
       }
@@ -243,7 +403,7 @@ export async function generateProductosVendidosPDF(data) {
         { content: row.valorDescuento, styles: { halign: 'center' } },
         { content: row.total, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -253,17 +413,45 @@ export async function generateProductosVendidosPDF(data) {
 
 // -------------------------------Día actual---------------------------------------------------------------------------
 export async function generateVentasActualPDF() {
-  ///Se debe modificar
   try {
-    const responseData = await fetchVentasActualReport(data)
+    const responseData = await fetchVentasActualReport()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
     const fechaActual = new Date().toLocaleDateString('es-ES')
-    doc.setFontSize(18)
-    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+    doc.text(`${fechaActual}`, doc.internal.pageSize.getWidth() / 2, 45, {
       align: 'center',
     })
-    doc.setFontSize(12)
-    doc.text(doc.internal.pageSize.getWidth() / 2, 22, {
+
+    doc.setFontSize(18)
+    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
       align: 'center',
     })
     doc.autoTable({
@@ -285,7 +473,7 @@ export async function generateVentasActualPDF() {
         { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
         { content: row.totalDescuento, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -295,9 +483,41 @@ export async function generateVentasActualPDF() {
 
 export async function generateSalidaClientesActualPDF() {
   try {
-    const responseData = await fetchClienteSalidaActualReport(data)
+    const responseData = await fetchClienteSalidaActualReport()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
     const fechaActual = new Date().toLocaleDateString('es-ES')
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+    doc.text(`${fechaActual}`, doc.internal.pageSize.getWidth() / 2, 45, {
+      align: 'center',
+    })
     doc.setFontSize(18)
     doc.text(
       'Reporte de Cliente Salidas Día Actual',
@@ -320,7 +540,7 @@ export async function generateSalidaClientesActualPDF() {
         { content: row.clienteNombre, styles: { halign: 'center' } },
         { content: row.clienteId, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -329,40 +549,71 @@ export async function generateSalidaClientesActualPDF() {
 }
 
 export async function generateComprasActualPDF() {
-  ///Se debe modificar...
-
   try {
-    const responseData = await fetchComprasActualReport(data)
+    const responseData = await fetchComprasActualReport()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
     const fechaActual = new Date().toLocaleDateString('es-ES')
-    doc.setFontSize(18)
-    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
-      align: 'center',
-    })
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
     doc.setFontSize(12)
-    doc.text(doc.internal.pageSize.getWidth() / 2, 22, {
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+    doc.text(`${fechaActual}`, doc.internal.pageSize.getWidth() / 2, 45, {
       align: 'center',
     })
+    doc.setFontSize(18)
+    doc.text(`Reporte de Compras`, doc.internal.pageSize.getWidth() / 2, 15, {
+      align: 'center',
+    })
+
     doc.autoTable({
       head: [
         [
-          { content: 'Fecha Factura', styles: { halign: 'center' } },
-          { content: 'Nombre Cliente', styles: { halign: 'center' } },
-          { content: 'Cantidad Productos', styles: { halign: 'center' } },
-          { content: 'Total con Descuento', styles: { halign: 'center' } },
-          { content: 'Total sin Descuento', styles: { halign: 'center' } },
-          { content: 'Total Descuento', styles: { halign: 'center' } },
+          { content: 'Categoria', styles: { halign: 'center' } },
+          { content: 'Producto', styles: { halign: 'center' } },
+          { content: 'Proveedor', styles: { halign: 'center' } },
+          { content: 'Existencia Inicial', styles: { halign: 'center' } },
+          { content: 'Existencia Actual', styles: { halign: 'center' } },
+          { content: 'Precio Compra', styles: { halign: 'center' } },
+          { content: 'Precio Venta', styles: { halign: 'center' } },
+          { content: 'Fecha Entrada', styles: { halign: 'center' } },
         ],
       ],
       body: responseData.map((row) => [
-        { content: fechaActual, styles: { halign: 'center' } },
-        { content: row.clienteNombre, styles: { halign: 'center' } },
-        { content: row.cantidadProductos, styles: { halign: 'center' } },
-        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
-        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
-        { content: row.totalDescuento, styles: { halign: 'center' } },
+        { content: row.nombreCategoria, styles: { halign: 'center' } },
+        { content: row.nombreProducto, styles: { halign: 'center' } },
+        { content: row.nombreProveedor, styles: { halign: 'center' } },
+        { content: row.existenciaInicial, styles: { halign: 'center' } },
+        { content: row.existenciaActual, styles: { halign: 'center' } },
+        { content: row.precioCompra, styles: { halign: 'center' } },
+        { content: row.precioVenta, styles: { halign: 'center' } },
+        { content: row.fechaEntrada, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -371,55 +622,45 @@ export async function generateComprasActualPDF() {
 }
 
 export async function generateEntradaProveedoresActualPDF() {
-  ///Se debe modificar
-
   try {
-    const responseData = await fetchEntradaProveedoresActualReport(data)
+    const responseData = await fetchEntradaProveedoresActualReport()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
     const fechaActual = new Date().toLocaleDateString('es-ES')
-    doc.setFontSize(18)
-    doc.text(`Reporte de Ventas`, doc.internal.pageSize.getWidth() / 2, 15, {
-      align: 'center',
-    })
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
     doc.setFontSize(12)
-    doc.text(doc.internal.pageSize.getWidth() / 2, 22, {
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+    doc.text(`${fechaActual}`, doc.internal.pageSize.getWidth() / 2, 45, {
       align: 'center',
     })
-    doc.autoTable({
-      head: [
-        [
-          { content: 'Fecha Factura', styles: { halign: 'center' } },
-          { content: 'Nombre Cliente', styles: { halign: 'center' } },
-          { content: 'Cantidad Productos', styles: { halign: 'center' } },
-          { content: 'Total con Descuento', styles: { halign: 'center' } },
-          { content: 'Total sin Descuento', styles: { halign: 'center' } },
-          { content: 'Total Descuento', styles: { halign: 'center' } },
-        ],
-      ],
-      body: responseData.map((row) => [
-        { content: fechaActual, styles: { halign: 'center' } },
-        { content: row.clienteNombre, styles: { halign: 'center' } },
-        { content: row.cantidadProductos, styles: { halign: 'center' } },
-        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
-        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
-        { content: row.totalDescuento, styles: { halign: 'center' } },
-      ]),
-      startY: 25,
-    })
-    return doc.output('bloburl')
-  } catch (error) {
-    throw error
-  }
-}
-
-export async function generateProductosSalidaActualPDF() {
-  try {
-    const responseData = await fetchProductosSalidaActualReport(data)
-    const doc = new jsPDF()
-    const fechaActual = new Date().toLocaleDateString('es-ES')
     doc.setFontSize(18)
     doc.text(
-      'Productos Salidas Día Actual',
+      `Reporte de Proveedores`,
       doc.internal.pageSize.getWidth() / 2,
       15,
       {
@@ -429,7 +670,73 @@ export async function generateProductosSalidaActualPDF() {
     doc.autoTable({
       head: [
         [
-          { content: 'Fecha factura', styles: { halign: 'center' } },
+          { content: 'id Proveedor', styles: { halign: 'center' } },
+          { content: 'Proveedor', styles: { halign: 'center' } },
+          { content: 'Fecha Entrada', styles: { halign: 'center' } },
+        ],
+      ],
+      body: responseData.map((row) => [
+        { content: row.idProveedor, styles: { halign: 'center' } },
+        { content: row.nombreProveedor, styles: { halign: 'center' } },
+        { content: row.fechaEntrada, styles: { halign: 'center' } },
+      ]),
+      startY: 50,
+    })
+    return doc.output('bloburl')
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function generateProductosSalidaActualPDF() {
+  try {
+    const responseData = await fetchProductosSalidaActualReport()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
+    const doc = new jsPDF()
+    const fechaActual = new Date().toLocaleDateString('es-ES')
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+    doc.text(`${fechaActual}`, doc.internal.pageSize.getWidth() / 2, 45, {
+      align: 'center',
+    })
+    doc.setFontSize(18)
+    doc.text(
+      'Reporte Producto Salidas',
+      doc.internal.pageSize.getWidth() / 2,
+      15,
+      {
+        align: 'center',
+      }
+    )
+    doc.autoTable({
+      head: [
+        [
           { content: 'Producto', styles: { halign: 'center' } },
           { content: 'Categoria', styles: { halign: 'center' } },
           { content: 'Precio ', styles: { halign: 'center' } },
@@ -440,7 +747,6 @@ export async function generateProductosSalidaActualPDF() {
         ],
       ],
       body: responseData.map((row) => [
-        { content: fechaActual, styles: { halign: 'center' } },
         { content: row.productoNombre, styles: { halign: 'center' } },
         { content: row.categoriaNombre, styles: { halign: 'center' } },
         { content: row.precio, styles: { halign: 'center' } },
@@ -449,7 +755,7 @@ export async function generateProductosSalidaActualPDF() {
         { content: row.valorDescuento, styles: { halign: 'center' } },
         { content: row.total, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 50,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -462,7 +768,36 @@ export async function generateProductosSalidaActualPDF() {
 export async function generateProductosBajaExistenciaPDF() {
   try {
     const responseData = await fetchProductosbajaExistenciaReport()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
     doc.setFontSize(18)
     doc.text(
       'Reporte de Productos Con Baja Existencia',
@@ -495,7 +830,7 @@ export async function generateProductosBajaExistenciaPDF() {
         { content: row.precioCompra, styles: { halign: 'center' } },
         { content: row.precioVenta, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 47,
     })
     return doc.output('bloburl')
   } catch (error) {
@@ -506,10 +841,40 @@ export async function generateProductosBajaExistenciaPDF() {
 export async function generateProductosExistencia0PDF() {
   try {
     const responseData = await fetchProductosExistencia0Report()
+    const empresaDataArray = await fetchEmpresaData()
+    const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
+    const imgData = 'src/assets/en-stock.png'
+    doc.addImage(imgData, 'JPEG', 15, 10, 20, 20)
+    doc.setFontSize(12)
+    doc.text(
+      `${empresaData.nombre}`,
+      doc.internal.pageSize.getWidth() / 2,
+      22,
+      {
+        align: 'center',
+      }
+    ),
+      doc.text(
+        `${empresaData.direccion}`,
+        doc.internal.pageSize.getWidth() / 2,
+        28,
+        {
+          align: 'center',
+        }
+      )
+    doc.text(
+      `${empresaData.telefono}`,
+      doc.internal.pageSize.getWidth() / 2,
+      34,
+      {
+        align: 'center',
+      }
+    )
+
     doc.setFontSize(18)
     doc.text(
-      'Reporte de Productos Con Existencia 0',
+      'Reporte de Productos Con Existencia Cero(0)',
       doc.internal.pageSize.getWidth() / 2,
       15,
       {
@@ -539,7 +904,7 @@ export async function generateProductosExistencia0PDF() {
         { content: row.precioCompra, styles: { halign: 'center' } },
         { content: row.precioVenta, styles: { halign: 'center' } },
       ]),
-      startY: 25,
+      startY: 47,
     })
     return doc.output('bloburl')
   } catch (error) {
