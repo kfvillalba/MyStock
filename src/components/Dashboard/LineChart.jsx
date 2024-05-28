@@ -66,14 +66,14 @@ const LineComprasVentas = ({ color }) => {
       {
         label: "Compras",
         data: compras,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgb(191, 254, 26)",
+        backgroundColor: "rgb(191, 254, 26)",
       },
       {
         label: "Ventas",
         data: ventas,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        borderColor: "rgb(59, 170, 52)",
+        backgroundColor: "rgb(59, 170, 52)",
       },
     ],
   };
