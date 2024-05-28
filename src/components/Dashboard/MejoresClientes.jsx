@@ -38,6 +38,7 @@ const UtilidadProductos = ({ color }) => {
       legend: {
         position: 'bottom',
         align: 'center',
+        display: false,
         labels: {
           boxWidth: 20,
           padding: 10,
@@ -46,14 +47,14 @@ const UtilidadProductos = ({ color }) => {
       },
       title: {
         display: true,
-        text: 'Top 5 Mejores Clientes',
+        text: 'CATEGORIAS',
       },
     },
   }
 
   useEffect(() => {
     fetch(
-      'https://localhost:7073/inventario-service/Dashboard/Grafica/TopMejoresClientes'
+      'https://localhost:7073/inventario-service/Dashboard/Grafica/ConsultarCategoriaProductos'
     )
       .then((response) => {
         if (!response.ok) {
@@ -62,8 +63,8 @@ const UtilidadProductos = ({ color }) => {
         return response.json()
       })
       .then((data) => {
-        const labels = data.map((item) => item.nombreCliente)
-        const chartData = data.map((item) => item.cantidadCompras)
+        const labels = data.map((item) => item.nombreCategoria)
+        const chartData = data.map((item) => item.cantidadProductos)
         setChartData({
           labels: labels,
           datasets: [
@@ -77,6 +78,10 @@ const UtilidadProductos = ({ color }) => {
                 'rgba(75, 192, 192, 0.2)',
                 'rgba(153, 102, 255, 0.2)',
                 'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 255, 0.2)',
+                'rgba(54, 162, 155, 0.2)',
+                'rgba(153, 102, 155, 0.2)',
               ],
               borderColor: [
                 'rgba(255, 99, 132, 1)',
@@ -85,6 +90,10 @@ const UtilidadProductos = ({ color }) => {
                 'rgba(75, 192, 192, 1)',
                 'rgba(153, 102, 255, 1)',
                 'rgba(255, 159, 64, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(75, 192, 255, 1)',
+                'rgba(54, 162, 155, 1)',
+                'rgba(153, 102, 155, 1)',
               ],
               borderWidth: 1,
             },
