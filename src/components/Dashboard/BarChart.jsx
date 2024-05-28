@@ -51,7 +51,7 @@ const BarChartGanancias = ({ color }) => {
         display: true,
       },
       title: {
-        display: true,
+        display: false,
         text: 'Ganancia por productos',
       },
     },
