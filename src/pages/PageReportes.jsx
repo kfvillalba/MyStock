@@ -17,6 +17,8 @@ import {
 } from '../components/Reportes/TablasReportes'
 import Swal from 'sweetalert2'
 import ModalVerReporte from '../components/Reportes/modalVerReporte'
+import { TbReportAnalytics } from 'react-icons/tb'
+import '../index.css'
 
 const Page = () => {
   const {
@@ -27,39 +29,38 @@ const Page = () => {
   } = useForm()
 
   const onSubmit = async (data) => {
-    console.log(data)
     try {
       let pdfUrl = ''
       if (tipoReporte === '1') {
-        if (data.reporte === '1') {
+        if (reporte === '1') {
           pdfUrl = await generateVentasPDF(data)
-        } else if (data.reporte === '2') {
+        } else if (reporte === '2') {
           pdfUrl = await generateSalidaClientesPDF(data)
-        } else if (data.reporte === '3') {
+        } else if (reporte === '3') {
           pdfUrl = await generateComprasPDF(data)
-        } else if (data.reporte === '4') {
+        } else if (reporte === '4') {
           pdfUrl = await generateEntradaProveedoresPDF(data)
-        } else if (data.reporte === '5') {
+        } else if (reporte === '5') {
           pdfUrl = await generateProductosVendidosPDF(data)
         }
       }
       if (tipoReporte === '2') {
-        if (data.reporte === '1') {
+        if (reporte === '1') {
           pdfUrl = await generateVentasActualPDF()
-        } else if (data.reporte === '2') {
+        } else if (reporte === '2') {
           pdfUrl = await generateSalidaClientesActualPDF()
-        } else if (data.reporte === '3') {
+        } else if (reporte === '3') {
           pdfUrl = await generateComprasActualPDF(data)
-        } else if (data.reporte === '4') {
+        } else if (reporte === '4') {
           pdfUrl = await generateEntradaProveedoresActualPDF(data)
-        } else if (data.reporte === '5') {
+        } else if (reporte === '5') {
           pdfUrl = await generateProductosSalidaActualPDF()
         }
       }
       if (tipoReporte === '3') {
-        if (data.reporte === '1') {
+        if (reporte === '1') {
           pdfUrl = await generateProductosExistencia0PDF()
-        } else if (data.reporte === '2') {
+        } else if (reporte === '2') {
           pdfUrl = await generateProductosBajaExistenciaPDF()
         }
       }
@@ -246,9 +247,17 @@ const Page = () => {
   }
 
   const [tipoReporte, setTipoReporte] = useState('-1')
+  const [reporte, setReporte] = useState('-1')
 
   const handleTipoReporteChange = (event) => {
     setTipoReporte(event.target.value)
+    setReporte('-1')
+    console.log('tipo reporte', tipoReporte)
+  }
+
+  const handleReporteChange = (event) => {
+    setReporte(event.target.value)
+    console.log('reporte', reporte)
   }
 
   return (
@@ -263,233 +272,243 @@ const Page = () => {
           />
         </ModalVerReporte>
       )}
-      <div
-        className='gap-4 p-10 shadow-md shadow-black'
-        style={{ maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}
-      >
+      <div className='shadow-md h-full w-full pb-6'>
         <form
-          className='bg-white rounded-lg shadow-sm flex flex-col h-full p-5'
+          className='bg-white rounded-lg m-3 flex shadow-sm shadow-gray-400 justify-center h-full p-5'
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className='h-full'>
-            <div>
-              <label className='label__form' htmlFor='tipoReporte'>
-                Seleccione el Tipo de reporte
-              </label>
-              <select
-                className='input__form'
-                name='tipoReporte'
-                id='tipoReporte'
-                value={tipoReporte}
-                onChange={handleTipoReporteChange}
-              >
-                <option value='-1'>Seleccione un tipo de reporte</option>
-                <option value='1'>Reporte Entre Fechas</option>
-                <option value='2'>Reporte Día Actual</option>
-                <option value='3'>Reporte de Información Productos</option>
-              </select>
-              {tipoReporte === '1' && (
+          <div className='w-1/2'>
+            <div className='h-11-12 overflow-y-auto'>
+              <div>
+                <label className='label__form' htmlFor='tipoReporte'>
+                  Seleccione el Tipo de reporte
+                </label>
+                <select
+                  className='input__form'
+                  name='tipoReporte'
+                  id='tipoReporte'
+                  value={tipoReporte}
+                  onChange={handleTipoReporteChange}
+                >
+                  <option value='-1'>Seleccione un tipo de reporte</option>
+                  <option value='1'>Reporte Entre Fechas</option>
+                  <option value='2'>Reporte Día Actual</option>
+                  <option value='3'>Reporte de Información Productos</option>
+                </select>
+                {tipoReporte === '1' && (
+                  <div>
+                    <label className='label__form' htmlFor='producto'>
+                      Seleccionar reporte
+                    </label>
+                    <select
+                      className='input__form'
+                      name='producto'
+                      id='tipoReporte'
+                      onChange={handleReporteChange}
+                    >
+                      <option value=''>Seleccione el tipo de reporte</option>
+                      <option value='1'>Ventas</option>
+                      <option value='2'>Salidas de clientes</option>
+                      <option value='3'>Compras</option>
+                      <option value='4'>Entrada de proveedores</option>
+                      <option value='5'>Productos vendidos</option>
+                    </select>
+                    <span className='message'>{errors?.producto?.message}</span>
+                  </div>
+                )}
+                {tipoReporte === '1' && (
+                  <div>
+                    <label className='label__form' htmlFor='fechaInicio'>
+                      Fecha de Inicio
+                    </label>
+                    <input
+                      className='input__form'
+                      type='date'
+                      name='fechaInicio'
+                      id='fechaInicio'
+                      {...register('fechaInicio')}
+                    />
+                    <span className='message'></span>
+                  </div>
+                )}
+
+                {tipoReporte === '1' && (
+                  <div>
+                    <label className='label__form' htmlFor='fechaFinal'>
+                      Fecha de Final
+                    </label>
+                    <input
+                      className='input__form'
+                      type='date'
+                      name='fechaFinal'
+                      id='fechaFinal'
+                      {...register('fechaFinal')}
+                    />
+                    <span className='message'></span>
+                  </div>
+                )}
+
+                {tipoReporte === '2' && (
+                  <div>
+                    <label className='label__form' htmlFor='producto'>
+                      Seleccionar reporte
+                    </label>
+                    <select
+                      className='input__form'
+                      name='producto'
+                      id='tipoReporte'
+                      onChange={handleReporteChange}
+                    >
+                      <option value='-1'>Selecciones el tipo de reporte</option>
+                      <option value='1'>Ventas</option>
+                      <option value='2'>Cliente salidas</option>
+                      <option value='3'>Compras</option>
+                      <option value='4'>Entrada de proveedores</option>
+                      <option value='5'>Salida de productos</option>
+                    </select>
+                    <span className='message'>{errors?.producto?.message}</span>
+                  </div>
+                )}
+                {tipoReporte === '3' && (
+                  <div>
+                    <label className='label__form' htmlFor='producto'>
+                      Seleccionar reporte
+                    </label>
+                    <select
+                      className='input__form'
+                      name='producto'
+                      id='tipoReporte'
+                      onChange={handleReporteChange}
+                    >
+                      <option value='-1'>Seleccione el tipo de reporte</option>
+                      <option value='1'>Productos sin existencia</option>
+                      <option value='2'>Productos con baja existencia</option>
+                    </select>
+                    <span className='message'>{errors?.producto?.message}</span>
+                  </div>
+                )}
+              </div>
+              {(reporte === '3' || reporte === '5') && tipoReporte !== '-1' && (
+                <div>
+                  <label className='label__form' htmlFor='categoria'>
+                    Seleccione una Categoria (Opcional)
+                  </label>
+                  <select
+                    className='input__form'
+                    name='categoria'
+                    id='tipoReporte'
+                    {...register('categoria')}
+                    onChange={handleCategoriaChange}
+                  >
+                    <option value='-1'>Seleccione una categoria</option>
+                    {categoriasOptions?.map((categoria) => {
+                      return (
+                        <option
+                          key={categoria.id}
+                          value={`${categoria.idCategoria}`}
+                        >
+                          {categoria.nombreCategoria}
+                        </option>
+                      )
+                    })}
+                  </select>
+                  <span className='message'>{errors?.categoria?.message}</span>
+                </div>
+              )}
+              {(reporte === '3' || reporte === '5') && tipoReporte !== '-1' && (
                 <div>
                   <label className='label__form' htmlFor='producto'>
-                    Seleccionar reporte
+                    Seleccione un producto (Opcional)
                   </label>
                   <select
                     className='input__form'
                     name='producto'
                     id='tipoReporte'
-                    {...register('reporte')}
+                    {...register('producto')}
+                    onChange={handleProductoChange}
                   >
-                    <option value='-1'>Seleccione el tipo de reporte</option>
-                    <option value='1'>Ventas</option>
-                    <option value='2'>Salidas de clientes</option>
-                    <option value='3'>Compras</option>
-                    <option value='4'>Entrada de proveedores</option>
-                    <option value='5'>Productos vendidos</option>
+                    <option value='-1'>Seleccione un producto</option>
+                    {productosOptions?.map((producto) => {
+                      return (
+                        <option
+                          key={producto.idProducto}
+                          value={`${producto.idProducto}`}
+                        >
+                          {producto.nombreProducto}
+                        </option>
+                      )
+                    })}
                   </select>
                   <span className='message'>{errors?.producto?.message}</span>
                 </div>
               )}
-              {tipoReporte === '1' && (
+              {(reporte === '1' || reporte === '2') && tipoReporte !== '-1' && (
                 <div>
-                  <label className='label__form' htmlFor='fechaInicio'>
-                    Fecha de Inicio
-                  </label>
-                  <input
-                    className='input__form'
-                    type='date'
-                    name='fechaInicio'
-                    id='fechaInicio'
-                    {...register('fechaInicio')}
-                  />
-                  <span className='message'></span>
-                </div>
-              )}
-
-              {tipoReporte === '1' && (
-                <div>
-                  <label className='label__form' htmlFor='fechaFinal'>
-                    Fecha de Final
-                  </label>
-                  <input
-                    className='input__form'
-                    type='date'
-                    name='fechaFinal'
-                    id='fechaFinal'
-                    {...register('fechaFinal')}
-                  />
-                  <span className='message'></span>
-                </div>
-              )}
-
-              {tipoReporte === '2' && (
-                <div>
-                  <label className='label__form' htmlFor='producto'>
-                    Seleccionar reporte
+                  <label className='label__form' htmlFor='cliente'>
+                    Seleccione un cliente (Opcional)
                   </label>
                   <select
                     className='input__form'
-                    name='producto'
+                    name='cliente'
                     id='tipoReporte'
-                    {...register('reporte')}
+                    {...register('cliente')}
                   >
-                    <option value='-1'>Selecciones el tipo de reporte</option>
-                    <option value='1'>Ventas</option>
-                    <option value='2'>Cliente salidas</option>
-                    <option value='3'>Compras</option>
-                    <option value='4'>Entrada de proveedores</option>
-                    <option value='5'>Salida de productos</option>
+                    <option value='-1'>Seleccione un cliente</option>
+                    {clientesOptions?.map((cliente) => {
+                      return (
+                        <option
+                          key={cliente.clienteId}
+                          value={`${cliente.clienteId}`}
+                        >
+                          {cliente.clienteNombre}
+                        </option>
+                      )
+                    })}
                   </select>
-                  <span className='message'>{errors?.producto?.message}</span>
+                  <span className='message'>{errors?.cliente?.message}</span>
                 </div>
               )}
-              {tipoReporte === '3' && (
+              {(reporte === '3' || reporte === '4') && tipoReporte !== '-1' && (
                 <div>
-                  <label className='label__form' htmlFor='producto'>
-                    Seleccionar reporte
+                  <label className='label__form' htmlFor='proveedor'>
+                    Seleccione un proveedor (Opcional)
                   </label>
                   <select
                     className='input__form'
-                    name='producto'
+                    name='proveedor'
                     id='tipoReporte'
-                    {...register('reporte')}
+                    {...register('proveedor')}
                   >
-                    <option value='-1'>Seleccione el tipo de reporte</option>
-                    <option value='1'>Productos sin existencia</option>
-                    <option value='2'>Productos con baja existencia</option>
+                    <option value='-1'>Seleccione un proveedor</option>
+                    {proveedoresOptions?.map((proveedor) => {
+                      return (
+                        <option
+                          key={proveedor.idProveedor}
+                          value={`${proveedor.idProveedor}`}
+                        >
+                          {proveedor.nombreProveedor}
+                        </option>
+                      )
+                    })}
                   </select>
-                  <span className='message'>{errors?.producto?.message}</span>
+                  <span className='message'>{errors?.proveedor?.message}</span>
                 </div>
               )}
-            </div>
-
-            <div>
-              <label className='label__form' htmlFor='categoria'>
-                Seleccione una Categoria (Opcional)
-              </label>
-              <select
-                className='input__form'
-                name='categoria'
-                id='tipoReporte'
-                {...register('categoria')}
-                onChange={handleCategoriaChange}
-              >
-                <option value='-1'>Seleccione una categoria</option>
-                {categoriasOptions?.map((categoria) => {
-                  return (
-                    <option
-                      key={categoria.id}
-                      value={`${categoria.idCategoria}`}
-                    >
-                      {categoria.nombreCategoria}
-                    </option>
-                  )
-                })}
-              </select>
-              <span className='message'>{errors?.categoria?.message}</span>
-            </div>
-            <div>
-              <label className='label__form' htmlFor='producto'>
-                Seleccione un producto (Opcional)
-              </label>
-              <select
-                className='input__form'
-                name='producto'
-                id='tipoReporte'
-                {...register('producto')}
-                onChange={handleProductoChange}
-              >
-                <option value='-1'>Seleccione un producto</option>
-                {productosOptions?.map((producto) => {
-                  return (
-                    <option
-                      key={producto.idProducto}
-                      value={`${producto.idProducto}`}
-                    >
-                      {producto.nombreProducto}
-                    </option>
-                  )
-                })}
-              </select>
-              <span className='message'>{errors?.producto?.message}</span>
-            </div>
-            <div>
-              <label className='label__form' htmlFor='cliente'>
-                Seleccione un cliente (Opcional)
-              </label>
-              <select
-                className='input__form'
-                name='cliente'
-                id='tipoReporte'
-                {...register('cliente')}
-              >
-                <option value='-1'>Seleccione un cliente</option>
-                {clientesOptions?.map((cliente) => {
-                  return (
-                    <option
-                      key={cliente.clienteId}
-                      value={`${cliente.clienteId}`}
-                    >
-                      {cliente.clienteNombre}
-                    </option>
-                  )
-                })}
-              </select>
-              <span className='message'>{errors?.cliente?.message}</span>
-            </div>
-            <div>
-              <label className='label__form' htmlFor='proveedor'>
-                Seleccione un proveedor (Opcional)
-              </label>
-              <select
-                className='input__form'
-                name='proveedor'
-                id='tipoReporte'
-                {...register('proveedor')}
-              >
-                <option value='-1'>Seleccione un proveedor</option>
-                {proveedoresOptions?.map((proveedor) => {
-                  return (
-                    <option
-                      key={proveedor.idProveedor}
-                      value={`${proveedor.idProveedor}`}
-                    >
-                      {proveedor.nombreProveedor}
-                    </option>
-                  )
-                })}
-              </select>
-              <span className='message'>{errors?.proveedor?.message}</span>
+              <div className='text-center'></div>
             </div>
           </div>
-          <section className='self-end'>
-            <button
-              type='submit'
-              className='bnt__primary mt-5'
-              onClick={handleGenerateReport}
-            >
-              Generar Reporte
-            </button>
-          </section>
+          <div className='w-1/3'>
+            <div className='flex flex-col items-center'>
+              <TbReportAnalytics className='size-96 icon-green' />
+              <button
+                type='submit'
+                className='bnt__primary bg-slate-500/30 mt-5 font-semibold text-black'
+                onClick={handleGenerateReport}
+              >
+                Generar Reporte
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </>

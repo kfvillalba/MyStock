@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2'
 
 const BarChartGanancias = ({ color }) => {
   const [data, setData] = useState([])
+  const [data2, setData2] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -22,14 +23,32 @@ const BarChartGanancias = ({ color }) => {
         setIsLoading(false)
       }
     }
+    const fetchData2 = async () => {
+      try {
+        const response = await fetch(
+          'https://localhost:7073/inventario-service/Dashboard/Grafica/TodosLosProductosConVentas'
+        )
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos')
+        }
+        const jsonData = await response.json()
+        setData2(jsonData)
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error:', error)
+        setIsLoading(false)
+      }
+    }
+
     fetchData()
+    fetchData2()
   }, [])
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        display: false,
+        display: true,
       },
       title: {
         display: true,
@@ -76,15 +95,22 @@ const BarChartGanancias = ({ color }) => {
   } else {
     const labels = data.map((item) => item.nombreProducto)
     const ganancias = data.map((item) => item.ganancia)
+    const productos = data2.map((item) => item.cantidadVentas)
     const backgroundColors = data.map(() => randomColor())
+    const backgroundColors2 = data2.map(() => randomColor())
 
     chartData = {
       labels: labels,
       datasets: [
         {
-          label: 'Ganancia',
+          label: 'Ganancia por producto',
           data: ganancias,
           backgroundColor: backgroundColors,
+        },
+        {
+          label: 'productos con ventas',
+          data: productos,
+          backgroundColor: backgroundColors2,
         },
       ],
     }
