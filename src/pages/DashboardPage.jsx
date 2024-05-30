@@ -15,8 +15,8 @@ import BeneficioBrutoIcon from '../assets/BeneficioBrutoIcon'
 import BeneficioTotalIcon from '../assets/BeneficioTotalIcon'
 import BarChartGanancias from '../components/Dashboard/BarChart'
 import LineComprasVentas from '../components/Dashboard/LineChart'
-import TopVendidos from '../components/Dashboard/DoughnutChart'
-import UtilidadProductos from '../components/Dashboard/MejoresClientes'
+import TopVendidos from '../components/Dashboard/TopVendidos'
+import CategoriaProductos from '../components/Dashboard/CategoriaProductos'
 import '../index.css'
 
 const fetchData = (url, setter) => {
@@ -135,7 +135,7 @@ const Page = () => {
           <TopVendidos />
         </div>
         <div className='flex justify-center gap-1'>
-          <UtilidadProductos />
+          <CategoriaProductos />
           <BarChartGanancias />
         </div>
       </section>

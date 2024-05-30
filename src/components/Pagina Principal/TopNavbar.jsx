@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ProfileModal from '../Usuario y Empresa/modalVerUsuario'
 import ModalVerNotificaciones from '../Usuario y Empresa/modalVerNotificaciones'
 import { IoIosNotifications } from 'react-icons/io'
 const TopNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
-  const [Notification, setNotification] = useState([[], []])
+  const [Notification, setNotification] = useState([])
+
+  useEffect(() => {
+    const storedNotificationCount = localStorage.getItem('notificationCount')
+    if (storedNotificationCount) {
+      setNotification(parseInt(storedNotificationCount))
+    }
+  }, [])
 
   return (
     <>
@@ -19,6 +26,10 @@ const TopNavbar = () => {
         open={isNotification}
         onClose={() => {
           setIsNotification(false)
+        }}
+        onNotificationCountChange={(count) => {
+          localStorage.setItem('notificationCount', count.toString())
+          setNotification(count)
         }}
       />
       <div className='2xl:h-20 h-12 shadow-sm bg-slate-200 shadow-gray-700 flex p-3 justify-between items-center '>
@@ -44,7 +55,7 @@ const TopNavbar = () => {
             <div>
               {Notification && (
                 <div className='absolute 2xl:ml-[30px] ml-[24px]  font-semibold rounded-full min-w-fit size-4 2xl:size-6 bg-red-900 2xl:p-1 text-xs text-white text-center items-center '>
-                  {Notification.length}
+                  {Notification}
                 </div>
               )}
 

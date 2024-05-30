@@ -412,9 +412,9 @@ export async function generateProductosVendidosPDF(data) {
 }
 
 // -------------------------------Día actual---------------------------------------------------------------------------
-export async function generateVentasActualPDF() {
+export async function generateVentasActualPDF(data) {
   try {
-    const responseData = await fetchVentasActualReport()
+    const responseData = await fetchVentasActualReport(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
@@ -481,9 +481,9 @@ export async function generateVentasActualPDF() {
   }
 }
 
-export async function generateSalidaClientesActualPDF() {
+export async function generateSalidaClientesActualPDF(data) {
   try {
-    const responseData = await fetchClienteSalidaActualReport()
+    const responseData = await fetchClienteSalidaActualReport(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
@@ -548,9 +548,9 @@ export async function generateSalidaClientesActualPDF() {
   }
 }
 
-export async function generateComprasActualPDF() {
+export async function generateComprasActualPDF(data) {
   try {
-    const responseData = await fetchComprasActualReport()
+    const responseData = await fetchComprasActualReport(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
@@ -621,9 +621,9 @@ export async function generateComprasActualPDF() {
   }
 }
 
-export async function generateEntradaProveedoresActualPDF() {
+export async function generateEntradaProveedoresActualPDF(data) {
   try {
-    const responseData = await fetchEntradaProveedoresActualReport()
+    const responseData = await fetchEntradaProveedoresActualReport(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
@@ -688,9 +688,9 @@ export async function generateEntradaProveedoresActualPDF() {
   }
 }
 
-export async function generateProductosSalidaActualPDF() {
+export async function generateProductosSalidaActualPDF(data) {
   try {
-    const responseData = await fetchProductosSalidaActualReport()
+    const responseData = await fetchProductosSalidaActualReport(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
@@ -765,9 +765,9 @@ export async function generateProductosSalidaActualPDF() {
 
 // ------------------------------información de productos-------------------------------------------------
 
-export async function generateProductosBajaExistenciaPDF() {
+export async function generateProductosBajaExistenciaPDF(data) {
   try {
-    const responseData = await fetchProductosbajaExistenciaReport()
+    const responseData = await fetchProductosbajaExistenciaReport(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()
@@ -838,9 +838,9 @@ export async function generateProductosBajaExistenciaPDF() {
   }
 }
 
-export async function generateProductosExistencia0PDF() {
+export async function generateProductosExistencia0PDF(data) {
   try {
-    const responseData = await fetchProductosExistencia0Report()
+    const responseData = await fetchProductosExistencia0Report(data)
     const empresaDataArray = await fetchEmpresaData()
     const empresaData = empresaDataArray[0]
     const doc = new jsPDF()

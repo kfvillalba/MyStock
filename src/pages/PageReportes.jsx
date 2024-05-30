@@ -29,6 +29,7 @@ const Page = () => {
   } = useForm()
 
   const onSubmit = async (data) => {
+    console.log(data)
     try {
       let pdfUrl = ''
       if (tipoReporte === '1') {
@@ -451,7 +452,7 @@ const Page = () => {
                     className='input__form'
                     name='cliente'
                     id='tipoReporte'
-                    {...register('cliente')}
+                    {...register('clienteId')}
                   >
                     <option value='-1'>Seleccione un cliente</option>
                     {clientesOptions?.map((cliente) => {

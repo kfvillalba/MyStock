@@ -17,7 +17,7 @@ const ProfileHeader = ({ avatar, cover, openModal, navigateBack }) => {
       <div className='absolute top-2 left-2'>
         <button
           onClick={navigateBack}
-          className='text-black hover:text-black text-3xl'
+          className=' text-white hover:text-white text-3xl bg-slate-500'
         >
           <FiArrowLeft />
         </button>

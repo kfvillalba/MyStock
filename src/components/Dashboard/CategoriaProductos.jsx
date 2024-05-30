@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-const UtilidadProductos = ({ color }) => {
+const CategoriaProductos = ({ color }) => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -64,13 +64,28 @@ const UtilidadProductos = ({ color }) => {
       })
       .then((data) => {
         const labels = data.map((item) => item.nombreCategoria)
-        const chartData = data.map((item) => item.cantidadProductos)
+        const values = data.map((item) => item.cantidadProductos)
+
+        const total = values.reduce((acc, value) => acc + value, 0)
+        const percentages = values.map((value) =>
+          ((value / total) * 100).toFixed(2)
+        )
+        const combinedData = labels.map((label, index) => ({
+          label,
+          percentage: percentages[index],
+        }))
+        combinedData.sort((a, b) => b.percentage - a.percentage)
+        const sortedLabels = combinedData.map((item) => item.label)
+        const sortedPercentages = combinedData.map(
+          (item) => `${item.percentage}`
+        )
+
         setChartData({
-          labels: labels,
+          labels: sortedLabels,
           datasets: [
             {
-              label: 'Cantidad de Ventas',
-              data: chartData,
+              label: 'Porcentaje de Ventas',
+              data: sortedPercentages,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -113,8 +128,10 @@ const UtilidadProductos = ({ color }) => {
           ],
           datasets: [
             {
-              label: 'Cantidad de Ventas',
-              data: [12, 19, 3, 5, 2],
+              label: 'Porcentaje de Ventas',
+              data: [12, 19, 3, 5, 2]
+                .map((value) => ((value / 41) * 100).toFixed(2))
+                .sort((a, b) => b - a),
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -145,4 +162,4 @@ const UtilidadProductos = ({ color }) => {
   )
 }
 
-export default UtilidadProductos
+export default CategoriaProductos

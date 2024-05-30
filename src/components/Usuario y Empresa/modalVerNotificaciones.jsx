@@ -1,11 +1,140 @@
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const ModalVerNotificaciones = ({ open, onClose }) => {
-  if (!open) return null
+const ModalVerNotificaciones = ({
+  open,
+  onClose,
+  onNotificationCountChange,
+}) => {
+  const [notificaciones, setNotificaciones] = useState([])
+  const email = localStorage.getItem('email')
+
+  useEffect(() => {
+    const fetchAndCreateNotifications = async () => {
+      try {
+        const responseProductosBaja = await fetch(
+          'https://localhost:7113/api/Reportes/ProductosBajaExistencia'
+        )
+        const productosBaja = await responseProductosBaja.json()
+
+        const responseProductosNula = await fetch(
+          'https://localhost:7113/api/Reportes/ProductosExistenciaNula'
+        )
+        const productosNula = await responseProductosNula.json()
+
+        let notificacionesExistentes = []
+        try {
+          const responseNotificaciones = await fetch(
+            `https://localhost:7113/api/Notificacion/Filtrar/NotificacionUsuario?email=${email}`
+          )
+          notificacionesExistentes = await responseNotificaciones.json()
+        } catch (error) {
+          console.warn(
+            'No se encontraron notificaciones existentes o la respuesta no es válida:',
+            error
+          )
+        }
+
+        const nuevasNotificaciones = []
+
+        for (const producto of productosBaja) {
+          const {
+            productoNombre,
+            categoriaNombre,
+            existenciaInicial,
+            existenciaActual,
+          } = producto
+
+          if (existenciaActual < existenciaInicial * 0.2) {
+            const cuerpo = `El producto ${productoNombre} de la categoría ${categoriaNombre} empezó con una existencia inicial de ${existenciaInicial} y ya se encuentra por debajo del 20%.`
+            const notificacion = {
+              titulo: `Producto ${productoNombre} con baja existencia`,
+              cuerpo,
+              fecha: new Date().toISOString(),
+              estado: true,
+              email,
+            }
+            const existe = notificacionesExistentes.some(
+              (n) =>
+                n.titulo === notificacion.titulo &&
+                n.cuerpo === notificacion.cuerpo
+            )
+
+            if (!existe) {
+              nuevasNotificaciones.push(notificacion)
+            }
+          }
+        }
+
+        for (const producto of productosNula) {
+          const { productoNombre, categoriaNombre, existenciaInicial } =
+            producto
+
+          const cuerpo = `El producto ${productoNombre} de la categoría ${categoriaNombre} ya no tiene existencia.`
+          const notificacion = {
+            titulo: `Producto ${productoNombre} sin existencia`,
+            cuerpo,
+            fecha: new Date().toISOString(),
+            estado: true,
+            email,
+          }
+
+          const existe = notificacionesExistentes.some(
+            (n) =>
+              n.titulo === notificacion.titulo &&
+              n.cuerpo === notificacion.cuerpo
+          )
+
+          if (!existe) {
+            nuevasNotificaciones.push(notificacion)
+          }
+        }
+        await Promise.all(
+          nuevasNotificaciones.map(async (notificacion) => {
+            try {
+              await fetch('https://localhost:7113/api/Notificacion/Agregar', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(notificacion),
+              })
+            } catch (error) {
+              console.error('Error adding notification:', error)
+            }
+          })
+        )
+      } catch (error) {
+        console.error('Error fetching products or adding notifications:', error)
+      }
+    }
+
+    if (open) {
+      fetchAndCreateNotifications()
+    }
+  }, [open, email, onNotificationCountChange])
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7113/api/Notificacion/Filtrar/NotificacionUsuario?email=${email}`
+        )
+        const data = await response.json()
+        setNotificaciones(data)
+        onNotificationCountChange(data.length)
+      } catch (error) {
+        console.error('Error fetching notifications:', error)
+      }
+    }
+
+    if (open) {
+      fetchNotifications()
+    }
+  }, [open, email, onNotificationCountChange])
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       const isNotificaciones = event.target.closest('.bg-slate-100')
-
       if (open && !isNotificaciones) {
         onClose()
       }
@@ -16,23 +145,32 @@ const ModalVerNotificaciones = ({ open, onClose }) => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [open, onClose])
+
+  if (!open) return null
+
   return (
-    <>
-      <div className='absolute flex-col w-full top-0 z-10 flex items-end justify-end'>
-        <div className='h-12'></div>
-        <div className='mr-20 flex justify-end items-center'>
-          <div className='bg-slate-100 w-96 p-4 flex flex-col gap-2 cursor-pointer  rounded-lg'>
-            <div>
-              <h1 className='text-start'>Notificaciones</h1>
-            </div>
-            <div className='rounded-lg p-3 flex flex-col  bg-slate-100 hover:bg-slate-200'>
-              <div className='self-end text-gray-400 text-xs'>20/12/2024</div>
-              <div>Hey ponte pilas a subir evidencias</div>
-            </div>
+    <div className='absolute flex-col w-full top-0 z-10 flex items-end justify-end'>
+      <div className='h-12'></div>
+      <div className='mr-20 flex justify-end items-center'>
+        <div className='bg-slate-100 w-96 p-4 flex flex-col gap-2 cursor-pointer rounded-lg'>
+          <h1 className='text-start'>Notificaciones</h1>
+          <div className='h-96 overflow-y-auto'>
+            {notificaciones.map((notificacion, index) => (
+              <div
+                key={index}
+                className='rounded-lg p-3 flex flex-col bg-slate-100 hover:bg-slate-200'
+              >
+                <div className='self-end text-gray-400 text-sm'>
+                  {new Date(notificacion.fecha).toLocaleDateString()}
+                </div>
+                <div className='font-bold text-sm'>{notificacion.titulo}</div>
+                <div className='mt-2 text-sm'>{notificacion.cuerpo}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

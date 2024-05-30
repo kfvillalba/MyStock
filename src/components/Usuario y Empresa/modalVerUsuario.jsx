@@ -39,11 +39,7 @@ const ProfileModal = ({ open, onClose }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       const isProfileModal = event.target.closest('.profile-modal')
-      const isDataModal = event.target.closest('.modalDatos')
       if (open && !isProfileModal) {
-        if (formRegister && !isDataModal) {
-          return
-        }
         onClose()
       }
     }

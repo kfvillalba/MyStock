@@ -7,14 +7,24 @@ export async function fetchVentasReport(data) {
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.clienteId !== '-1') {
+        const clienteId = parseInt(data.clienteId)
+        filteredData = responseData.filter(
+          (venta) => venta.clienteId === clienteId
+        )
+      }
+      const formattedData = filteredData.map((venta) => {
         return {
-          ...row,
-          fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          }),
+          ...venta,
+          fechaFactura: new Date(venta.fechaFactura).toLocaleDateString(
+            'es-ES',
+            {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            }
+          ),
         }
       })
       return formattedData
@@ -34,7 +44,16 @@ export async function fetchCienteSalidasReport(data) {
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      console.log(responseData)
+      let filteredData = responseData
+      if (data.clienteId !== '-1') {
+        const clienteId = parseInt(data.clienteId)
+        filteredData = responseData.filter(
+          (venta) => venta.clienteId === clienteId
+        )
+      }
+      console.log(filteredData)
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
           fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
@@ -125,14 +144,21 @@ export async function fetchProductosVendidosReport(data) {
   }
 }
 // ---------------------------------Dia actual-------------------------------------------------------------------------
-export async function fetchVentasActualReport() {
+export async function fetchVentasActualReport(data) {
   try {
     const response = await fetch(
       `https://localhost:7073/inventario-service/Reportes/VentasDiaActual`
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.clienteId !== '-1') {
+        const clienteId = parseInt(data.clienteId)
+        filteredData = responseData.filter(
+          (venta) => venta.clienteId === clienteId
+        )
+      }
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
           fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
@@ -152,14 +178,21 @@ export async function fetchVentasActualReport() {
   }
 }
 
-export async function fetchClienteSalidaActualReport() {
+export async function fetchClienteSalidaActualReport(data) {
   try {
     const response = await fetch(
       `https://localhost:7073/inventario-service/Reportes/ClientesSalidasDiaActual`
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.clienteId !== '-1') {
+        const clienteId = parseInt(data.clienteId)
+        filteredData = responseData.filter(
+          (venta) => venta.clienteId === clienteId
+        )
+      }
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
           fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
