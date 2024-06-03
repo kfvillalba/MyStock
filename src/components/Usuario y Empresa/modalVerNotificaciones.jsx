@@ -12,19 +12,19 @@ const ModalVerNotificaciones = ({
     const fetchAndCreateNotifications = async () => {
       try {
         const responseProductosBaja = await fetch(
-          'https://localhost:7113/api/Reportes/ProductosBajaExistencia'
+          'https://localhost:7073/inventario-service/Reportes/ProductosBajaExistencia'
         )
         const productosBaja = await responseProductosBaja.json()
 
         const responseProductosNula = await fetch(
-          'https://localhost:7113/api/Reportes/ProductosExistenciaNula'
+          'https://localhost:7073/inventario-service/Reportes/ProductosExistenciaNula'
         )
         const productosNula = await responseProductosNula.json()
 
         let notificacionesExistentes = []
         try {
           const responseNotificaciones = await fetch(
-            `https://localhost:7113/api/Notificacion/Filtrar/NotificacionUsuario?email=${email}`
+            `https://localhost:7073/inventario-service/Notificacion/Filtrar/NotificacionUsuario?email=${email}`
           )
           notificacionesExistentes = await responseNotificaciones.json()
         } catch (error) {
@@ -91,13 +91,16 @@ const ModalVerNotificaciones = ({
         await Promise.all(
           nuevasNotificaciones.map(async (notificacion) => {
             try {
-              await fetch('https://localhost:7113/api/Notificacion/Agregar', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(notificacion),
-              })
+              await fetch(
+                'https://localhost:7073/inventario-service/Notificacion/Agregar',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(notificacion),
+                }
+              )
             } catch (error) {
               console.error('Error adding notification:', error)
             }
@@ -117,11 +120,17 @@ const ModalVerNotificaciones = ({
     const fetchNotifications = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7113/api/Notificacion/Filtrar/NotificacionUsuario?email=${email}`
+          `https://localhost:7073/inventario-service/Notificacion/Filtrar/NotificacionUsuario?email=${email}`
         )
         const data = await response.json()
-        setNotificaciones(data)
-        onNotificationCountChange(data.length)
+        const notificacionesNoLeidas = data.filter(
+          (notificacion) => !notificacion.estado
+        )
+        // Colocar las nuevas notificaciones primero
+        setNotificaciones(
+          data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        )
+        onNotificationCountChange(notificacionesNoLeidas.length)
       } catch (error) {
         console.error('Error fetching notifications:', error)
       }
@@ -146,6 +155,27 @@ const ModalVerNotificaciones = ({
     }
   }, [open, onClose])
 
+  const handleNotificationClick = async (id) => {
+    try {
+      await fetch(
+        `https://localhost:7073/inventario-service/Notificacion/ActualizarEstado?id=${id}&email=${email}`,
+        {
+          method: 'PUT',
+        }
+      )
+
+      setNotificaciones((prevNotificaciones) =>
+        prevNotificaciones.map((notificacion) =>
+          notificacion.id === id
+            ? { ...notificacion, estado: true }
+            : notificacion
+        )
+      )
+    } catch (error) {
+      console.error('Error updating notification status:', error)
+    }
+  }
+
   if (!open) return null
 
   return (
@@ -154,11 +184,14 @@ const ModalVerNotificaciones = ({
       <div className='mr-20 flex justify-end items-center'>
         <div className='bg-slate-100 w-96 p-4 flex flex-col gap-2 cursor-pointer rounded-lg'>
           <h1 className='text-start'>Notificaciones</h1>
-          <div className='h-96 overflow-y-auto'>
+          <div className='h-96 overflow-y-auto gap-3 flex flex-col'>
             {notificaciones.map((notificacion, index) => (
               <div
                 key={index}
-                className='rounded-lg p-3 flex flex-col bg-slate-100 hover:bg-slate-200'
+                onClick={() => handleNotificationClick(notificacion.id)}
+                className={`rounded-lg p-3 flex flex-col ${
+                  notificacion.estado ? 'bg-slate-50' : 'bg-gray-200'
+                } hover:bg-slate-300`}
               >
                 <div className='self-end text-gray-400 text-sm'>
                   {new Date(notificacion.fecha).toLocaleDateString()}

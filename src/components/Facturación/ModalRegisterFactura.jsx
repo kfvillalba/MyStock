@@ -284,7 +284,10 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       ...detalleFactura,
       { ...detalle, id: Math.random().toString(36).substring(7) },
     ])
-    reset()
+    const currentCliente = watch('cliente')
+    reset({
+      cliente: currentCliente,
+    })
   }
 
   const eliminarDetalle = async (index) => {

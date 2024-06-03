@@ -59,7 +59,7 @@ const TopNavbar = () => {
                 </div>
               )}
 
-              <IoIosNotifications className='2xl:size-10 size-8  transition-all  text-green-800' />
+              <IoIosNotifications className='2xl:size-10 size-8  transition-all  text-gray-500 ' />
             </div>
           </button>
           <button

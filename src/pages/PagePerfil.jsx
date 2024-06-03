@@ -7,6 +7,7 @@ import defaultCover from '../assets/portada.png'
 import { FiArrowLeft, FiTrash } from 'react-icons/fi'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
+import TopNavbar from '../components/Pagina Principal/TopNavbar'
 
 Modal.setAppElement('#root')
 
@@ -407,78 +408,85 @@ const PagePerfil = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gray-100'>
-      <ProfileHeader
-        avatar={avatar}
-        cover={cover}
-        openModal={openModal}
-        navigateBack={() => Navigate('/Dashboard')}
-      />
-      <div className='flex justify-center'>
-        <UserInfo
-          username={username}
-          email={email}
-          password={password}
-          confirmPassword={confirmPassword}
-        />
-        <AdditionalInfo
-          genero={genero}
-          intereses={intereses}
-          setGenero={setGenero}
-          setIntereses={setIntereses}
-        />
-      </div>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel='Confirmar Eliminación'
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 1000,
-          },
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            width: '90%',
-            maxWidth: '500px',
-            padding: '20px',
-          },
-        }}
-      >
-        <h2 className='text-xl font-bold mb-4'>Confirmar Eliminación</h2>
-        <p className='mb-4'>
-          Por favor, escribe tu nombre de usuario para confirmar.
-        </p>
-        <input
-          type='text'
-          className='p-2 border rounded-md mb-4 w-full'
-          value={inputUsername}
-          onChange={(e) => setInputUsername(e.target.value)}
-        />
-        {error.type === 'username' && (
-          <p className='text-red-500 text-sm mb-4'>{error.message}</p>
-        )}
-        <div className='flex justify-end'>
-          <button
-            onClick={closeModal}
-            className='bg-gray-500 text-white px-4 py-2 rounded-md mr-2'
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={confirmDelete}
-            className='bg-red-500 text-white px-4 py-2 rounded-md'
-          >
-            Eliminar
-          </button>
+    <>
+      <div>
+        <div>
+          <TopNavbar />
         </div>
-      </Modal>
-    </div>
+        <div className='h-screen bg-gray-100'>
+          <ProfileHeader
+            avatar={avatar}
+            cover={cover}
+            openModal={openModal}
+            navigateBack={() => Navigate('/Dashboard')}
+          />
+          <div className='flex justify-center'>
+            <UserInfo
+              username={username}
+              email={email}
+              password={password}
+              confirmPassword={confirmPassword}
+            />
+            <AdditionalInfo
+              genero={genero}
+              intereses={intereses}
+              setGenero={setGenero}
+              setIntereses={setIntereses}
+            />
+          </div>
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            contentLabel='Confirmar Eliminación'
+            style={{
+              overlay: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                zIndex: 1000,
+              },
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                width: '90%',
+                maxWidth: '500px',
+                padding: '20px',
+              },
+            }}
+          >
+            <h2 className='text-xl font-bold mb-4'>Confirmar Eliminación</h2>
+            <p className='mb-4'>
+              Por favor, escribe tu nombre de usuario para confirmar.
+            </p>
+            <input
+              type='text'
+              className='p-2 border rounded-md mb-4 w-full'
+              value={inputUsername}
+              onChange={(e) => setInputUsername(e.target.value)}
+            />
+            {error.type === 'username' && (
+              <p className='text-red-500 text-sm mb-4'>{error.message}</p>
+            )}
+            <div className='flex justify-end'>
+              <button
+                onClick={closeModal}
+                className='bg-gray-500 text-white px-4 py-2 rounded-md mr-2'
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                className='bg-red-500 text-white px-4 py-2 rounded-md'
+              >
+                Eliminar
+              </button>
+            </div>
+          </Modal>
+        </div>
+      </div>
+    </>
   )
 }
 
