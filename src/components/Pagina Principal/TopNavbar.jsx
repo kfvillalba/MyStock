@@ -5,7 +5,7 @@ import { IoIosNotifications } from 'react-icons/io'
 const TopNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
-  const [Notification, setNotification] = useState([])
+  const [Notification, setNotification] = useState(0)
 
   useEffect(() => {
     const storedNotificationCount = localStorage.getItem('notificationCount')
@@ -53,7 +53,7 @@ const TopNavbar = () => {
             onClick={() => setIsNotification(true)}
           >
             <div>
-              {Notification && (
+              {Notification > 0 && (
                 <div className='absolute 2xl:ml-[30px] ml-[24px]  font-semibold rounded-full min-w-fit size-4 2xl:size-6 bg-red-900 2xl:p-1 text-xs text-white text-center items-center '>
                   {Notification}
                 </div>

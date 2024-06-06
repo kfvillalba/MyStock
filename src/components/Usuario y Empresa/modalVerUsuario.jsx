@@ -21,7 +21,7 @@ const ProfileModal = ({ open, onClose }) => {
       const checkCompany = async () => {
         try {
           const response = await fetch(
-            `https://localhost:7113/api/Empresas/Filtrar/EmpresaUsuario?email=${localStorage.getItem(
+            `https://localhost:7073/inventario-service/Empresas/Filtrar/EmpresaUsuario?email=${localStorage.getItem(
               'email'
             )}`
           )

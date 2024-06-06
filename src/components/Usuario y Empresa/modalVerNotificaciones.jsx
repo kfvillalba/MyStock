@@ -88,6 +88,7 @@ const ModalVerNotificaciones = ({
             nuevasNotificaciones.push(notificacion)
           }
         }
+
         await Promise.all(
           nuevasNotificaciones.map(async (notificacion) => {
             try {
@@ -101,8 +102,24 @@ const ModalVerNotificaciones = ({
                   body: JSON.stringify(notificacion),
                 }
               )
+
+              await fetch('https://localhost:7062/EnviarEmail', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  to: email,
+                  subject: notificacion.titulo,
+                  body: notificacion.cuerpo,
+                  attachments: [],
+                }),
+              })
             } catch (error) {
-              console.error('Error adding notification:', error)
+              console.error(
+                'Error adding notification or sending email:',
+                error
+              )
             }
           })
         )
@@ -126,7 +143,6 @@ const ModalVerNotificaciones = ({
         const notificacionesNoLeidas = data.filter(
           (notificacion) => !notificacion.estado
         )
-        // Colocar las nuevas notificaciones primero
         setNotificaciones(
           data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
         )
