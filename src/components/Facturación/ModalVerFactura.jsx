@@ -39,9 +39,21 @@ const ModalVerFactura = ({ open, onClose, salida }) => {
                         <td>{salida.categoriaNombre}</td>
                         <td>{salida.productoNombre}</td>
                         <td>{salida.cantidad}</td>
-                        <td>{salida.precio}</td>
-                        <td>{salida.descuento}</td>
-                        <td>{salida.total}</td>
+                        <td>
+                          {salida.precio
+                            .toFixed(0)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                        </td>
+                        <td>
+                          {salida.descuento
+                            .toFixed(0)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                        </td>
+                        <td>
+                          {salida.total
+                            .toFixed(0)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                        </td>
                       </tr>
                     )
                   })}
@@ -53,10 +65,23 @@ const ModalVerFactura = ({ open, onClose, salida }) => {
                     <td></td>
                     <td>Productos: {salida.cantidadProductos}</td>
                     <td>
-                      Total sin descuento: {salida.totalPagarSinDescuento}
+                      Total sin descuento:{' '}
+                      {salida.totalPagarSinDescuento
+                        .toFixed(0)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </td>
-                    <td>Total Descuento: {salida.totalDescuento}</td>
-                    <td>Total a Pagar: {salida.totalPagarConDescuento}</td>
+                    <td>
+                      Total Descuento:{' '}
+                      {salida.totalDescuento
+                        .toFixed(0)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </td>
+                    <td>
+                      Total a Pagar:{' '}
+                      {salida.totalPagarConDescuento
+                        .toFixed(0)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </td>
                   </tr>
                 </tfoot>
               </table>

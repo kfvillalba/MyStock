@@ -100,7 +100,6 @@ const Page = () => {
                   <th className='text-center'>Cliente</th>
                   <th className='text-center'>Total Pagado</th>
                   <th className='text-center'>Mostrar</th>
-                  <th className='text-center'>Eliminar</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,15 +164,14 @@ const Page = () => {
                           )}
                         </td>
                         <td>{salida.clienteNombre}</td>
-                        <td>{salida.totalPagarConDescuento}</td>
+                        <td>
+                          {salida.totalPagarConDescuento
+                            .toFixed(0)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                        </td>
                         <td className='text-blue-800'>
                           <button onClick={() => handleView(salida)}>
                             <EyeIcon clases={'size-7 cursor-pointer'} />
-                          </button>
-                        </td>
-                        <td className=' text-red-800'>
-                          <button onClick={(event) => console.log('event')}>
-                            <DeleteIcon clases={'size-7 cursor-pointer'} />
                           </button>
                         </td>
                       </tr>

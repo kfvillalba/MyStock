@@ -11,6 +11,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm()
 
@@ -18,6 +19,11 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
   const [productosOptions, setProductosOptions] = useState([])
   const [clientesOptions, setClientesOptions] = useState([])
   const [stockOptions, setStockOptions] = useState([])
+  const [precioProducto, setPrecioProducto] = useState(0)
+  const [clienteFilter, setClienteFilter] = useState('')
+  const [filteredClientes, setFilteredClientes] = useState([])
+  const [selectedClient, setSelectedClient] = useState(null)
+  const [selectedClientId, setSelectedClientId] = useState(null)
 
   useEffect(() => {
     const fetchClientes = async () => {
@@ -28,6 +34,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
         if (response.ok) {
           const data = await response.json()
           setClientesOptions(data)
+          setFilteredClientes(data)
         } else {
           throw new Error('Error al cargar los proveedores')
         }
@@ -66,6 +73,23 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     fetchClientes()
     fetchEntradasCategorias()
   }, [])
+
+  const handleClienteFilterChange = (event) => {
+    const value = event.target.value.toLowerCase()
+    setClienteFilter(value)
+    const filtered = clientesOptions.filter((cliente) =>
+      cliente.nombre.toLowerCase().includes(value)
+    )
+    setFilteredClientes(filtered)
+    setSelectedClient(null)
+  }
+
+  const handleClientSelect = (client) => {
+    setSelectedClient(client)
+    setSelectedClientId(client.id)
+    setClienteFilter(client.nombre)
+    setValue('cliente', client.id)
+  }
 
   const handleCategoriaChange = async (event) => {
     const idCategoria = event.target.value
@@ -132,16 +156,34 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     }
   }
 
-  const total = [
-    (
-      Math.floor(
-        parseFloat(
-          watch('cantidad') * watch('precio') -
-            (watch('cantidad') * watch('precio') * watch('descuento')) / 100
-        ) * 100
-      ) / 100
-    ).toFixed(2),
-  ]
+  const obtenerPrecioVentaActual = () => {
+    return (
+      stockOptions.find((stock) => stock.id === parseInt(watch('idEntrada')))
+        ?.precioVenta || ''
+    )
+  }
+  const precioVentaActual = obtenerPrecioVentaActual()
+
+  const calculateTotal = () => {
+    setPrecioProducto(precioVentaActual)
+    const cantidad = parseFloat(watch('cantidad') || 0)
+    const precio = parseFloat(precioProducto || 0)
+    const descuento = parseFloat(watch('descuento') || 0)
+
+    const total =
+      (Math.floor(cantidad * precio - (cantidad * precio * descuento) / 100) *
+        100) /
+      100
+
+    setValue('total', total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'))
+
+    return total
+  }
+
+  useEffect(() => {
+    calculateTotal()
+  }, [watch('cantidad'), watch('descuento')])
+
   const totales = {}
   const [detalleFactura, setDetalleFactura] = useState([])
   function getTotales() {
@@ -150,10 +192,15 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     totales.totalDescuento = 0
     totales.totalPagar = 0
     detalleFactura.map((detalle) => {
-      totales.totalProductos += parseFloat(detalle.cantidad)
-      totales.totalSinDescuento += parseFloat(detalle.cantidad * detalle.precio)
-      totales.totalDescuento += parseFloat(detalle.valorDescuento)
-      totales.totalPagar += parseFloat(detalle.total)
+      const cantidad = parseFloat(detalle.cantidad)
+      const precio = parseFloat(detalle.precio)
+      const total = parseFloat(detalle.total)
+      const valorDescuento = parseFloat(detalle.valorDescuento)
+
+      totales.totalProductos += cantidad
+      totales.totalSinDescuento += cantidad * precio
+      totales.totalDescuento += valorDescuento
+      totales.totalPagar += total
     })
   }
   getTotales()
@@ -213,9 +260,8 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     }
 
     const cantidad = parseFloat(watch('cantidad'))
-    const precio = parseFloat(watch('precio'))
+    const precio = parseFloat(precioProducto)
     const descuento = parseFloat(watch('descuento'))
-
     if (cantidad <= 0) {
       Swal.fire(
         'Error',
@@ -236,7 +282,12 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       Swal.fire('Error', 'El precio ingresado no es válido', 'error')
       return
     }
-    if (descuento < 0 || isNaN(descuento) || descuento % 1 !== 0) {
+    if (
+      descuento < 0 ||
+      isNaN(descuento) ||
+      descuento % 1 !== 0 ||
+      descuento > 100
+    ) {
       Swal.fire('Error', 'El descuento ingresado no es válido', 'error')
       return
     }
@@ -253,12 +304,17 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
       idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
       cantidad: parseFloat(watch('cantidad')),
-      precio: parseFloat(watch('precio')),
+      precio: parseFloat(precioProducto)
+        .toFixed(0)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+
       descuento: parseFloat(watch('descuento')),
       valorDescuento: parseFloat(
-        (watch('cantidad') * watch('precio') * watch('descuento')) / 100
+        (watch('cantidad') * precioProducto * watch('descuento')) / 100
       ).toFixed(2),
-      total: total[0],
+      total: calculateTotal()
+        .toFixed(0)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
     }
     try {
       const restarExistenciasResponse = await fetch(
@@ -279,7 +335,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       Swal.fire('Error', error.message, 'error')
       return
     }
-
+    reset()
     setDetalleFactura([
       ...detalleFactura,
       { ...detalle, id: Math.random().toString(36).substring(7) },
@@ -316,29 +372,33 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
     }
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     try {
       if (detalleFactura.length === 0) {
         Swal.fire('Error', 'Debe agregar un producto', 'error')
 
         return
       }
-      const idCliente = parseInt(data.cliente)
+      const idCliente = selectedClientId
+      if (!idCliente) {
+        Swal.fire('Error', 'Debe seleccionar un cliente', 'error')
+        return
+      }
       const cantidadProductos = detalleFactura.length
-      const totalPagarSinDescuento = totales.totalSinDescuento
+      const totalPagarSinDescuento = totales.totalSinDescuento * 1000
       const totalDescuento = totales.totalDescuento
-      const totalPagarConDescuento = totales.totalPagar
+      const totalPagarConDescuento = totales.totalPagar * 1000
 
       const productoSalidas = detalleFactura.map((detalle) => {
         return {
           idCategoria: parseInt(detalle.idCategoria),
           idProducto: parseInt(detalle.idProducto),
           idEntrada: parseInt(detalle.idEntrada),
-          precio: parseFloat(detalle.precio),
+          precio: parseFloat(detalle.precio * 1000),
           cantidad: parseFloat(detalle.cantidad),
           descuento: parseFloat(detalle.descuento),
-          valorDescuento: parseFloat(detalle.valorDescuento),
-          total: parseFloat(detalle.total),
+          valorDescuento: parseFloat(detalle.valorDescuento * 1000),
+          total: parseFloat(detalle.total * 1000),
         }
       })
 
@@ -350,6 +410,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
         totalDescuento,
         productoSalidas,
       }
+      console.log('fac', factura)
 
       const response = await fetch(
         'https://localhost:7073/inventario-service/Salidas/Agregar',
@@ -398,23 +459,27 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
             <section className='flex flex-col gap-4 my-5'>
               <div className='flex flex-row'>
                 <div className='flex flex-col'>
-                  <select
+                  <input
                     type='text'
-                    className='select'
-                    {...register('cliente', {
-                      min: { value: 0, message: 'Seleccione un Cliente' },
-                    })}
-                  >
-                    <option value='-1'>Seleccione un Cliente</option>
-                    {clientesOptions?.map((cliente) => {
-                      return (
-                        <option key={cliente.id} value={`${cliente.id}`}>
+                    className='input__form'
+                    placeholder='Buscar cliente'
+                    value={clienteFilter}
+                    onChange={handleClienteFilterChange}
+                  />
+
+                  {clienteFilter && !selectedClient && (
+                    <ul className='absolute z-10 bg-white mt-12 rounded-sm shadow-md max-h-60 w-auto overflow-y-auto'>
+                      {filteredClientes.map((cliente) => (
+                        <li
+                          key={cliente.id}
+                          className='px-2 py-1 cursor-pointer hover:bg-gray-200'
+                          onClick={() => handleClientSelect(cliente)}
+                        >
                           {cliente.nombre}
-                        </option>
-                      )
-                    })}
-                  </select>
-                  <span className='message'>{errors?.cliente?.message}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <button
                   type='button'
@@ -541,7 +606,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                         <div>
                           <input
                             type='number'
-                            className='input__form'
+                            className='input__form no-spinner'
                             {...register('cantidad', {
                               required: false,
                               min: {
@@ -560,7 +625,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                         <div>
                           <input
                             type='number'
-                            className='input__form'
+                            className='input__form no-spinner'
                             value={
                               stockOptions.find(
                                 (stock) =>
@@ -576,7 +641,6 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                               valueAsNumber: true,
                             })}
                           />
-
                           <span className='message'>
                             {errors?.precio?.message}
                           </span>
@@ -586,7 +650,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                         <div>
                           <input
                             type='number'
-                            className='input__form'
+                            className='input__form no-spinner'
                             defaultValue={0}
                             {...register('descuento', {
                               required: false,
@@ -609,10 +673,10 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                       <td>
                         <div>
                           <input
-                            placeholder={total}
+                            value={calculateTotal}
                             disabled
                             type='number'
-                            className='input__form'
+                            className='input__form no-spinner'
                             {...register('total', {
                               required: false,
                               min: {
@@ -633,26 +697,24 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                     <tr className='bg-purple-light text-white [&>td]:py-2 '>
                       <td>Total</td>
                       <td></td>
-                      <td></td>
-                      <td></td>
                       <td>Productos: {totales.totalProductos}</td>
-                      <td>
+                      <td colspan='2'>
                         Total sin descuento:{' '}
-                        {(
-                          Math.floor(totales.totalSinDescuento * 100) / 100
-                        ).toFixed(2)}
+                        {(totales.totalSinDescuento * 1000)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       </td>
                       <td>
                         Total Descuento:{' '}
-                        {(
-                          Math.floor(totales.totalDescuento * 100) / 100
-                        ).toFixed(2)}
+                        {(Math.floor(totales.totalDescuento * 100) / 100)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       </td>
-                      <td>
+                      <td colspan='2'>
                         Total a Pagar:{' '}
-                        {(Math.floor(totales.totalPagar * 100) / 100).toFixed(
-                          2
-                        )}
+                        {(totales.totalPagar * 1000)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       </td>
                       <td></td>
                     </tr>
@@ -673,6 +735,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
               </button>
               <button
                 onClick={() => {
+                  reset()
                   SumarExistencias(), setDetalleFactura([]), onClose()
                 }}
                 className='bnt__danger mt-3 '
