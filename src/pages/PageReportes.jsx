@@ -47,15 +47,15 @@ const Page = () => {
       }
       if (tipoReporte === '2') {
         if (reporte === '1') {
-          pdfUrl = await generateVentasActualPDF()
+          pdfUrl = await generateVentasActualPDF(data)
         } else if (reporte === '2') {
-          pdfUrl = await generateSalidaClientesActualPDF()
+          pdfUrl = await generateSalidaClientesActualPDF(data)
         } else if (reporte === '3') {
           pdfUrl = await generateComprasActualPDF(data)
         } else if (reporte === '4') {
           pdfUrl = await generateEntradaProveedoresActualPDF(data)
         } else if (reporte === '5') {
-          pdfUrl = await generateProductosSalidaActualPDF()
+          pdfUrl = await generateProductosSalidaActualPDF(data)
         }
       }
       if (tipoReporte === '3') {
@@ -398,7 +398,7 @@ const Page = () => {
                     className='input__form'
                     name='categoria'
                     id='tipoReporte'
-                    {...register('categoria')}
+                    {...register('idCategoria')}
                     onChange={handleCategoriaChange}
                   >
                     <option value='-1'>Seleccione una categoria</option>
@@ -425,7 +425,7 @@ const Page = () => {
                     className='input__form'
                     name='producto'
                     id='tipoReporte'
-                    {...register('producto')}
+                    {...register('idProducto')}
                     onChange={handleProductoChange}
                   >
                     <option value='-1'>Seleccione un producto</option>
@@ -478,7 +478,7 @@ const Page = () => {
                     className='input__form'
                     name='proveedor'
                     id='tipoReporte'
-                    {...register('proveedor')}
+                    {...register('idProveedor')}
                   >
                     <option value='-1'>Seleccione un proveedor</option>
                     {proveedoresOptions?.map((proveedor) => {

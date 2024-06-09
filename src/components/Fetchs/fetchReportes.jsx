@@ -44,7 +44,6 @@ export async function fetchCienteSalidasReport(data) {
     )
     if (response.ok) {
       const responseData = await response.json()
-      console.log(responseData)
       let filteredData = responseData
       if (data.clienteId !== '-1') {
         const clienteId = parseInt(data.clienteId)
@@ -80,7 +79,29 @@ export async function fetchComprasReport(data) {
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.idCategoria !== '-1') {
+        const idCategoria = parseInt(data.idCategoria)
+        filteredData = responseData.filter(
+          (venta) => venta.idCategoria === idCategoria
+        )
+      }
+
+      if (data.idProducto !== '-1') {
+        const idProducto = parseInt(data.idProducto)
+        filteredData = filteredData.filter(
+          (compra) => compra.idProducto === idProducto
+        )
+      }
+
+      if (data.idProveedor !== '-1') {
+        const idProveedor = parseInt(data.idProveedor)
+        filteredData = filteredData.filter(
+          (compra) => compra.idProveedor === idProveedor
+        )
+      }
+
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
         }
@@ -102,7 +123,14 @@ export async function fetchEntradaProveedorReport(data) {
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.idProveedor !== '-1') {
+        const idProveedor = parseInt(data.idProveedor)
+        filteredData = filteredData.filter(
+          (compra) => compra.idProveedor === idProveedor
+        )
+      }
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
         }
@@ -124,7 +152,22 @@ export async function fetchProductosVendidosReport(data) {
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+
+      if (data.idCategoria !== '-1') {
+        const categoriaId = parseInt(data.idCategoria)
+        filteredData = responseData.filter(
+          (venta) => venta.categoriaId === categoriaId
+        )
+      }
+
+      if (data.idProducto !== '-1') {
+        const productoId = parseInt(data.idProducto)
+        filteredData = filteredData.filter(
+          (compra) => compra.productoId === productoId
+        )
+      }
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
           fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
@@ -212,14 +255,35 @@ export async function fetchClienteSalidaActualReport(data) {
   }
 }
 
-export async function fetchComprasActualReport() {
+export async function fetchComprasActualReport(data) {
   try {
     const response = await fetch(
       `https://localhost:7073/inventario-service/Reportes/ComprasDiaActual`
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.idCategoria !== '-1') {
+        const idCategoria = parseInt(data.idCategoria)
+        filteredData = responseData.filter(
+          (venta) => venta.idCategoria === idCategoria
+        )
+      }
+
+      if (data.idProducto !== '-1') {
+        const idProducto = parseInt(data.idProducto)
+        filteredData = filteredData.filter(
+          (compra) => compra.idProducto === idProducto
+        )
+      }
+
+      if (data.idProveedor !== '-1') {
+        const idProveedor = parseInt(data.idProveedor)
+        filteredData = filteredData.filter(
+          (compra) => compra.idProveedor === idProveedor
+        )
+      }
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
           fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
@@ -239,17 +303,24 @@ export async function fetchComprasActualReport() {
   }
 }
 
-export async function fetchEntradaProveedoresActualReport() {
+export async function fetchEntradaProveedoresActualReport(data) {
   try {
     const response = await fetch(
       `https://localhost:7073/inventario-service/Reportes/ProveedoresEntradasDiaActual`
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+      if (data.idProveedor !== '-1') {
+        const idProveedor = parseInt(data.idProveedor)
+        filteredData = filteredData.filter(
+          (compra) => compra.idProveedor === idProveedor
+        )
+      }
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
-          fechaFactura: new Date(row.fechaFactura).toLocaleDateString('es-ES', {
+          fechaEntrada: new Date(row.fechaEntrada).toLocaleDateString('es-ES', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
@@ -266,14 +337,30 @@ export async function fetchEntradaProveedoresActualReport() {
   }
 }
 
-export async function fetchProductosSalidaActualReport() {
+export async function fetchProductosSalidaActualReport(data) {
   try {
     const response = await fetch(
       `https://localhost:7073/inventario-service/Reportes/ProductosSalidaDiaActual`
     )
     if (response.ok) {
       const responseData = await response.json()
-      const formattedData = responseData.map((row) => {
+      let filteredData = responseData
+
+      if (data.idCategoria !== '-1') {
+        const categoriaId = parseInt(data.idCategoria)
+        filteredData = responseData.filter(
+          (venta) => venta.categoriaId === categoriaId
+        )
+      }
+
+      if (data.idProducto !== '-1') {
+        const productoId = parseInt(data.idProducto)
+        filteredData = filteredData.filter(
+          (compra) => compra.productoId === productoId
+        )
+      }
+
+      const formattedData = filteredData.map((row) => {
         return {
           ...row,
         }

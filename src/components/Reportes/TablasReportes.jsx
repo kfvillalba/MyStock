@@ -676,7 +676,7 @@ export async function generateEntradaProveedoresActualPDF(data) {
         ],
       ],
       body: responseData.map((row) => [
-        { content: row.idProveedor, styles: { halign: 'center' } },
+        { content: row.proveedorId, styles: { halign: 'center' } },
         { content: row.nombreProveedor, styles: { halign: 'center' } },
         { content: row.fechaEntrada, styles: { halign: 'center' } },
       ]),
