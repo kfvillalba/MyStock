@@ -91,9 +91,24 @@ export async function generateVentasPDF(data) {
         { content: row.fechaFactura, styles: { halign: 'center' } },
         { content: row.clienteNombre, styles: { halign: 'center' } },
         { content: row.cantidadProductos, styles: { halign: 'center' } },
-        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
-        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
-        { content: row.totalDescuento, styles: { halign: 'center' } },
+        {
+          content: row.totalPagarConDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.totalPagarSinDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.totalDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
       ]),
       startY: 50,
     })
@@ -242,8 +257,18 @@ export async function generateComprasPDF(data) {
         { content: row.nombreProveedor, styles: { halign: 'center' } },
         { content: row.existenciaInicial, styles: { halign: 'center' } },
         { content: row.existenciaActual, styles: { halign: 'center' } },
-        { content: row.precioCompra, styles: { halign: 'center' } },
-        { content: row.precioVenta, styles: { halign: 'center' } },
+        {
+          content: row.precioCompra
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.precioVenta
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
         { content: row.fechaEntrada, styles: { halign: 'center' } },
       ]),
       startY: 50,
@@ -397,11 +422,27 @@ export async function generateProductosVendidosPDF(data) {
         { content: row.fechaFactura, styles: { halign: 'center' } },
         { content: row.productoNombre, styles: { halign: 'center' } },
         { content: row.categoriaNombre, styles: { halign: 'center' } },
-        { content: row.precio, styles: { halign: 'center' } },
+        {
+          content: row.precio.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
         { content: row.cantidad, styles: { halign: 'center' } },
-        { content: row.descuento, styles: { halign: 'center' } },
-        { content: row.valorDescuento, styles: { halign: 'center' } },
-        { content: row.total, styles: { halign: 'center' } },
+        {
+          content: row.descuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.valorDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
       ]),
       startY: 50,
     })
@@ -469,9 +510,24 @@ export async function generateVentasActualPDF(data) {
         { content: fechaActual, styles: { halign: 'center' } },
         { content: row.clienteNombre, styles: { halign: 'center' } },
         { content: row.cantidadProductos, styles: { halign: 'center' } },
-        { content: row.totalPagarConDescuento, styles: { halign: 'center' } },
-        { content: row.totalPagarSinDescuento, styles: { halign: 'center' } },
-        { content: row.totalDescuento, styles: { halign: 'center' } },
+        {
+          content: row.totalPagarConDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.totalPagarSinDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.totalDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
       ]),
       startY: 50,
     })
@@ -609,8 +665,18 @@ export async function generateComprasActualPDF(data) {
         { content: row.nombreProveedor, styles: { halign: 'center' } },
         { content: row.existenciaInicial, styles: { halign: 'center' } },
         { content: row.existenciaActual, styles: { halign: 'center' } },
-        { content: row.precioCompra, styles: { halign: 'center' } },
-        { content: row.precioVenta, styles: { halign: 'center' } },
+        {
+          content: row.precioCompra
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.precioVenta
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
         { content: row.fechaEntrada, styles: { halign: 'center' } },
       ]),
       startY: 50,
@@ -749,11 +815,27 @@ export async function generateProductosSalidaActualPDF(data) {
       body: responseData.map((row) => [
         { content: row.productoNombre, styles: { halign: 'center' } },
         { content: row.categoriaNombre, styles: { halign: 'center' } },
-        { content: row.precio, styles: { halign: 'center' } },
+        {
+          content: row.precio.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
         { content: row.cantidad, styles: { halign: 'center' } },
-        { content: row.descuento, styles: { halign: 'center' } },
-        { content: row.valorDescuento, styles: { halign: 'center' } },
-        { content: row.total, styles: { halign: 'center' } },
+        {
+          content: row.descuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.valorDescuento
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
       ]),
       startY: 50,
     })
@@ -825,10 +907,30 @@ export async function generateProductosBajaExistenciaPDF(data) {
         { content: row.categoriaNombre, styles: { halign: 'center' } },
         { content: row.productoNombre, styles: { halign: 'center' } },
         { content: row.proveedorNombre, styles: { halign: 'center' } },
-        { content: row.existenciaInicial, styles: { halign: 'center' } },
-        { content: row.existenciaActual, styles: { halign: 'center' } },
-        { content: row.precioCompra, styles: { halign: 'center' } },
-        { content: row.precioVenta, styles: { halign: 'center' } },
+        {
+          content: row.existenciaInicial
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.existenciaActual
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.precioCompra
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.precioVenta
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
       ]),
       startY: 47,
     })
@@ -899,10 +1001,30 @@ export async function generateProductosExistencia0PDF(data) {
         { content: row.categoriaNombre, styles: { halign: 'center' } },
         { content: row.productoNombre, styles: { halign: 'center' } },
         { content: row.proveedorNombre, styles: { halign: 'center' } },
-        { content: row.existenciaInicial, styles: { halign: 'center' } },
-        { content: row.existenciaActual, styles: { halign: 'center' } },
-        { content: row.precioCompra, styles: { halign: 'center' } },
-        { content: row.precioVenta, styles: { halign: 'center' } },
+        {
+          content: row.existenciaInicial
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.existenciaActual
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.precioCompra
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
+        {
+          content: row.precioVenta
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          styles: { halign: 'center' },
+        },
       ]),
       startY: 47,
     })
