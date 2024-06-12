@@ -294,10 +294,14 @@ const Page = () => {
                           {existencia.existenciaActual}
                         </td>
                         <td className='text-center'>
-                          {existencia.precioCompra}
+                          {existencia.precioCompra
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                         </td>
                         <td className='text-center'>
-                          {existencia.precioVenta}
+                          {existencia.precioVenta
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                         </td>
                         <td className='text-center pl-1'>
                           {existencia.fechaEntrada}

@@ -175,7 +175,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
         100) /
       100
 
-    setValue('total', total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'))
+    setValue('total', total)
 
     return total
   }
@@ -304,17 +304,12 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
       stock: stockSeleccionado ? stockSeleccionado.existenciaActual : 0,
       idProducto: productoSeleccionado ? productoSeleccionado.idProducto : 0,
       cantidad: parseFloat(watch('cantidad')),
-      precio: parseFloat(precioProducto)
-        .toFixed(0)
-        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
-
+      precio: parseFloat(precioProducto),
       descuento: parseFloat(watch('descuento')),
       valorDescuento: parseFloat(
         (watch('cantidad') * precioProducto * watch('descuento')) / 100
       ).toFixed(2),
-      total: calculateTotal()
-        .toFixed(0)
-        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+      total: calculateTotal(),
     }
     try {
       const restarExistenciasResponse = await fetch(
@@ -523,9 +518,17 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                           <td>{detalle.producto}</td>
                           <td>{detalle.stock}</td>
                           <td>{detalle.cantidad}</td>
-                          <td>{detalle.precio}</td>
+                          <td>
+                            {detalle.precio
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                          </td>
                           <td>{detalle.descuento}</td>
-                          <td>{detalle.total}</td>
+                          <td>
+                            {detalle.total
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                          </td>
                         </tr>
                       )
                     })}
@@ -700,7 +703,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                       <td>Productos: {totales.totalProductos}</td>
                       <td colspan='2'>
                         Total sin descuento:{' '}
-                        {(totales.totalSinDescuento * 1000)
+                        {totales.totalSinDescuento
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       </td>
@@ -712,7 +715,7 @@ const ModalRegisterFactura = ({ open, onClose, registrar }) => {
                       </td>
                       <td colspan='2'>
                         Total a Pagar:{' '}
-                        {(totales.totalPagar * 1000)
+                        {totales.totalPagar
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       </td>

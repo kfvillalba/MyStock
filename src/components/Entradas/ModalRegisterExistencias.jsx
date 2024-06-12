@@ -135,6 +135,7 @@ const ModalRegisterExistencias = ({ open, onClose }) => {
         }}
         registrar={(dataForm) => {
           fetchCategories().then((clientes) => setCategoriasOptions(clientes))
+          fetchCategories().then((clientes) => setCategorias(clientes))
         }}
       />
       <ModalRegisterProducto
@@ -143,7 +144,6 @@ const ModalRegisterExistencias = ({ open, onClose }) => {
           setformRegister2(false)
         }}
         registrar={(dataForm) => {
-          console.log(dataForm)
           fetchProducts().then((productos) => setProductosOptions(productos))
         }}
         categorias={categorias}
